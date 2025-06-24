@@ -8,6 +8,9 @@ import com.example.hit_networking_base.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import javax.validation.Valid;
 
 @RestApiV1
 @RequiredArgsConstructor
@@ -16,7 +19,7 @@ public class AuthorizationController {
     private final AuthService authService;
 
     @PostMapping(UrlConstant.Authorization.LOGIN)
-    public ResponseEntity<?> login(AuthRequest authRequest){
+    public ResponseEntity<?> login(@RequestBody @Valid  AuthRequest authRequest){
         return VsResponseUtil.success(authService.login(authRequest));
     }
 }
