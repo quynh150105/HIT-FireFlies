@@ -4,5 +4,6 @@ public class ErrorMessage {
     public static class User{
         public static final String ERR_NOT_FOUND_USER_NAME = "exception.user.not.found.username";
         public static final String ERR_INVALID_PASSWORD = "exception.user.invalid.password";
+        public static final String ERR_SAME_PASSWORD = "exception.user.same.password";
     }
 }
