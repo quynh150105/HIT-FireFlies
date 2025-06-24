@@ -4,6 +4,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -14,8 +16,13 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/swagger-resources/**",
-            "/webjars/**"
+            "/webjars/**",
+            "/api/v1/auth/**"
     };
+
+    private final String ADMIN = "/api/v1/admin/**";
+    private final String USER = "/api/v1/user/**";
+
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
@@ -26,22 +33,14 @@ public class SecurityConfig {
                     )
                     .authorizeRequests()
                         .antMatchers(SWAGGER_WHITELIST).permitAll()
-                        .antMatchers("/api/v1/auth/**").permitAll()
+                        .antMatchers(ADMIN).hasRole("ADMIN")
+                        .antMatchers(USER).hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated();
         return httpSecurity.build();
     }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder(10);
+    }
 }
-
-
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-//        httpSecurity
-//                .csrf(csrf -> csrf.disable())
-//                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-//                .authorizeHttpRequests(auth -> auth
-//                        .antMatchers(SWAGGER_WHITELIST).permitAll()
-//                        .anyRequest().permitAll()
-//                );
-//        return httpSecurity.build();
-//    }
-//}

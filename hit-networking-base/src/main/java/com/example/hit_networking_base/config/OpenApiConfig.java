@@ -15,23 +15,23 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         OpenAPI openAPI = new OpenAPI().info(
             new Info()
-                    .title("Hit Product Spring APi")
+                    .title("Hit Networking APi")
                     .version("1.0")
-                    .description("Documentation Hit Product Spring API v1.0")
+                    .description("Documentation Hit Networking APi v1.0")
         );
-//        openAPI.components(
-//                new Components()
-//                        .addSecuritySchemes(
-//                                API_KEY,
-//                                new SecurityScheme()
-//                                        .name("Authorization")
-//                                        .scheme("bearer")
-//                                        .bearerFormat("JWT")
-//                                        .type(SecurityScheme.Type.HTTP)
-//                                        .in(SecurityScheme.In.HEADER)
-//                        )
-//        );
-//       openAPI.addSecurityItem(new SecurityRequirement().addList(API_KEY));
+        openAPI.components(
+                new Components()
+                        .addSecuritySchemes(
+                                API_KEY,
+                                new SecurityScheme()
+                                        .name("AuthorizationController")
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .in(SecurityScheme.In.HEADER)
+                        )
+        );
+        openAPI.addSecurityItem(new SecurityRequirement().addList(API_KEY));
         return openAPI;
     }
 

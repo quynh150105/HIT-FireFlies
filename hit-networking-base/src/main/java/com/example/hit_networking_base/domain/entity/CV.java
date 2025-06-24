@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 public class CV {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "post_id")

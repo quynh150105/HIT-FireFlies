@@ -11,6 +11,7 @@ public class JobPost {
 
     @Id
     @Column(name = "post_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer postId;
 
     @Column(length = 200)

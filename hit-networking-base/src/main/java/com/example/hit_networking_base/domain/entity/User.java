@@ -1,17 +1,26 @@
 package com.example.hit_networking_base.domain.entity;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "user")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
 
     @Id
     @Column(name = "user_id")
-    private Integer userId;
+    private int userId;
 
     @Column(length = 50, nullable = false)
     private String username;
