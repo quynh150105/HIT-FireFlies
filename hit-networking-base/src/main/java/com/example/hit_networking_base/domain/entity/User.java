@@ -1,16 +1,24 @@
 package com.example.hit_networking_base.domain.entity;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 @Table(name = "user")
+@AllArgsConstructor
+@NamedEntityGraph
+@Data
 public class User {
 
     @Id
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
 
     @Column(length = 50, nullable = false)
@@ -22,6 +30,13 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Gender gender;
+
+    @Column(nullable = false)
+    private LocalDate dob;
 
     @Column(name = "full_name", length = 100)
     private String fullName;
@@ -36,10 +51,10 @@ public class User {
     private String avatarUrl;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDate createdAt;
 
     @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
+    private LocalDate deletedAt;
 
     @OneToMany(mappedBy = "user")
     private List<CV> cvs;
@@ -58,5 +73,9 @@ public class User {
 
     public enum Role {
         BQT, TV
+    }
+
+    public enum Gender {
+        NAM, NU, ORTHER
     }
 }
