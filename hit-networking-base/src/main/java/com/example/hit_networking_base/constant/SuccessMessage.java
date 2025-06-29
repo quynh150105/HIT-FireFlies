@@ -4,4 +4,7 @@ public class SuccessMessage {
     public static class User{
         public static final String PASSWORD_CHANGE_SUCCESS = "Password changed successfully";
     }
+    public static class Auth{
+        public static final String SEND_EMAIL_SUCCESS = "Email sent successfully";
+    }
 }

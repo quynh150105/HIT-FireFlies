@@ -4,6 +4,7 @@ public class UrlConstant {
     public static class Authorization{
         public static final String PREFIX = "auth";
         public static final String LOGIN = PREFIX + "/login";
+        public static final String REST_PASSWORD = PREFIX + "/forgot-password";
     }
 
     public static class User{

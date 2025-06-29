@@ -2,7 +2,7 @@ package com.example.hit_networking_base.domain.dto.response;
 
 import com.example.hit_networking_base.domain.entity.*;
 
-import javax.persistence.*;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
