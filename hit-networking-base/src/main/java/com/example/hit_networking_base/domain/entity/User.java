@@ -1,6 +1,7 @@
 package com.example.hit_networking_base.domain.entity;
 
 
+import com.example.hit_networking_base.constant.Role;
 import lombok.*;
 
 import javax.persistence.*;
@@ -16,7 +17,7 @@ public class User {
 
     @Id
     @Column(name = "user_id")
-    private int userId;
+    private long userId;
 
     @Column(length = 50, nullable = false, unique = true)
     private String username;
@@ -61,7 +62,4 @@ public class User {
     @OneToMany(mappedBy = "creator")
     private List<JobPost> createdJobPosts;
 
-    public enum Role {
-        BQT, TV
-    }
 }

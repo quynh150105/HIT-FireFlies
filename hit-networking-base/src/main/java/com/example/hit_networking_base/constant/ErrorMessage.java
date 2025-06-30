@@ -14,5 +14,14 @@ public class ErrorMessage {
 
     public static class Image{
         public static final String ERR_UPLOAD = "exception.image.upload.failed";
+        public static final String ERR_NOT_FOUND_IMAGE = "exception.image.not.found";
+    }
+
+    public static class Reaction{
+        public static final String ERR_NOT_FOUND_REACTION = "exception.reaction.not.found";
+    }
+
+    public static class Comment{
+        public static final String ERR_NOT_FOUND_COMMENT = "exception.comment.not.found";
     }
 }

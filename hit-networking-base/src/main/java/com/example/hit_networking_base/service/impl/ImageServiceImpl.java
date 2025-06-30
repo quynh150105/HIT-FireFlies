@@ -1,8 +1,10 @@
 package com.example.hit_networking_base.service.impl;
 
 import com.cloudinary.Cloudinary;
+import com.example.hit_networking_base.constant.ErrorMessage;
 import com.example.hit_networking_base.constant.TargetType;
 import com.example.hit_networking_base.domain.entity.Image;
+import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.repository.ImageRepository;
 import com.example.hit_networking_base.service.ImageService;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ public class ImageServiceImpl implements ImageService {
     private final ImageRepository imageRepository;
 
     @Override
-    public List<String> uploadImage(MultipartFile[] files, TargetType targetType, Integer targetId)
+    public List<String> uploadImage(MultipartFile[] files, TargetType targetType, long targetId)
             throws IOException {
         List<String> urls = new ArrayList<>();
 
@@ -40,6 +42,15 @@ public class ImageServiceImpl implements ImageService {
 
             imageRepository.save(image);
         }
+        return urls;
+    }
+
+    @Override
+    public List<String> getUrlImage(long targetId, TargetType targetType) {
+        List<Image> images = imageRepository.findByTargetTypeAndTargetId(targetType, targetId);
+        List<String> urls = new ArrayList<>();
+        for(Image image : images)
+            urls.add(image.getImageUrl());
         return urls;
     }
 }

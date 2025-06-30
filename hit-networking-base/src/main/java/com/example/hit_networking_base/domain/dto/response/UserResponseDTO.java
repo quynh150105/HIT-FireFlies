@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.domain.dto.response;
 
+import com.example.hit_networking_base.constant.Role;
 import com.example.hit_networking_base.domain.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,9 +15,9 @@ import java.util.List;
 @NoArgsConstructor
 public class UserResponseDTO {
 
-    int userId;
+    long userId;
     String username;
-    User.Role role;
+    Role role;
     String fullName;
     String email;
     String phone;

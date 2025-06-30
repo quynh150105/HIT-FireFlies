@@ -10,13 +10,7 @@ public class CV {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
-    @Column(name = "post_id")
-    private Integer postId;
-
-    @Column(name = "user_id")
-    private Integer userId;
+    private long id;
 
     @Column(name = "apply_date")
     private LocalDateTime applyDate;

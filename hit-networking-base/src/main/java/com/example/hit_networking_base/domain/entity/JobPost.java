@@ -12,7 +12,7 @@ public class JobPost {
     @Id
     @Column(name = "post_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer postId;
+    private long postId;
 
     @Column(length = 200)
     private String title;

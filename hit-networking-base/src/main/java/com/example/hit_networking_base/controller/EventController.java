@@ -6,6 +6,7 @@ import com.example.hit_networking_base.constant.UrlConstant;
 import com.example.hit_networking_base.domain.dto.request.EventRequest;
 import com.example.hit_networking_base.service.EventService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,5 +26,10 @@ public class EventController {
         System.out.println("files.length = " + (eventRequest.getFiles() != null ? eventRequest.getFiles().length : 0));
 
         return VsResponseUtil.success(eventService.createEvent(eventRequest, eventRequest.getFiles()));
+    }
+
+    @GetMapping(UrlConstant.Event.GET_EVENTS)
+    public ResponseEntity<?> getAllEvent(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        return VsResponseUtil.success(eventService.getPageAllEvent(page, size));
     }
 }

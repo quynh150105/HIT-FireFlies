@@ -19,14 +19,14 @@ public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "target_type")
     private TargetType targetType;
 
     @Column(name = "target_id")
-    private Integer targetId;
+    private long targetId;
 
     @Column(name = "image_url")
     private String imageUrl;

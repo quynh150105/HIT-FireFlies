@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface ImageService {
-    List<String> uploadImage(MultipartFile[] files, TargetType targetType, Integer targetId) throws IOException;
+    List<String> uploadImage(MultipartFile[] files, TargetType targetType, long targetId) throws IOException;
+    List<String> getUrlImage(long targetId, TargetType targetType);
 
 }
