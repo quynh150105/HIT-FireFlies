@@ -8,10 +8,7 @@ import com.example.hit_networking_base.service.EventService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
@@ -22,7 +19,7 @@ public class EventController {
 
     private final EventService eventService;
 
-    @PutMapping(value = UrlConstant.Event.CREATE_EVENT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = UrlConstant.Event.CREATE_EVENT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createEvent(@ModelAttribute @Valid EventRequest eventRequest){
         System.out.println("files == null ? " + (eventRequest.getFiles() == null));
         System.out.println("files.length = " + (eventRequest.getFiles() != null ? eventRequest.getFiles().length : 0));
