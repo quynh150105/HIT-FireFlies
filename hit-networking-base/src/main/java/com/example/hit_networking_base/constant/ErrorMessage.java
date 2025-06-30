@@ -11,4 +11,8 @@ public class ErrorMessage {
     public static class Auth{
         public static final String ERR_SEND_EMAIL = "exception.auth.send.failed.email";
     }
+
+    public static class Image{
+        public static final String ERR_UPLOAD = "exception.image.upload.failed";
+    }
 }

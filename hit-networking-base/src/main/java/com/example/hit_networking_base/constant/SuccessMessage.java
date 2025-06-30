@@ -7,4 +7,7 @@ public class SuccessMessage {
     public static class Auth{
         public static final String SEND_EMAIL_SUCCESS = "Email sent successfully";
     }
+    public static class Image{
+        public static final String UPLOAD_SUCCESS = "Image upload success";
+    }
 }

@@ -1,11 +1,20 @@
 package com.example.hit_networking_base.domain.entity;
 
 
+import com.example.hit_networking_base.constant.TargetType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "image")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Image {
 
     @Id
@@ -19,7 +28,7 @@ public class Image {
     @Column(name = "target_id")
     private Integer targetId;
 
-    @Column(name = "image_url", length = 255)
+    @Column(name = "image_url")
     private String imageUrl;
 
     @Column(name = "uploaded_at")
@@ -28,7 +37,4 @@ public class Image {
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    public enum TargetType {
-        JOBPOST, EVENT, COMMENT
-    }
 }

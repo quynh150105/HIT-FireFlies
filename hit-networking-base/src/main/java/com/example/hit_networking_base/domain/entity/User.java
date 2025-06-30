@@ -1,10 +1,7 @@
 package com.example.hit_networking_base.domain.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,8 +9,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user")
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -22,10 +18,10 @@ public class User {
     @Column(name = "user_id")
     private int userId;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 50, nullable = false, unique = true)
     private String username;
 
-    @Column(name = "password_hash", length = 255, nullable = false)
+    @Column(name = "password_hash", nullable = false)
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
@@ -35,13 +31,13 @@ public class User {
     @Column(name = "full_name", length = 100)
     private String fullName;
 
-    @Column(length = 100)
+    @Column(length = 100, unique = true)
     private String email;
 
     @Column(length = 20)
     private String phone;
 
-    @Column(name = "avatar_url", length = 255)
+    @Column(name = "avatar_url")
     private String avatarUrl;
 
     @Column(name = "created_at")

@@ -55,6 +55,12 @@
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>5.3.34</version>
+		</dependency>
+
 
 		<!-- JWT -->
 		<dependency>
@@ -97,7 +103,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.6.5</version>
+			<version>1.6.7</version>
 		</dependency>
 
 		<!-- Lombok -->
@@ -175,6 +181,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 	</dependencies>
 
 	<build>

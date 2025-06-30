@@ -40,8 +40,8 @@ public class SecurityConfig {
                     )
                     .authorizeRequests()
                         .antMatchers(SWAGGER_WHITELIST).permitAll()
-                        .antMatchers(ADMIN).hasAnyRole("ADMIN", "TV")
-                        .antMatchers(USER).hasAnyRole("USER", "ADMIN", "BQT")
+                        .antMatchers(ADMIN).hasAnyRole("ADMIN", "BQT")
+                        .antMatchers(USER).hasAnyRole("USER", "ADMIN", "BQT", "TV")
                         .anyRequest().authenticated()
                     .and()
                     .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
