@@ -1,7 +1,11 @@
 package com.example.hit_networking_base.domain.entity;
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+@Getter
+@Setter
 @Entity
 @Table(name = "comment")
 public class Comment {
