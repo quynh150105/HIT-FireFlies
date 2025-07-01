@@ -1,10 +1,14 @@
 package com.example.hit_networking_base.domain.entity;
 
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Getter
+@Setter
 @Entity
 @Table(name = "jobpost")
 public class JobPost {
