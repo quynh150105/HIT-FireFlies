@@ -1,5 +1,8 @@
 package com.example.hit_networking_base.controller;
 
+import com.example.hit_networking_base.base.RestApiV1;
+import com.example.hit_networking_base.base.VsResponseUtil;
+import com.example.hit_networking_base.constant.UrlConstant;
 import com.example.hit_networking_base.domain.dto.request.RequestCUDUserDTO;
 import com.example.hit_networking_base.domain.dto.response.ApiResponse;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
@@ -14,20 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-@RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RestApiV1
 public class UserController {
     private final UserService service;
 
-    @PostMapping("/create/User")
-    public ResponseEntity<ApiResponse<?>> createUser(@Valid @RequestBody RequestCUDUserDTO request){
-        return ResponseEntity.ok(
-                ApiResponse.<UserResponseDTO> builder()
-                        .message("create thanh cong")
-                        .status(HttpStatus.CREATED)
-                        .data(service.createUser(request))
-                        .build()
-        );
+    @PostMapping(UrlConstant.Admin.CREATE)
+    public ResponseEntity<?> createUser(@Valid @RequestBody RequestCUDUserDTO request){
+       return VsResponseUtil.success(service.createUser(request));
     }
 }

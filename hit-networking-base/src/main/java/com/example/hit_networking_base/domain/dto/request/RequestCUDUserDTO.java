@@ -43,6 +43,7 @@ public class RequestCUDUserDTO {
     private String fullName;
 
     @Email(message="Hay nhap email dung dinh dang")
+    @NotBlank(message = "email khong duoc de trong")
     private String email;
 
     private LocalDate createdAt = LocalDate.now();

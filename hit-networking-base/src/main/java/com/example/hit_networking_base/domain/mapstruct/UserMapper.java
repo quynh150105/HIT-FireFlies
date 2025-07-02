@@ -1,11 +1,9 @@
 package com.example.hit_networking_base.domain.mapstruct;
 
 import com.example.hit_networking_base.domain.dto.request.RequestCUDUserDTO;
-import com.example.hit_networking_base.domain.dto.request.RequestSearchUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

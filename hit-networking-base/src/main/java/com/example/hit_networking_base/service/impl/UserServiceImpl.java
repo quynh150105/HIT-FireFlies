@@ -2,7 +2,6 @@ package com.example.hit_networking_base.service.impl;
 
 import com.example.hit_networking_base.config.PasswordConfig;
 import com.example.hit_networking_base.domain.dto.request.RequestCUDUserDTO;
-import com.example.hit_networking_base.domain.dto.request.RequestSearchUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.UserMapper;
@@ -36,16 +35,16 @@ public class UserServiceImpl implements UserService {
         return mapper.toUserResponseDTO(saveUser);
     }
 
-    @Override
-    public UserResponseDTO searchUser(RequestSearchUserDTO request) {
-
-        return null;
-    }
-
-    @Override
-    public UserResponseDTO updateUser(RequestSearchUserDTO request) {
-        return null;
-    }
+//    @Override
+//    public UserResponseDTO searchUser(RequestSearchUserDTO request) {
+//
+//        return null;
+//    }
+//
+//    @Override
+//    public UserResponseDTO updateUser(RequestSearchUserDTO request) {
+//        return null;
+//    }
 
     @Override
     public Page<UserResponseDTO> getAll(int page, int size) {
