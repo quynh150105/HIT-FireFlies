@@ -4,7 +4,9 @@ import com.example.hit_networking_base.constant.ErrorMessage;
 import com.example.hit_networking_base.constant.SuccessMessage;
 import com.example.hit_networking_base.domain.dto.request.ChangePasswordRequest;
 import com.example.hit_networking_base.domain.dto.response.ChangePasswordResponseDTO;
+import com.example.hit_networking_base.domain.dto.response.UserInfoResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
+import com.example.hit_networking_base.domain.mapstruct.UserMapper;
 import com.example.hit_networking_base.exception.BadRequestException;
 import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.repository.UserRepository;
@@ -22,6 +24,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
 
     @Override
     public User findUserByUsername(String username) {
@@ -33,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public ChangePasswordResponseDTO changePassword(ChangePasswordRequest changePasswordRequest) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if(authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException("User is not authenticated");
+            throw new RuntimeException(ErrorMessage.User.ERR_NOT_AUTHENTICATED);
         }
         String username = authentication.getName();
         User user = findUserByUsername(username);
@@ -49,5 +52,16 @@ public class UserServiceImpl implements UserService {
         user.setPasswordHash(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
         userRepository.save(user);
         return new ChangePasswordResponseDTO(SuccessMessage.User.PASSWORD_CHANGE_SUCCESS);
+    }
+
+    @Override
+    public UserInfoResponseDTO getUserInfo() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication == null || !authentication.isAuthenticated()){
+            throw new RuntimeException(ErrorMessage.User.ERR_NOT_AUTHENTICATED);
+        }
+
+        User user = findUserByUsername(authentication.getName());
+        return userMapper.toUserInforResponseDTO(user);
     }
 }

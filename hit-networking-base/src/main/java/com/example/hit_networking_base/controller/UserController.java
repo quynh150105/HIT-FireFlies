@@ -7,6 +7,7 @@ import com.example.hit_networking_base.domain.dto.request.ChangePasswordRequest;
 import com.example.hit_networking_base.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,8 +19,13 @@ public class UserController {
 
     private final UserService userService;
 
-    @PutMapping(UrlConstant.User.CHANGE_PASSWORK)
+    @PutMapping(UrlConstant.User.CHANGE_PASSWORD)
     public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordRequest changePasswordRequest){
         return VsResponseUtil.success(userService.changePassword(changePasswordRequest));
+    }
+
+    @GetMapping(UrlConstant.User.USER_INFO)
+    public ResponseEntity<?> getInfo(){
+        return VsResponseUtil.success(userService.getUserInfo());
     }
 }

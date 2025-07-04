@@ -1,5 +1,7 @@
 package com.example.hit_networking_base.constant;
 
+import org.springframework.security.core.parameters.P;
+
 public class UrlConstant {
     public static class Authorization{
         public static final String PREFIX = "/auth";
@@ -9,7 +11,8 @@ public class UrlConstant {
 
     public static class User{
         public static final String PREFIX = "/users";
-        public static final String CHANGE_PASSWORK = PREFIX + "/change-password";
+        public static final String CHANGE_PASSWORD = PREFIX + "/change-password";
+        public static final String USER_INFO = PREFIX + "/me";
     }
 
     public static class Event{

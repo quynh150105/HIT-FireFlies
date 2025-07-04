@@ -6,6 +6,7 @@ public class ErrorMessage {
         public static final String ERR_INVALID_PASSWORD = "exception.user.invalid.password";
         public static final String ERR_SAME_PASSWORD = "exception.user.same.password";
         public static final String ERR_NOT_FOUND_EMAIL = "exception.user.not.found.email";
+        public static final String ERR_NOT_AUTHENTICATED = "exception.user.not.authenticated";
     }
 
     public static class Auth{
