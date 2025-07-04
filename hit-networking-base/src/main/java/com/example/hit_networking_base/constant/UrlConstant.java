@@ -13,6 +13,7 @@ public class UrlConstant {
         public static final String PREFIX = "/users";
         public static final String CHANGE_PASSWORD = PREFIX + "/change-password";
         public static final String USER_INFO = PREFIX + "/me";
+        public static final String USER_UPDATE_INFO = PREFIX + "/me";
     }
 
     public static class Event{

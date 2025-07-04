@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,4 +17,5 @@ public class UserInfoResponseDTO {
     private String phone;
     private String avatarUrl;
     private Gender gender;
+    private LocalDate dob;
 }

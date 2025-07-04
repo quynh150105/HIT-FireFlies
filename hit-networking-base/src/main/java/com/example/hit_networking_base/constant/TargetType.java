@@ -1,5 +1,5 @@
 package com.example.hit_networking_base.constant;
 
 public enum TargetType {
-    JOB, EVENT, COMMENT
+    JOB, EVENT, COMMENT, USER
 }
