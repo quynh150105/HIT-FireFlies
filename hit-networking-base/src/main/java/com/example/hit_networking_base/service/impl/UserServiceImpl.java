@@ -25,29 +25,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO updateUser(RequestUpdateUserDTO request) {
-//        if(!repository.existsByUserName(request.getUserName())){
-//            throw new UserException("User da ton tai");
-//        }
-//        if(repository.existsByEmail(request.getEmail())){
-//            throw new UserException("email da ton tai");
-//        }
-//        User user = repository.findByUserName(request.getUserName());
-//        if (user == null) {
-//            throw new UserException("User không tồn tại");
-//        }
-//        if (!request.getUserName().equals(user.getUserName())) {
-//            throw new UserException("Không được phép thay đổi userName");
-//        }
-//
-//
-//        user.setFullName(request.getFullName());
-//        user.setDob(request.getDob());
-//        user.setEmail(request.getEmail());
-//        user.setGender(request.getGender());
-//
-//        user.setPasswordHash(passwordEncoder.passwordEncoder().encode(request.getPasswordHash()));
-//        repository.save(user);
-//        return mapper.toUserResponseDTO(user);
 
         // 1. Tìm user theo userName
         User user = repository.findByUserName(request.getUserName());

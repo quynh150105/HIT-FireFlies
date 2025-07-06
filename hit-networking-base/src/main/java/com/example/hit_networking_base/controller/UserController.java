@@ -21,8 +21,5 @@ public class UserController {
        return VsResponseUtil.success(service.updateUser(request));
     }
 
-//    @PostMapping(UrlConstant.Admin.CREATE)
-//    public ResponseEntity<?> createUser(@Valid @RequestBody RequestUpdateUserDTO request){
-//        return VsResponseUtil.success(service.updateUser(request));
-//    }
+
 }
