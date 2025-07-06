@@ -3,6 +3,7 @@ package com.example.hit_networking_base.domain.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "user")
 @AllArgsConstructor
-@NamedEntityGraph
+@NoArgsConstructor
 @Data
 public class User {
 
@@ -21,8 +22,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer userId;
 
-    @Column(length = 50, nullable = false)
-    private String username;
+    @Column(length = 50, nullable = false, name= "username")
+    private String userName;
 
     @Column(name = "password_hash", length = 255, nullable = false)
     private String passwordHash;
