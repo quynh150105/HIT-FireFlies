@@ -12,7 +12,7 @@ public class UrlConstant {
 
     public static class User{
         public static final String PREFIX= "user";
-        public static final String UPDATE = PREFIX + "/update";s
+        public static final String UPDATE = PREFIX + "/update";
         public static final String SHOW = PREFIX + "/show";
     }
 }

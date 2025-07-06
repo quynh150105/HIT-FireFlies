@@ -7,9 +7,5 @@ import org.springframework.data.domain.Page;
 public interface UserService {
     UserResponseDTO createUser(RequestCUDUserDTO request);
 
-//    UserResponseDTO searchUser(RequestSearchUserDTO request);
-//
-//    UserResponseDTO updateUser(RequestSearchUserDTO request);
 
-    Page<UserResponseDTO> getAll(int page, int size);
 }
