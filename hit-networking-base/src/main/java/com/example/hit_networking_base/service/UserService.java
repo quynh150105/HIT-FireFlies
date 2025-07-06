@@ -8,11 +8,6 @@ import java.util.List;
 public interface UserService {
     UserResponseDTO updateUser(RequestUpdateUserDTO request);
 
-//    UserResponseDTO searchUser(RequestSearchUserDTO request);
-//
-//    UserResponseDTO updateUser(RequestSearchUserDTO request);
 
-    Page<UserResponseDTO> getAll(int page, int size);
 
-//    List<UserResponseDTO> getAll();
 }

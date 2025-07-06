@@ -72,22 +72,7 @@ public class UserServiceImpl implements UserService {
         return mapper.toUserResponseDTO(user);
 
     }
-
-//    @Override
-//    public UserResponseDTO searchUser(RequestSearchUserDTO request) {
-//
-//        return null;
-//    }
-//
-//    @Override
-//    public UserResponseDTO updateUser(RequestSearchUserDTO request) {
-//        return null;
-//    }
-
-    @Override
-    public Page<UserResponseDTO> getAll(int page, int size) {
-        return null;
-    }
-
-
 }
+
+
+
