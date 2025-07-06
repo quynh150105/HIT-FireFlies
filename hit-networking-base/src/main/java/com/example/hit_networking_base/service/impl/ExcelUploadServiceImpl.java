@@ -208,14 +208,14 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 user.setEmail(email);
 
                 // Các thông tin khác
-                user.setRole(User.Role.BQT);
+                user.setRole(User.Role.TV);
                 user.setCreatedAt(LocalDate.now());
                 String password = PasswordGenerator.generatePassword();
                 user.setPasswordHash(passwordencoder.encode(password));
-                user.setUsername(VietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
+                user.setUserName(VietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
 
-                if (repository.existsByUsername(user.getUsername())) {
-                    throw new UserException("Username đã tồn tại: " + user.getUsername());
+                if (repository.existsByUserName(user.getUserName())) {
+                    throw new UserException("Username đã tồn tại: " + user.getUserName());
                 }
 
                 System.out.println("✅ Thêm user: " + user.getFullName() + ", dob = " + user.getDob() + ", email = " + user.getEmail());
