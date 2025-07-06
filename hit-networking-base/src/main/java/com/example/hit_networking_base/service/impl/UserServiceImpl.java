@@ -1,6 +1,7 @@
 package com.example.hit_networking_base.service.impl;
 
 import com.example.hit_networking_base.config.PasswordConfig;
+import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
@@ -48,6 +49,20 @@ public class UserServiceImpl implements UserService {
         // 5. Trả về dữ liệu sau khi cập nhật
         return mapper.toUserResponseDTO(user);
 
+    }
+
+    @Override
+    public UserResponseDTO createUser(RequestUpdateUserDTO request) {
+        if(repository.existsByUserName(request.getUserName())){
+            throw new UserException("User da ton tai");
+        }
+        if(repository.existsByEmail(request.getEmail())){
+            throw new UserException("email da ton tai");
+        }
+        User user = mapper.toUser(request);
+        user.setPasswordHash(passwordEncoder.passwordEncoder().encode(request.getPasswordHash()));
+        User saveUser = repository.save(user);
+        return mapper.toUserResponseDTO(saveUser);
     }
 }
 

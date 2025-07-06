@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.domain.mapstruct;
 
+import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
@@ -21,6 +22,7 @@ public interface UserMapper {
 
     List<UserResponseDTO> TolistUserResonseDTO(List<User> list);
 
+//  User toUser(RequestCreateUserDTO request);
 
 
 }

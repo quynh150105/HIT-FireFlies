@@ -3,6 +3,7 @@ package com.example.hit_networking_base.controller;
 import com.example.hit_networking_base.base.RestApiV1;
 import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
+import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,9 @@ public class UserController {
        return VsResponseUtil.success(service.updateUser(request));
     }
 
+    @PostMapping(UrlConstant.Admin.CREATE)
+    public ResponseEntity<?> createUser(@Valid @RequestBody RequestUpdateUserDTO request){
+        return VsResponseUtil.success(service.createUser(request));
+    }
 
 }
