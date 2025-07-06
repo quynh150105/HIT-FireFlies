@@ -26,4 +26,12 @@ public class VsResponseUtil {
         RestData<T> response = RestData.error(message);
         return new ResponseEntity<>(response, status);
     }
+
+    public static <T> ResponseEntity<RestData<T>> success(String message){
+        return new ResponseEntity<>(RestData.success(message), HttpStatus.OK);
+    }
+
+    public static <T> ResponseEntity<RestData<T>> error(String message){
+        return new ResponseEntity<>(RestData.success(message), HttpStatus.BAD_REQUEST);
+    }
 }

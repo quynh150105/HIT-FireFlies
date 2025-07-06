@@ -24,11 +24,20 @@ public class RestData<T>{
         this.data = data;
     }
 
-    public static <T>RestData<T> error(String message){
-        return new RestData<>(RestStatus.ERROR,message,null);
+    public RestData(String message){
+        this.status = RestStatus.SUCCESS;
+        this.message = message;
+    }
+
+    public static <T>RestData<T> error(String message) {
+        return new RestData<>(RestStatus.ERROR, message, null);
     }
 
     public static <T> RestData<T> success(T data){
         return new RestData<>(data);
+    }
+
+    public static <T>RestData<T> success(String message){
+        return new RestData<>(message);
     }
 }
