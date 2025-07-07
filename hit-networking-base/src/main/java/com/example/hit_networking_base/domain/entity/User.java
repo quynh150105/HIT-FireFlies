@@ -2,11 +2,13 @@ package com.example.hit_networking_base.domain.entity;
 
 
 
+
 import com.example.hit_networking_base.constant.Gender;
 import com.example.hit_networking_base.constant.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 

@@ -1,12 +1,15 @@
 package com.example.hit_networking_base.domain.entity;
 
 
+
 import com.example.hit_networking_base.constant.EmotionType;
 import com.example.hit_networking_base.constant.TargetType;
+import lombok.Data;
+
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-
+@Data
 @Entity
 @Table(name = "reaction")
 public class Reaction {

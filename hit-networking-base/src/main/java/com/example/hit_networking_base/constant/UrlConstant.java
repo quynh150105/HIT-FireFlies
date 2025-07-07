@@ -8,7 +8,6 @@ public class UrlConstant {
         public static final String CREATE = PREFIX + "/create";
         public static final String UPDATE = PREFIX + "/update";
         public static final String IMPORT = PREFIX + "/import";
-
         public static final String GETALL = PREFIX + "/select-all";
     }
 
@@ -16,6 +15,7 @@ public class UrlConstant {
         public static final String PREFIX = "/auth";
         public static final String LOGIN = PREFIX + "/login";
         public static final String REST_PASSWORD = PREFIX + "/forgot-password";
+        public static final String HOME = PREFIX + "/home";
     }
 
     public static class User{
