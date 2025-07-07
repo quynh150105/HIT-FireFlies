@@ -27,4 +27,9 @@ public class ErrorMessage {
         public static final String ERR_NOT_FOUND_COMMENT = "exception.comment.not.found";
     }
 
+    public static class ImportFileExcel{
+        public static final String ERR_WRONG_FORMAT ="exception.import.wrong.format.file";
+        public static final String ERR_WRONG_READ ="exception.import.wrong.read.file";
+    }
+
 }

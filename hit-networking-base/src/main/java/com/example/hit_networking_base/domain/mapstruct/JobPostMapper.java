@@ -13,4 +13,3 @@ public interface JobPostMapper {
     JobPostResponse toResponse(JobPost jobPost);
     List<JobPostResponse> toResponseList(List<JobPost> jobPosts);
 }
-

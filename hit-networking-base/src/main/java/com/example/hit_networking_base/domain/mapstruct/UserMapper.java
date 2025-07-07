@@ -21,7 +21,7 @@ public interface UserMapper {
    @Mapping(source = "username", target = "username")
     UserResponseDTO toUserResponseDTO(User user);
 
-    List<UserResponseDTO> TolistUserResonseDTO(List<User> list);
+    List<UserResponseDTO> TolistUserResponseDTO(List<User> list);
 
     UserInfoResponseDTO toUserInforResponseDTO(User user);
 }

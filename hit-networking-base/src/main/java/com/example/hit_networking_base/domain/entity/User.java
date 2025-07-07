@@ -1,8 +1,6 @@
 package com.example.hit_networking_base.domain.entity;
 
 
-
-
 import com.example.hit_networking_base.constant.Gender;
 import com.example.hit_networking_base.constant.Role;
 import lombok.AllArgsConstructor;
@@ -14,7 +12,6 @@ import java.time.LocalDate;
 
 
 import java.util.List;
-
 @Entity
 @Table(name = "user")
 @AllArgsConstructor

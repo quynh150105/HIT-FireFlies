@@ -28,12 +28,11 @@ public class SecurityConfig {
             "/v3/api-docs/**",
             "/swagger-resources/**",
             "/webjars/**",
-            "/api/v1/auth/**",
-            "/api/v1/admin/**"
+            "/api/v1/auth/**"
     };
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-//    private final String ADMIN = "/api/v1/admin/**";
+    private final String ADMIN = "/api/v1/admin/**";
     private final String USER = "/api/v1/users/**";
 
 
@@ -46,7 +45,7 @@ public class SecurityConfig {
                 )
                 .authorizeRequests()
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
-//                .antMatchers(ADMIN).hasAnyRole("ADMIN", "BQT")
+                .antMatchers(ADMIN).hasAnyRole("ADMIN", "BQT")
                 .antMatchers(USER).hasAnyRole("USER", "ADMIN", "BQT", "TV")
                 .anyRequest().authenticated()
                 .and()

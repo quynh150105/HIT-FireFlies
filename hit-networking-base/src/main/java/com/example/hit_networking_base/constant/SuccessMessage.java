@@ -10,4 +10,8 @@ public class SuccessMessage {
     public static class Image{
         public static final String UPLOAD_SUCCESS = "Image upload success";
     }
+
+    public static class ImportExcelFile{
+        public static final String IMPORT_SUCCESS = "Import excel file success";
+    }
 }

@@ -3,14 +3,15 @@ package com.example.hit_networking_base.service.impl;
 import com.example.hit_networking_base.constant.ErrorMessage;
 import com.example.hit_networking_base.constant.TargetType;
 import com.example.hit_networking_base.domain.dto.request.EventRequest;
-import com.example.hit_networking_base.domain.dto.response.CommentResponseDTO;
-import com.example.hit_networking_base.domain.dto.response.EventPageResponseDTO;
-import com.example.hit_networking_base.domain.dto.response.EventResponseDTO;
-import com.example.hit_networking_base.domain.dto.response.ReactionResponseDTO;
+import com.example.hit_networking_base.domain.dto.request.EventUpdateRequest;
+import com.example.hit_networking_base.domain.dto.response.*;
 import com.example.hit_networking_base.domain.entity.Event;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.EventMapper;
+import com.example.hit_networking_base.exception.NotFoundException;
+import com.example.hit_networking_base.exception.UnauthorizedException;
 import com.example.hit_networking_base.repository.EventRepository;
+import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -34,6 +35,7 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final UserService userService;
+    private final UserRepository userRepository;
     private final EventMapper eventMapper;
     private final ImageService imageService;
     private final CommentService commentService;
@@ -107,4 +109,21 @@ public class EventServiceImpl implements EventService {
         return new PageImpl<>(dtos, pageable, eventPage.getTotalElements());
     }
 
+    @Override
+    public EventResponseDTO updateEvent(long eventId, EventUpdateRequest request) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event not found with id: " + eventId));
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+
+        if (!event.getCreator().getUsername().equals(username)) {
+            throw new UnauthorizedException("You are not authorized to update this event");
+        }
+
+        eventMapper.updateEventFromRequest(request, event);
+        Event updatedEvent = eventRepository.save(event);
+
+        return eventMapper.toEventResponseDTO(updatedEvent);
+    }
 }
