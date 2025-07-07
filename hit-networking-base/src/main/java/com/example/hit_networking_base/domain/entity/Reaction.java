@@ -1,6 +1,9 @@
 package com.example.hit_networking_base.domain.entity;
 
 
+import com.example.hit_networking_base.constant.EmotionType;
+import com.example.hit_networking_base.constant.TargetType;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
@@ -9,10 +12,8 @@ import java.time.LocalDateTime;
 public class Reaction {
 
     @Id
-    private Integer id;
-
-    @Column(name = "user_id")
-    private Integer userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "emotion_type")
@@ -23,7 +24,7 @@ public class Reaction {
     private TargetType targetType;
 
     @Column(name = "target_id")
-    private Integer targetId;
+    private long targetId;
 
     @Column(name = "reacted_at")
     private LocalDateTime reactedAt;
@@ -34,12 +35,4 @@ public class Reaction {
     @ManyToOne
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
-
-    public enum EmotionType {
-        LIKE, LOVE, HAHA, WOW, SAD, ANGRY
-    }
-
-    public enum TargetType {
-        JOBPOST, EVENT, CV
-    }
 }

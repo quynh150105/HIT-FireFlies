@@ -1,17 +1,21 @@
 package com.example.hit_networking_base.domain.entity;
+
+import com.example.hit_networking_base.constant.TargetType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comment")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Comment {
-
     @Id
-    @Column(name = "comment_id")
-    private Integer commentId;
-
-    @Column(name = "user_id")
-    private Integer userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long commentId;
 
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -21,7 +25,8 @@ public class Comment {
     private TargetType targetType;
 
     @Column(name = "target_id")
-    private Integer targetId;
+    private long targetId;
+
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -33,7 +38,4 @@ public class Comment {
     @JoinColumn(name = "user_id", insertable = false, updatable = false)
     private User user;
 
-    public enum TargetType {
-        JOBPOST, EVENT, CV
-    }
 }

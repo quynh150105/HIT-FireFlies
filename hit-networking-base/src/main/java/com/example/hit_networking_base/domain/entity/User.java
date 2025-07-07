@@ -1,13 +1,16 @@
 package com.example.hit_networking_base.domain.entity;
 
 
+
+import com.example.hit_networking_base.constant.Gender;
+import com.example.hit_networking_base.constant.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+
+
 import java.util.List;
 
 @Entity
@@ -20,10 +23,10 @@ public class User {
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer userId;
+    private Long userId;
 
     @Column(length = 50, nullable = false, name= "username")
-    private String userName;
+    private String username;
 
     @Column(name = "password_hash", length = 255, nullable = false)
     private String passwordHash;
@@ -72,11 +75,4 @@ public class User {
     @OneToMany(mappedBy = "creator")
     private List<JobPost> createdJobPosts;
 
-    public enum Role {
-        BQT, TV
-    }
-
-    public enum Gender {
-        NAM, NU, ORTHER
-    }
 }

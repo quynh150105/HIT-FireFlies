@@ -1,8 +1,10 @@
 package com.example.hit_networking_base.service.impl;
 
-import com.example.hit_networking_base.Util.ExcelHelper;
-import com.example.hit_networking_base.Util.PasswordGenerator;
-import com.example.hit_networking_base.Util.VietNameseUtils;
+import com.example.hit_networking_base.constant.Gender;
+import com.example.hit_networking_base.constant.Role;
+import com.example.hit_networking_base.util.ExcelHelper;
+import com.example.hit_networking_base.util.PasswordGenerator;
+import com.example.hit_networking_base.util.VietNameseUtils;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.exception.UserException;
 import com.example.hit_networking_base.repository.UserRepository;
@@ -12,7 +14,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFShape;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -161,9 +162,9 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 // Giới tính
                 String genderStr = ExcelHelper.getCellValueAsString(genderCell).trim().toUpperCase();
                 if (genderStr.equals("NAM")) {
-                    user.setGender(User.Gender.NAM);
+                    user.setGender(Gender.MALE);
                 } else if (genderStr.equals("NỮ")) {
-                    user.setGender(User.Gender.NU);
+                    user.setGender(Gender.FEMALE);
                 } else {
                     throw new UserException("Giới tính không hợp lệ tại dòng " + (rowIndex + 1) + ": " + genderStr);
                 }
@@ -208,14 +209,14 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 user.setEmail(email);
 
                 // Các thông tin khác
-                user.setRole(User.Role.TV);
+                user.setRole(Role.TV);
                 user.setCreatedAt(LocalDate.now());
                 String password = PasswordGenerator.generatePassword();
                 user.setPasswordHash(passwordencoder.encode(password));
-                user.setUserName(VietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
+                user.setUsername(VietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
 
-                if (repository.existsByUserName(user.getUserName())) {
-                    throw new UserException("Username đã tồn tại: " + user.getUserName());
+                if (repository.existsByUsername(user.getUsername())) {
+                    throw new UserException("Username đã tồn tại: " + user.getUsername());
                 }
 
                 System.out.println("✅ Thêm user: " + user.getFullName() + ", dob = " + user.getDob() + ", email = " + user.getEmail());

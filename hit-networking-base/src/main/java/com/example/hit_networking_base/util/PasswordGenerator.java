@@ -1,4 +1,4 @@
-package com.example.hit_networking_base.Util;
+package com.example.hit_networking_base.util;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;

@@ -1,38 +1,43 @@
 package com.example.hit_networking_base.config;
 
+import io.swagger.v3.core.converter.ModelConverters;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.servers.Server;
-import org.springdoc.core.GroupedOpenApi;
-import org.springframework.beans.factory.annotation.Value;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import java.util.List;
-
-import java.security.Provider;
 
 @Configuration
+@RequiredArgsConstructor
 public class OpenApiConfig {
-    @Bean
-    public OpenAPI openAPI(@Value("${open.api.title}") String title,
-                           @Value("${open.api.version}") String version,
-                           @Value("${open.api.description}") String description,
-                           @Value("${open.api.serverUrl}") String serverUrl,
-                           @Value("${open.api.serverName}") String serverName) {
-                return new OpenAPI().info(new Info()
-                        .title(title)
-                        .version(version)
-                        .description(description))
-                        .servers(List.of(new Server().url(serverUrl).description(serverName)));
-    }
 
+    private final String API_KEY = "Bearer Token";
+
+    // Inject MultipartFileArrayConverter
+    private final MultipartFileArrayConverter multipartFileArrayConverter;
 
     @Bean
-    public GroupedOpenApi groupedOpenApi(){
+    public OpenAPI customOpenAPI() {
 
-        return GroupedOpenApi.builder()
-                .group("api-service-1")
-                .packagesToScan("")
-                .build();
+        ModelConverters.getInstance().addConverter(multipartFileArrayConverter);
+
+        return new OpenAPI()
+                .info(new Info()
+                        .title("Hit Networking API")
+                        .version("1.0")
+                        .description("Documentation Hit Networking API v1.0"))
+                .components(new Components().addSecuritySchemes(
+                        API_KEY,
+                        new SecurityScheme()
+                                .name("AuthorizationController")
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                                .type(SecurityScheme.Type.HTTP)
+                                .in(SecurityScheme.In.HEADER)
+                ))
+                .addSecurityItem(new SecurityRequirement().addList(API_KEY));
     }
 }

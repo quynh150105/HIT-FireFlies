@@ -9,13 +9,8 @@ import java.time.LocalDateTime;
 public class CV {
 
     @Id
-    private Integer id;
-
-    @Column(name = "post_id")
-    private Integer postId;
-
-    @Column(name = "user_id")
-    private Integer userId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
 
     @Column(name = "apply_date")
     private LocalDateTime applyDate;

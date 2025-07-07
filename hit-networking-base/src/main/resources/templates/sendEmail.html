@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Notification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f7fa;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #1f4fff, #0099ff);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .content {
+      padding: 30px;
+      color: #333333;
+    }
+
+    .content h2 {
+      font-size: 20px;
+      margin-top: 0;
+    }
+
+    .password-box {
+      background-color: #f0f4f8;
+      border-left: 5px solid #1f4fff;
+      padding: 15px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      margin: 20px 0;
+      border-radius: 8px;
+      color: #2c3e50;
+      word-break: break-all;
+    }
+
+    .footer {
+      background-color: #f0f0f0;
+      padding: 20px;
+      text-align: center;
+      font-size: 13px;
+      color: #999999;
+    }
+
+    a.button {
+      display: inline-block;
+      background-color: #1f4fff;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    @media only screen and (max-width: 600px) {
+      .container {
+        margin: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Thông báo từ Hệ thống CLB-HIT</h1>
+  </div>
+  <div class="content">
+    <h2>Xin chào <strong>{{username}}</strong></h2>
+    <p>Chúng tôi đã xử lý yêu cầu cấp lại mật khẩu của bạn. Dưới đây là mật khẩu mới:</p>
+    <div class="password-box">{{password}}</div>
+    <p>Vui lòng đăng nhập và đổi mật khẩu ngay để bảo vệ tài khoản của bạn.</p>
+    <a href="{{login_url}}" class="button">Đăng nhập ngay</a>
+  </div>
+  <div class="footer">
+    Email này được gửi tự động từ hệ thống. Vui lòng không phản hồi lại email này.<br>
+    &copy; 2025 Hệ thống Quản lý CLB-HIT.
+  </div>
+</div>
+</body>
+</html>

@@ -1,18 +1,26 @@
 package com.example.hit_networking_base.domain.entity;
 
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "event")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Event {
 
     @Id
     @Column(name = "event_id")
-    private Integer eventId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long eventId;
 
-    @Column(length = 200)
+    @Column(length = 100)
     private String title;
 
     @Column(columnDefinition = "TEXT")
@@ -21,8 +29,11 @@ public class Event {
     @Column(name = "event_date")
     private LocalDateTime eventDate;
 
-    @Column(name = "created_by")
-    private Integer createdBy;
+    @Column(name = "organizer")
+    private String organizer;
+
+    @Column(name = "location")
+    private String location;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

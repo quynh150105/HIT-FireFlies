@@ -10,11 +10,14 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RestData<T>{
+
+public class RestData<T> {
+
     private RestStatus status;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    private String  message;
+    private String message;
+
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T data;
@@ -40,4 +43,5 @@ public class RestData<T>{
     public static <T>RestData<T> success(String message){
         return new RestData<>(message);
     }
+
 }

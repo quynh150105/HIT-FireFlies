@@ -1,5 +1,7 @@
 package com.example.hit_networking_base.domain.dto.request;
 
+import com.example.hit_networking_base.constant.Gender;
+import com.example.hit_networking_base.constant.Role;
 import com.example.hit_networking_base.domain.entity.*;
 import com.example.hit_networking_base.domain.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -24,9 +26,9 @@ public class RequestCreateUserDTO {
     private String passwordHash;
 
 
-    private User.Role role = User.Role.TV;
+    private Role role = Role.TV;
 
-    private User.Gender gender= User.Gender.NAM;
+    private Gender gender = Gender.MALE;
 
     @NotNull(message = "Ngày sinh không được để trống")
     @Past(message = "Ngày sinh phải trước ngày hôm nay")
@@ -58,11 +60,5 @@ public class RequestCreateUserDTO {
 
     private List<JobPost> createdJobPosts;
 
-    public enum Role {
-        BQT, TV
-    }
 
-    public enum Gender {
-        NAM, NU, ORTHER
-    }
 }

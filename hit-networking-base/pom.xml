@@ -56,6 +56,13 @@
 			<artifactId>spring-security-crypto</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>5.3.34</version>
+		</dependency>
+
+
 		<!-- JWT -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
@@ -97,7 +104,7 @@
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-ui</artifactId>
-			<version>1.6.5</version>
+			<version>1.6.7</version>
 		</dependency>
 
 		<!-- Lombok -->
@@ -124,6 +131,7 @@
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
+			<version>5.6.15.Final</version>
 		</dependency>
 
 		<!-- JPA Annotation API -->
@@ -181,6 +189,7 @@
 			<artifactId>poi-ooxml</artifactId>
 			<version>5.4.1</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>

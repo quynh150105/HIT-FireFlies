@@ -10,8 +10,8 @@ import java.util.List;
 public class JobPost {
 
     @Id
-    @Column(name = "post_id")
-    private Integer postId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long postId;
 
     @Column(length = 200)
     private String title;

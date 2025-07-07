@@ -6,7 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.MultiValueMap;
 
 public class VsResponseUtil {
-    public static <T> ResponseEntity<RestData<T>> success(T data){
+
+    public static <T>ResponseEntity<RestData<T>> success(T data){
         return new ResponseEntity<>(RestData.success(data), HttpStatus.OK);
     }
 
@@ -34,4 +35,5 @@ public class VsResponseUtil {
     public static <T> ResponseEntity<RestData<T>> error(String message){
         return new ResponseEntity<>(RestData.success(message), HttpStatus.BAD_REQUEST);
     }
+
 }

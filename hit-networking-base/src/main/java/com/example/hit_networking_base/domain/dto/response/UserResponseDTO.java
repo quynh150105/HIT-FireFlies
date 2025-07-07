@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.domain.dto.response;
 
+import com.example.hit_networking_base.constant.Gender;
 import com.example.hit_networking_base.domain.entity.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,13 +20,13 @@ public class UserResponseDTO {
 
     private String fullName;
 
-    private User.Gender gender;
+    private Gender gender;
 
     private LocalDate dob;
 
     private String email;
 
-    private String userName;
+    private String username;
 
     private String passwordHash;
 

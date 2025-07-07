@@ -1,7 +1,9 @@
 package com.example.hit_networking_base.domain.mapstruct;
 
+
 import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
+import com.example.hit_networking_base.domain.dto.response.UserInfoResponseDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
 import org.mapstruct.Mapper;
@@ -14,15 +16,12 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring")
 
 public interface UserMapper {
-  //  @Mapping(target = "gender", expression = "java(dto.getGender() != null ? dto.getGender() : com.example.hit_networking_base.domain.entity.User.Gender.NAM)")
     User toUser(RequestUpdateUserDTO request);
 
-  @Mapping(source = "userName", target = "userName")
-  UserResponseDTO toUserResponseDTO(User user);
+   @Mapping(source = "username", target = "username")
+    UserResponseDTO toUserResponseDTO(User user);
 
     List<UserResponseDTO> TolistUserResonseDTO(List<User> list);
 
-//  User toUser(RequestCreateUserDTO request);
-
-
+    UserInfoResponseDTO toUserInforResponseDTO(User user);
 }
