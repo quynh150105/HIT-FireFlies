@@ -5,7 +5,6 @@ import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
-import com.example.hit_networking_base.exception.UserException;
 import com.example.hit_networking_base.service.SaveListAccountUser;
 import com.example.hit_networking_base.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,55 +26,54 @@ public class AdminController {
     private final SaveListAccountUser saveListAccountUser;
     private final UserService userService;
 
-    @Operation(summary = "BQT thêm người dùng theo form")
+    @Operation(summary = "Admin creates a new user via form")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Thêm thành công",
+            @ApiResponse(responseCode = "200", description = "User created successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Dữ liệu không hợp lệ"),
-            @ApiResponse(responseCode = "403", description = "Không có quyền thực hiện"),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(UrlConstant.Admin.CREATE)
     public ResponseEntity<?> createUser(@Valid @RequestBody RequestUpdateUserDTO request){
         return VsResponseUtil.success(userService.createUser(request));
     }
 
-
-    @Operation(summary = "BQT import file Excel danh sách thành viên")
+    @Operation(summary = "Admin imports user list from Excel file")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Import thành công",
+            @ApiResponse(responseCode = "200", description = "File imported successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))),
-            @ApiResponse(responseCode = "400", description = "File không hợp lệ hoặc định dạng sai"),
-            @ApiResponse(responseCode = "401", description = "Chưa đăng nhập"),
-            @ApiResponse(responseCode = "403", description = "Không có quyền truy cập"),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            @ApiResponse(responseCode = "400", description = "Invalid or incorrect file format"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(value = UrlConstant.Admin.IMPORT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> importExcelFile(@ModelAttribute MultipartFile file){
         return VsResponseUtil.success(saveListAccountUser.saveListAccUsersToDatabase(file));
     }
 
-    @Operation(summary = "BQT lấy toàn bộ thông tin danh sách thành viên")
+    @Operation(summary = "Admin retrieves all user information")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Thành công",
+            @ApiResponse(responseCode = "200", description = "Retrieved successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))),
-            @ApiResponse(responseCode = "401", description = "Chưa đăng nhập"),
-            @ApiResponse(responseCode = "403", description = "Không có quyền truy cập"),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(UrlConstant.Admin.GET_ALL)
     public ResponseEntity<?> getAllUsers(){
-        return  VsResponseUtil.success(saveListAccountUser.getAllUser());
+        return VsResponseUtil.success(saveListAccountUser.getAllUser());
     }
 
-    @Operation(summary = "BQT cập nhật thông tin của thành viên")
+    @Operation(summary = "Admin updates user information")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Cập nhật thành công",
+            @ApiResponse(responseCode = "200", description = "User updated successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Dữ liệu không hợp lệ"),
-            @ApiResponse(responseCode = "401", description = "Chưa đăng nhập"),
-            @ApiResponse(responseCode = "403", description = "Không có quyền truy cập"),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping(UrlConstant.Admin.UPDATE)
     public ResponseEntity<?> updateUser(@Valid @RequestBody RequestUpdateUserDTO request){

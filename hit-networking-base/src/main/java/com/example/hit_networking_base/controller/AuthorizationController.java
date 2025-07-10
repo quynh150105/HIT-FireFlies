@@ -28,38 +28,38 @@ public class AuthorizationController {
     private final AuthService authService;
     private final JobPostServiceImpl jobPostService;
 
-    @Operation(summary = "Đăng nhập")
+    @Operation(summary = "User login")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Đăng nhập thành công",
+            @ApiResponse(responseCode = "200", description = "Login successful",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponseDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Sai thông tin người dùng"),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            @ApiResponse(responseCode = "400", description = "Invalid user credentials"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(UrlConstant.Authorization.LOGIN)
     public ResponseEntity<?> login(AuthRequest authRequest){
         return VsResponseUtil.success(authService.login(authRequest));
     }
 
-    @Operation(summary = "Cấp lại mật khẩu (Quên mật khẩu)")
+    @Operation(summary = "Reset password (Forgot password)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Gửi lại mật khẩu thành công",
+            @ApiResponse(responseCode = "200", description = "Password reset link sent successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
-            @ApiResponse(responseCode = "400", description = "Dữ liệu không hợp lệ"),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(UrlConstant.Authorization.REST_PASSWORD)
     public ResponseEntity<?> resetPassword(@RequestBody @Valid ResetPasswordRequest request){
         return VsResponseUtil.success(authService.resetPassword(request));
     }
 
-    @Operation(summary = "Tất cả bài đăng trên Trang chủ (Home)")
+    @Operation(summary = "Get all job posts on the homepage")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lấy danh sách thành công",
+            @ApiResponse(responseCode = "200", description = "Job post list retrieved successfully",
                     content = @Content(
                             mediaType = "application/json",
                             schema = @Schema(implementation = ApiResponse.class)
                     )),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(UrlConstant.Authorization.HOME)
     public ResponseEntity<?> listJobPosts(){

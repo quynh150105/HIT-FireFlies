@@ -1,25 +1,29 @@
 package com.example.hit_networking_base.config;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import javax.annotation.PostConstruct;
-import org.springframework.stereotype.Component;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.MapPropertySource;
 
-@Component
-public class DotenvInitializer {
+import java.util.HashMap;
+import java.util.Map;
 
-    @PostConstruct
-    public void init() {
-        Dotenv dotenv = Dotenv.configure()
-                .ignoreIfMissing()
-                .load();
+public class DotenvApplicationContextInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+    @Override
+    public void initialize(ConfigurableApplicationContext applicationContext) {
+        Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+        Map<String, Object> envMap = new HashMap<>();
 
         dotenv.entries().forEach(entry -> {
-            // Nếu biến chưa tồn tại trong system (ví dụ chạy trên IDE), thì set
-            if (System.getProperty(entry.getKey()) == null && System.getenv(entry.getKey()) == null) {
-                System.setProperty(entry.getKey(), entry.getValue());
-            }
+            envMap.put(entry.getKey(), entry.getValue());
+            System.setProperty(entry.getKey(), entry.getValue()); // vẫn giữ để log hoặc dùng System.getProperty()
         });
 
-        System.out.println("✅ Loaded .env into System properties");
+        ConfigurableEnvironment environment = applicationContext.getEnvironment();
+        environment.getPropertySources().addFirst(new MapPropertySource("dotenv", envMap));
+
+        System.out.println("✅ Loaded .env into Spring Environment [EARLY]");
     }
 }

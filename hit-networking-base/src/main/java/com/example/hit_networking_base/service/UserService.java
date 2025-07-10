@@ -18,4 +18,6 @@ public interface UserService {
 
     UserResponseDTO createUser(RequestUpdateUserDTO request);
 
+    boolean addAdmin(String adminNane, String password);
+
 }

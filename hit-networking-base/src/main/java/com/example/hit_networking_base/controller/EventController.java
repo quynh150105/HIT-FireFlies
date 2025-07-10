@@ -26,42 +26,42 @@ public class EventController {
 
     private final EventService eventService;
 
-    @Operation(summary = "Tạo sự kiện mới")
+    @Operation(summary = "Create a new event")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Tạo thành công",
+            @ApiResponse(responseCode = "201", description = "Event created successfully",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = EventResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Dữ liệu không hợp lệ"),
-            @ApiResponse(responseCode = "403", description = "Không có quyền"),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(value = UrlConstant.Event.CREATE_EVENT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createEvent(@ModelAttribute @Valid EventRequest eventRequest){
         return VsResponseUtil.success(eventService.createEvent(eventRequest, eventRequest.getFiles()));
     }
 
-    @Operation(summary = "Danh sách các sự kiện")
+    @Operation(summary = "Get a paginated list of events")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Lấy danh sách sự kiện thành công",
+            @ApiResponse(responseCode = "200", description = "Event list retrieved successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = EventPageResponseDTO.class))), // giả sử bạn có 1 class chứa danh sách có phân trang
-            @ApiResponse(responseCode = "403", description = "Không có quyền"),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+                            schema = @Schema(implementation = EventPageResponseDTO.class))),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(UrlConstant.Event.GET_EVENTS)
     public ResponseEntity<?> getAllEvent(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
         return VsResponseUtil.success(eventService.getPageAllEvent(page, size));
     }
 
-    @Operation(summary = "Sửa sự kiện theo ID")
+    @Operation(summary = "Update an event by ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Sửa thành công",
+            @ApiResponse(responseCode = "200", description = "Event updated successfully",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = EventResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Dữ liệu không hợp lệ"),
-            @ApiResponse(responseCode = "403", description = "Không có quyền"),
-            @ApiResponse(responseCode = "404", description = "Không tìm thấy sự kiện"),
-            @ApiResponse(responseCode = "500", description = "Lỗi hệ thống")
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "404", description = "Event not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping(UrlConstant.Event.UPDATE_EVENT)
     public ResponseEntity<?> updateEvent(
