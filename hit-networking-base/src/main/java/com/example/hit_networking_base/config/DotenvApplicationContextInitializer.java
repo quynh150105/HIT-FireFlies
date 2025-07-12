@@ -24,6 +24,6 @@ public class DotenvApplicationContextInitializer implements ApplicationContextIn
         ConfigurableEnvironment environment = applicationContext.getEnvironment();
         environment.getPropertySources().addFirst(new MapPropertySource("dotenv", envMap));
 
-        System.out.println("✅ Loaded .env into Spring Environment [EARLY]");
+        System.out.println("Loaded .env into Spring Environment [EARLY]");
     }
 }
