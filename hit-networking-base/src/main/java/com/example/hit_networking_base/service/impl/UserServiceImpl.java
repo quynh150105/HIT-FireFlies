@@ -68,10 +68,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO createUser(RequestUpdateUserDTO request) {
-        if(repository.existsByUsername(request.getUsername())){
+        if(repository.existsByUsernameAndDeletedAtIsNull(request.getUsername())){
             throw new UserException("User da ton tai");
         }
-        if(repository.existsByEmail(request.getEmail())){
+        if(repository.existsByEmailAndDeletedAtIsNull(request.getEmail())){
             throw new UserException("email da ton tai");
         }
         User user = mapper.toUser(request);
@@ -152,9 +152,8 @@ public class UserServiceImpl implements UserService {
     }
 
     public boolean addAdmin(String adminName, String adminPassword){
-        if(userRepository.existsByRole(Role.BQT))
+        if(userRepository.existsByRoleAndDeletedAtIsNull(Role.BQT))
             return false;
-
         User admin = new User();
         admin.setUsername(adminName);
         admin.setPasswordHash(passwordEncoder.encode(adminPassword));

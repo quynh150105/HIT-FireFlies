@@ -35,7 +35,6 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final UserService userService;
-    private final UserRepository userRepository;
     private final EventMapper eventMapper;
     private final ImageService imageService;
     private final CommentService commentService;
@@ -82,7 +81,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Page<EventPageResponseDTO> getPageAllEvent(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<Event> eventPage = eventRepository.findAll(pageable);
+        Page<Event> eventPage = eventRepository.findByDeletedAtIsNull(pageable);
 
         List<EventPageResponseDTO> dtos = eventPage.getContent().stream()
                 .map(event -> {
@@ -90,7 +89,7 @@ public class EventServiceImpl implements EventService {
 
                     // Gắn ảnh
                     List<String> images = imageService.getUrlImage(event.getEventId(), TargetType.EVENT);
-                    dto.setImages(images); // Nếu bạn đặt tên field trong DTO là `image`
+                    dto.setImages(images);
 
                     // Gắn comment
                     List<CommentResponseDTO> comments = commentService.findCommentByTargetIdAndTargetType(event.getEventId(), TargetType.EVENT);
@@ -103,9 +102,6 @@ public class EventServiceImpl implements EventService {
                     return dto;
                 })
                 .collect(Collectors.toList());
-
-        // Tùy yêu cầu, bạn có thể return list, hoặc bọc lại trong Page
-        // Nếu cần giữ phân trang:
         return new PageImpl<>(dtos, pageable, eventPage.getTotalElements());
     }
 

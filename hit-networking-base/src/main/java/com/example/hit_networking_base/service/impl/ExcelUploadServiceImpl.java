@@ -215,11 +215,11 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 user.setPasswordHash(passwordencoder.encode(password));
                 user.setUsername(VietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
 
-                if (repository.existsByUsername(user.getUsername())) {
+                if (repository.existsByUsernameAndDeletedAtIsNull(user.getUsername())) {
                     throw new UserException("Username đã tồn tại: " + user.getUsername());
                 }
 
-                System.out.println("✅ Thêm user: " + user.getFullName() + ", dob = " + user.getDob() + ", email = " + user.getEmail());
+                System.out.println("Thêm user: " + user.getFullName() + ", dob = " + user.getDob() + ", email = " + user.getEmail());
                 users.add(user);
                 System.out.println("password: " + password);
             }
@@ -229,6 +229,4 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
         }
         return users;
     }
-
-
 }

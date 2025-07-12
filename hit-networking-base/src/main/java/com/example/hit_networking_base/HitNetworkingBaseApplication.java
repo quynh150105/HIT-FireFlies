@@ -28,5 +28,4 @@ public class HitNetworkingBaseApplication {
 		log.info("-------------------------START SUCCESS " + appName
 				+ " Application------------------------------");
 	}
-
 }
