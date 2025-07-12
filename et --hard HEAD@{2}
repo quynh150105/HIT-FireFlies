@@ -1,0 +1,43 @@
+[33m1211cce[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{0}: rebase (finish): returning to refs/heads/dev
+[33m1211cce[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{1}: rebase (start): checkout origin/main
+[33mcaa1f54[m[33m ([m[1;31morigin/dev[m[33m)[m HEAD@{2}: checkout: moving from main to dev
+[33m1211cce[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m HEAD@{3}: commit: fix redundant display
+[33m914171a[m[33m ([m[1;31morigin/test-merge[m[33m, [m[1;32mtest-merge[m[33m)[m HEAD@{4}: merge test-merge: Fast-forward
+[33m92b62b0[m HEAD@{5}: checkout: moving from test-merge to main
+[33m914171a[m[33m ([m[1;31morigin/test-merge[m[33m, [m[1;32mtest-merge[m[33m)[m HEAD@{6}: commit: refactor: move credentials and configs to .env file
+[33mb33303e[m HEAD@{7}: commit: feat: auto-create default admin account on startup
+[33m1345a55[m HEAD@{8}: commit: Remove .env from Git tracking and add to .gitignore
+[33mcd25311[m HEAD@{9}: commit (merge): Add full API sprin 1
+[33me8b00cd[m HEAD@{10}: reset: moving to origin/test-merge
+[33me8b00cd[m HEAD@{11}: checkout: moving from feature/update-user-profile to test-merge
+[33mffe4728[m[33m ([m[1;31morigin/feature/update-user-profile[m[33m, [m[1;32mfeature/update-user-profile[m[33m)[m HEAD@{12}: commit: feat(user): implement update user info
+[33m34897ae[m[33m ([m[1;31morigin/feature/fetch-user-profile[m[33m, [m[1;32mfeature/fetch-user-profile[m[33m)[m HEAD@{13}: checkout: moving from feature/fetch-user-profile to feature/update-user-profile
+[33m34897ae[m[33m ([m[1;31morigin/feature/fetch-user-profile[m[33m, [m[1;32mfeature/fetch-user-profile[m[33m)[m HEAD@{14}: commit: feat: fetch user profile API
+[33m063c696[m[33m ([m[1;31morigin/feature/get-events[m[33m, [m[1;32mfeature/get-events[m[33m)[m HEAD@{15}: checkout: moving from feature/get-events to feature/fetch-user-profile
+[33m063c696[m[33m ([m[1;31morigin/feature/get-events[m[33m, [m[1;32mfeature/get-events[m[33m)[m HEAD@{16}: commit: feat: implement get events API with pagination, images, comments, and reactions
+[33m9b2aba9[m[33m ([m[1;31morigin/feature/create-event[m[33m, [m[1;32mfeature/create-event[m[33m)[m HEAD@{17}: checkout: moving from feature/create-event to feature/get-events
+[33m9b2aba9[m[33m ([m[1;31morigin/feature/create-event[m[33m, [m[1;32mfeature/create-event[m[33m)[m HEAD@{18}: commit: Change createEvent endpoint from PUT to POST for RESTful compliance
+[33m7c1df0d[m HEAD@{19}: commit: Add feature: create event with image upload
+[33m940294f[m[33m ([m[1;31morigin/feature/reset-password[m[33m, [m[1;32mfeature/reset-password[m[33m)[m HEAD@{20}: checkout: moving from feature/reset-password to feature/create-event
+[33m940294f[m[33m ([m[1;31morigin/feature/reset-password[m[33m, [m[1;32mfeature/reset-password[m[33m)[m HEAD@{21}: commit: Add API for forgot password
+[33med3cdd4[m[33m ([m[1;31morigin/feature/change-password[m[33m, [m[1;32mfeature/change-password[m[33m)[m HEAD@{22}: checkout: moving from feature/change-password to feature/reset-password
+[33med3cdd4[m[33m ([m[1;31morigin/feature/change-password[m[33m, [m[1;32mfeature/change-password[m[33m)[m HEAD@{23}: commit: feat: implement change password API
+[33mf17aba4[m HEAD@{24}: checkout: moving from feature/login to feature/change-password
+[33mc2865ab[m[33m ([m[1;31morigin/feature/login[m[33m, [m[1;32mfeature/login[m[33m)[m HEAD@{25}: commit: fix: validate login request and add missing @RequestBody
+[33mf17aba4[m HEAD@{26}: checkout: moving from feature/change-password to feature/login
+[33mf17aba4[m HEAD@{27}: checkout: moving from feature/login to feature/change-password
+[33mf17aba4[m HEAD@{28}: commit: Add API login
+[33m31d6c73[m HEAD@{29}: commit: chore: add .gitignore to exclude IDE and build folders
+[33mb4b9fa3[m HEAD@{30}: rebase (finish): returning to refs/heads/feature/login
+[33mb4b9fa3[m HEAD@{31}: rebase (pick): chore: copy domain package from dev branch
+[33mfe4e923[m HEAD@{32}: rebase (reword): add SecurityConfig for Spring Security config
+[33m7527664[m HEAD@{33}: rebase: fast-forward
+[33mc42ef48[m HEAD@{34}: rebase (start): checkout HEAD~2
+[33mf307cd0[m HEAD@{35}: reset: moving to HEAD
+[33mf307cd0[m HEAD@{36}: commit: chore: copy domain package from dev branch
+[33m7527664[m HEAD@{37}: checkout: moving from feature/login to feature/login
+[33m7527664[m HEAD@{38}: commit: chore: copy domain package from dev branch
+[33mc42ef48[m HEAD@{39}: commit: add base response structure
+[33m611afc8[m HEAD@{40}: commit: Add file pom
+[33m92b62b0[m HEAD@{41}: checkout: moving from main to feature/login
+[33m92b62b0[m HEAD@{42}: clone: from https://github.com/quynh150105/HIT-FireFlies

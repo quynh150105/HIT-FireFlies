@@ -30,13 +30,3 @@ public class HitNetworkingBaseApplication {
 	}
 
 }
-
-/*
-
-	{
-		"username": "admin",
-		"password": "prPt9Tn3"
-	}
-
-eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJCUVQiLCJpYXQiOjE3NTEyNjI2MDAsImV4cCI6MTc1MTM0OTAwMH0.kMX_3AH1J-C3sphTAlyRA_PelsNjACLx6rDwwTOyFrk
-*/
