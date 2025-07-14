@@ -5,8 +5,8 @@ import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
 import com.example.hit_networking_base.domain.dto.request.EventRequest;
 import com.example.hit_networking_base.domain.dto.request.EventUpdateRequest;
-import com.example.hit_networking_base.domain.dto.response.EventPageResponseDTO;
-import com.example.hit_networking_base.domain.dto.response.EventResponse;
+import com.example.hit_networking_base.domain.dto.response.EventPostResponseDTO;
+import com.example.hit_networking_base.domain.dto.response.EventResponseDTO;
 import com.example.hit_networking_base.service.EventService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -30,7 +30,7 @@ public class EventController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Event created successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = EventResponse.class))),
+                            schema = @Schema(implementation = EventResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
@@ -44,7 +44,7 @@ public class EventController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Event list retrieved successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = EventPageResponseDTO.class))),
+                            schema = @Schema(implementation = EventPostResponseDTO.class))),
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
@@ -57,7 +57,7 @@ public class EventController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Event updated successfully",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = EventResponse.class))),
+                            schema = @Schema(implementation = EventResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "404", description = "Event not found"),
@@ -69,5 +69,10 @@ public class EventController {
             @RequestBody @Valid EventUpdateRequest request) {
 
         return VsResponseUtil.success(eventService.updateEvent(eventId, request));
+    }
+
+    @GetMapping(UrlConstant.Event.GET_EVENT)
+    public ResponseEntity<?> getEventDetail(@RequestParam long eventId){
+        return VsResponseUtil.success(eventService.getEventDetail(eventId));
     }
 }
