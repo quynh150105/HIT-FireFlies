@@ -11,7 +11,6 @@ import com.example.hit_networking_base.domain.mapstruct.EventMapper;
 import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.exception.UnauthorizedException;
 import com.example.hit_networking_base.repository.EventRepository;
-import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
@@ -55,7 +54,6 @@ public class EventServiceImpl implements EventService {
         List<String> image = Collections.emptyList();
 
         if (files != null && files.length > 0) {
-            // Bỏ những file rỗng:
             List<MultipartFile> validFiles = Arrays.stream(files)
                     .filter(file -> file != null && !file.isEmpty())
                     .collect(Collectors.toList());
@@ -75,33 +73,27 @@ public class EventServiceImpl implements EventService {
 
         EventResponseDTO eventResponseDTO = eventMapper.toEventResponseDTO(event);
         eventResponseDTO.setImage(image);
+
+        // Thiếu phần gửi thông báo ở đây khi có bài viết mới cho mọi người qua email
+
         return eventResponseDTO;
     }
 
     @Override
-    public Page<EventPageResponseDTO> getPageAllEvent(int page, int size) {
+    public Page<EventPostResponseDTO> getPageAllEvent(int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
         Page<Event> eventPage = eventRepository.findByDeletedAtIsNull(pageable);
 
-        List<EventPageResponseDTO> dtos = eventPage.getContent().stream()
+        List<EventPostResponseDTO> dtos = eventPage.getContent().stream()
                 .map(event -> {
-                    EventPageResponseDTO dto = eventMapper.toEventPageResponse(event);
-
-                    // Gắn ảnh
+                    EventPostResponseDTO dto = eventMapper.toEventPageResponse(event);
                     List<String> images = imageService.getUrlImage(event.getEventId(), TargetType.EVENT);
-                    dto.setImages(images);
-
-                    // Gắn comment
-                    List<CommentResponseDTO> comments = commentService.findCommentByTargetIdAndTargetType(event.getEventId(), TargetType.EVENT);
-                    dto.setCommentResponseDTOS(comments);
-
-                    // Gắn reaction
-                    List<ReactionResponseDTO> reactions = reactionService.findReactionByTargetIdAndTargetType(event.getEventId(), TargetType.EVENT);
-                    dto.setReactionResponseDTOS(reactions);
-
+                    dto.setUrlImage(images);
+                    dto.setEventId(event.getEventId());
                     return dto;
                 })
                 .collect(Collectors.toList());
+
         return new PageImpl<>(dtos, pageable, eventPage.getTotalElements());
     }
 
@@ -121,5 +113,20 @@ public class EventServiceImpl implements EventService {
         Event updatedEvent = eventRepository.save(event);
 
         return eventMapper.toEventResponseDTO(updatedEvent);
+    }
+
+    @Override
+    public EventDetailResponseDTO getEventDetail(long eventId) {
+        Event event = eventRepository.findByEventIdAndDeletedAtIsNull(eventId).orElseThrow(()
+        -> new NotFoundException(ErrorMessage.Event.ERR_NOT_FOUND_EVENT));
+
+        List<String> urlImage = imageService.getUrlImage(eventId, TargetType.EVENT);
+        List<CommentResponseDTO> comment = commentService.findCommentByTargetIdAndTargetType(eventId, TargetType.EVENT);
+        List<ReactionResponseDTO> reaction = reactionService.findReactionByTargetIdAndTargetType(eventId, TargetType.EVENT);
+        EventDetailResponseDTO eventDetailResponseDTO = eventMapper.toEventDetailResponseDTO(event);
+        eventDetailResponseDTO.setImages(urlImage);
+        eventDetailResponseDTO.setCommentResponseDTOS(comment);
+        eventDetailResponseDTO.setReactionResponseDTOS(reaction);
+        return eventDetailResponseDTO;
     }
 }
