@@ -99,8 +99,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponseDTO updateEvent(long eventId, EventUpdateRequest request) {
-        Event event = eventRepository.findById(eventId)
-                .orElseThrow(() -> new NotFoundException("Event not found with id: " + eventId));
+        Event event = findById(eventId);
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -117,8 +116,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventDetailResponseDTO getEventDetail(long eventId) {
-        Event event = eventRepository.findByEventIdAndDeletedAtIsNull(eventId).orElseThrow(()
-        -> new NotFoundException(ErrorMessage.Event.ERR_NOT_FOUND_EVENT));
+        Event event = findById(eventId);
 
         List<String> urlImage = imageService.getUrlImage(eventId, TargetType.EVENT);
         List<CommentResponseDTO> comment = commentService.findCommentByTargetIdAndTargetType(eventId, TargetType.EVENT);
@@ -128,5 +126,11 @@ public class EventServiceImpl implements EventService {
         eventDetailResponseDTO.setCommentResponseDTOS(comment);
         eventDetailResponseDTO.setReactionResponseDTOS(reaction);
         return eventDetailResponseDTO;
+    }
+
+    @Override
+    public Event findById(Long id) {
+        return eventRepository.findByEventIdAndDeletedAtIsNull(id).orElseThrow(()
+                -> new NotFoundException(ErrorMessage.Event.ERR_NOT_FOUND_EVENT));
     }
 }
