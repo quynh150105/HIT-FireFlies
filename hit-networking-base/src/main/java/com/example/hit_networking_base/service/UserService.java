@@ -6,6 +6,10 @@ import com.example.hit_networking_base.domain.dto.response.UserInfoResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
+import java.util.Map;
 
 
 public interface UserService {
@@ -14,11 +18,11 @@ public interface UserService {
     ChangePasswordResponseDTO changePassword(ChangePasswordRequest changePasswordRequest);
     UserInfoResponseDTO getUserInfo();
     UserInfoResponseDTO updateUser(UpdateUserRequest updateUserRequest);
-
     UserResponseDTO updateUser(RequestUpdateUserDTO request);
-
     UserResponseDTO createUser(RequestUpdateUserDTO request);
 
     boolean addAdmin(String adminNane, String password);
+
+    Map<String, Object> getAllUser(int page, int size);
 
 }
