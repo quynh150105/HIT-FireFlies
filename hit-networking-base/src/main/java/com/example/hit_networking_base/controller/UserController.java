@@ -47,11 +47,7 @@ public class UserController {
         return VsResponseUtil.success(userService.updateUser(updateUserRequest));
     }
 
-<<<<<<< HEAD
     @GetMapping(UrlConstant.Admin.GETALL)
-=======
-    @GetMapping(UrlConstant.Admin.GET_ALL)
->>>>>>> afb00cd (add pagesize in getAll by Admin)
     public ResponseEntity<?> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "11") int size){
         return  VsResponseUtil.success(userService.getAllUser(page, size));
     }
