@@ -163,8 +163,10 @@ public class UserServiceImpl implements UserService {
     }
 
 
+
+    @Override
     public boolean addAdmin(String adminName, String adminPassword) {
-        if (userRepository.existsByRoleAndDeletedAtIsNull(Role.BQT))
+        if(userRepository.existsByRole(Role.BQT))
             return false;
         User admin = new User();
         admin.setUsername(adminName);
@@ -179,6 +181,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(admin);
         return true;
     }
+
     @Override
     public Map<String, Object> getAllUser(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -189,7 +192,6 @@ public class UserServiceImpl implements UserService {
         response.put("totalPages", pageResult.getTotalPages());
         response.put("currentPage", pageResult.getNumber());
         response.put("pageSize", pageResult.getSize());
-
 
         return response;
 

@@ -25,4 +25,5 @@ public interface UserService {
 
     Map<String, Object> getAllUser(int page, int size);
 
+
 }
