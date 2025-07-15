@@ -8,5 +8,5 @@ import java.util.List;
 public interface SaveListAccountUser {
     void saveListAccUsersToDatabase(MultipartFile file);
 
-    List<User> getAllUser();
+
 }

@@ -27,8 +27,5 @@ public class SaveListAccountUserImpl implements SaveListAccountUser {
         repository.saveAll(users);
     }
 
-    @Override
-    public List<User> getAllUser() {
-        return  repository.findAll();
-    }
+
 }

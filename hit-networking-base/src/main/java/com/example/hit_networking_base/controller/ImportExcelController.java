@@ -32,10 +32,7 @@ public class ImportExcelController {
         }
     }
 
-    @GetMapping(UrlConstant.Admin.GETALL)
-    public ResponseEntity<?> getAllUsers(){
-        return  VsResponseUtil.success(saveListAccountUser.getAllUser());
-    }
+
 
 
 }

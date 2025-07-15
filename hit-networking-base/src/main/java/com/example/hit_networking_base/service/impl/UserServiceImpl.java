@@ -8,6 +8,10 @@ import com.example.hit_networking_base.exception.UserException;
 import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.UserService;
 import lombok.RequiredArgsConstructor;
+//import org.springdoc.core.converters.models.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.hit_networking_base.constant.ErrorMessage;
 import com.example.hit_networking_base.constant.SuccessMessage;
@@ -25,9 +29,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+
 
 @Service
 @RequiredArgsConstructor
@@ -150,6 +155,21 @@ public class UserServiceImpl implements UserService {
 
         userRepository.save(user);
         return userMapper.toUserInforResponseDTO(user);
+    }
+
+    @Override
+    public Map<String, Object> getAllUser(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> pageResult = userRepository.findAll(pageable);
+        Map<String, Object> response = new HashMap<>();
+        response.put("items", pageResult.getContent());
+        response.put("totalItems", pageResult.getTotalElements());
+        response.put("totalPages", pageResult.getTotalPages());
+        response.put("currentPage", pageResult.getNumber());
+        response.put("pageSize", pageResult.getSize());
+
+
+        return response;
     }
 
 }
