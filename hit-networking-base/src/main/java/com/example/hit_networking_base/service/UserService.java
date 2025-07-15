@@ -19,5 +19,11 @@ public interface UserService {
     UserInfoResponseDTO updateUser(UpdateUserRequest updateUserRequest);
     UserResponseDTO updateUser(RequestUpdateUserDTO request);
     UserResponseDTO createUser(RequestUpdateUserDTO request);
+
+
+    boolean addAdmin(String adminNane, String password);
+
     Map<String, Object> getAllUser(int page, int size);
+
+
 }

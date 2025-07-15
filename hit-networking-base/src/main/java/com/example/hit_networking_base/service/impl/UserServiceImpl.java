@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.service.impl;
 
+import com.example.hit_networking_base.constant.*;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
@@ -13,9 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.example.hit_networking_base.constant.ErrorMessage;
-import com.example.hit_networking_base.constant.SuccessMessage;
-import com.example.hit_networking_base.constant.TargetType;
 import com.example.hit_networking_base.domain.dto.request.ChangePasswordRequest;
 import com.example.hit_networking_base.domain.dto.request.UpdateUserRequest;
 import com.example.hit_networking_base.domain.dto.response.ChangePasswordResponseDTO;
@@ -28,6 +26,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -157,6 +156,27 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserInforResponseDTO(user);
     }
 
+
+    @Override
+    public boolean addAdmin(String adminName, String adminPassword) {
+        if(userRepository.existsByRole(Role.BQT))
+            return false;
+
+        User admin = new User();
+        admin.setUsername(adminName);
+        admin.setPasswordHash(passwordEncoder.encode(adminPassword));
+        admin.setRole(Role.BQT);
+        admin.setGender(Gender.OTHER);
+        admin.setDob(LocalDate.of(2000, 1, 1));
+        admin.setFullName("Administrator");
+        admin.setEmail("admin@example.com");
+        admin.setPhone("0123456789");
+        admin.setCreatedAt(LocalDate.now());
+        userRepository.save(admin);
+
+        return true;
+    }
+
     @Override
     public Map<String, Object> getAllUser(int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
@@ -168,8 +188,8 @@ public class UserServiceImpl implements UserService {
         response.put("currentPage", pageResult.getNumber());
         response.put("pageSize", pageResult.getSize());
 
-
         return response;
+
     }
 
 }
