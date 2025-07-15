@@ -13,14 +13,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @RequiredArgsConstructor
 public class SecurityConfig {
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .csrf().disable()
-//                .authorizeHttpRequests()
-//                .anyRequest().permitAll(); // Cho phép tất cả request không cần xác thực
-//        return http.build();
-//    }
 
     private final String[] SWAGGER_WHITELIST =  {
             "/swagger-ui.html",
