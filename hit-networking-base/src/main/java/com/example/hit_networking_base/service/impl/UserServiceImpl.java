@@ -32,7 +32,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private  final UserRepository repository;
+    private final UserRepository repository;
     private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -85,6 +85,12 @@ public class UserServiceImpl implements UserService {
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(()
                 -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_USER_NAME, new long[]{}));
+    }
+
+    @Override
+    public User findUserById(long id) {
+        return userRepository.findById(id).orElseThrow(()
+        -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_USER_ID));
     }
 
     @Override

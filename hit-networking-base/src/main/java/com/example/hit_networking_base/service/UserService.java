@@ -10,6 +10,7 @@ import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 
 public interface UserService {
     User findUserByUsername (String username);
+    User findUserById(long id);
     ChangePasswordResponseDTO changePassword(ChangePasswordRequest changePasswordRequest);
     UserInfoResponseDTO getUserInfo();
     UserInfoResponseDTO updateUser(UpdateUserRequest updateUserRequest);
