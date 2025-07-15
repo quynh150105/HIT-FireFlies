@@ -47,91 +47,6 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = workbook.getSheetAt(0);
 
-            //Dinh bug dob is not null
-//            int rowIndex = 0;
-//            for(Row row : sheet){
-//                if(rowIndex == 0){
-//                    rowIndex++;
-//                    continue;
-//                }
-//                Iterator<Cell> cellIterator = row.iterator();
-//                int cellIndex = 0;
-//                User user = new User();
-//                while(cellIterator.hasNext()){
-//                    Cell cell = cellIterator.next();
-//                    switch(cellIndex){
-//                        case 0:
-//                            String fullName = ExcelHelper.getCellValueAsString(cell);
-//                            user.setFullName(fullName);
-//                            break;
-//                        case 1:
-//                            String genderStr = ExcelHelper.getCellValueAsString(cell).trim().toUpperCase();
-//                            if (genderStr.equals("NAM")) {
-//                                user.setGender(User.Gender.NAM);
-//                            } else if (genderStr.equals("NỮ")) {
-//                                user.setGender(User.Gender.NU);
-//                            } else {
-//                                throw new RuntimeException("Giá trị giới tính không hợp lệ: '" + genderStr + "' tại dòng " + row.getRowNum());
-//                            }
-//                            break;
-//
-//                        case 2:
-//                            if (cell == null || cell.getCellType() == CellType.BLANK) {
-//                                throw new UserException(" Ngày sinh bị trống tại dòng " + (row.getRowNum() + 1));
-//                            }
-//
-//                            LocalDate dob = null;
-//                            try {
-//                                if (cell.getCellType() == CellType.NUMERIC && DateUtil.isCellDateFormatted(cell)) {
-//                                    Date date = cell.getDateCellValue();
-//                                    dob = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-//                                } else {
-//                                    String dateStr = ExcelHelper.getCellValueAsString(cell).trim();
-//                                    List<DateTimeFormatter> formatters = List.of(
-//                                            DateTimeFormatter.ofPattern("d/M/yyyy"),
-//                                            DateTimeFormatter.ofPattern("dd/MM/yyyy"),
-//                                            DateTimeFormatter.ofPattern("yyyy-MM-dd")
-//                                    );
-//                                    for (DateTimeFormatter formatter : formatters) {
-//                                        try {
-//                                            dob = LocalDate.parse(dateStr, formatter);
-//                                            break;
-//                                        } catch (Exception ignored) {}
-//                                    }
-//                                    if (dob == null) {
-//                                        throw new UserException("Định dạng ngày sinh không hợp lệ tại dòng " + (row.getRowNum() + 1) + ": " + dateStr);
-//                                    }
-//                                }
-//
-//                                user.setDob(dob);
-//                            } catch (Exception ex) {
-//                                throw new UserException("Lỗi đọc ngày sinh tại dòng " + (row.getRowNum() + 1) + ": " + ex.getMessage());
-//                            }
-//                            break;
-//
-//                        case 3:
-//                            user.setEmail(ExcelHelper.getCellValueAsString(cell).trim());
-//                            break;
-//
-//                        default:
-//                            break;
-//
-//                    }
-//                    cellIndex++;
-//                }
-//                user.setRole(User.Role.TV);
-//                user.setCreatedAt(LocalDate.now());
-//                user.setPasswordHash(passwordencoder.encode(PasswordGenerator.generatePassword()));
-//                user.setUsername(VietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
-//                if(repository.existsByUsername(user.getUsername())){
-//                    throw new UserException("userName da ton tai");
-//                }
-//                else{
-//                    System.out.println("📦 Đang xử lý user: " + user.getFullName() + ", dob = " + user.getDob() + ", email = " + user.getEmail());
-//                    users.add(user);
-//                }
-//
-//            }
             int numberOfRows = sheet.getPhysicalNumberOfRows();
 
             for (int rowIndex = 1; rowIndex < numberOfRows; rowIndex++) { // Bắt đầu từ 1 để bỏ tiêu đề
@@ -140,7 +55,7 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
 
                 // Kiểm tra số ô: nếu ít hơn 4 thì có thể thiếu dữ liệu
                 if (row.getLastCellNum() < 4) {
-                    System.out.println("⚠️ Dòng " + (rowIndex + 1) + " có ít hơn 4 ô. Bỏ qua.");
+                    System.out.println("Dòng " + (rowIndex + 1) + " có ít hơn 4 ô. Bỏ qua.");
                     continue;
                 }
 
@@ -154,7 +69,7 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 // Họ tên
                 String fullName = ExcelHelper.getCellValueAsString(nameCell);
                 if (fullName == null || fullName.isBlank()) {
-                    System.out.println("⚠️ Họ tên bị trống tại dòng " + (rowIndex + 1));
+                    System.out.println("Họ tên bị trống tại dòng " + (rowIndex + 1));
                     continue;
                 }
                 user.setFullName(fullName);

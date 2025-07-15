@@ -62,6 +62,7 @@ public class UserController {
     }
 
 
+
     @GetMapping(UrlConstant.Admin.GET_ALL)
 
     public ResponseEntity<?> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "11") int size){
