@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReactionResponseDTO {
-    private long userId;
+    private UserPostResponseDTO userPostResponseDTO;
     private EmotionType emotionType;
+    private LocalDateTime createdAt;
 }
