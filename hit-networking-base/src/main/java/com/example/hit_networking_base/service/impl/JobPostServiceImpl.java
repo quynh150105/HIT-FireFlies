@@ -1,24 +1,121 @@
 package com.example.hit_networking_base.service.impl;
 
-import com.example.hit_networking_base.domain.dto.response.JobPostResponse;
+import com.example.hit_networking_base.constant.ErrorMessage;
+import com.example.hit_networking_base.constant.TargetType;
+import com.example.hit_networking_base.domain.dto.request.JobPostRequest;
+import com.example.hit_networking_base.domain.dto.request.JobUpdateRequestDTO;
+import com.example.hit_networking_base.domain.dto.response.JobDetailResponseDTO;
+import com.example.hit_networking_base.domain.dto.response.JobPostResponseDTO;
+import com.example.hit_networking_base.domain.dto.response.JobResponseDTO;
+import com.example.hit_networking_base.domain.entity.JobPost;
 import com.example.hit_networking_base.domain.mapstruct.JobPostMapper;
+import com.example.hit_networking_base.domain.mapstruct.UserMapper;
+import com.example.hit_networking_base.exception.LoadFileException;
+import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.repository.JobPostRepository;
-import com.example.hit_networking_base.service.JobPostService;
+import com.example.hit_networking_base.service.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class JobPostServiceImpl implements JobPostService {
 
     private final JobPostRepository jobPostRepository;
-    private final JobPostMapper jobPostMapper;
+    private final JobPostMapper jobMapper;
+    private final CommentService commentService;
+    private final ReactionService reactionService;
+    private final ImageService imageService;
+    private final UserService userService;
+    private final UserMapper userMapper;
 
 
     @Override
-    public List<JobPostResponse> getAllJobPosts() {
-        return jobPostMapper.toResponseList(jobPostRepository.findByDeletedAtIsNullOrderByCreatedAtDesc());
+    public JobResponseDTO createJob(JobPostRequest jobPostRequest) {
+        JobPost jobPost = new JobPost();
+        jobPost.setTitle(jobPostRequest.getTitle());
+        jobPost.setDescription(jobPostRequest.getDescription());
+        jobPost.setCreatedAt(LocalDateTime.now());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        jobPost.setCreator(userService.findUserByUsername(authentication.getName()));
+        jobPost.setCountComment(0L);
+        jobPost.setCountReaction(0L);
+        jobPostRepository.save(jobPost);
+        List<String>  listUrlImage = new ArrayList<>();
+        MultipartFile[] files = jobPostRequest.getUrlImage();
+        if (files != null) {
+            List<MultipartFile> validFiles = Arrays.stream(files)
+                    .filter(file -> file != null && !file.isEmpty() && file.getSize() > 0)
+                    .collect(Collectors.toList());
+            if(!validFiles.isEmpty()){
+                try {
+                    listUrlImage = imageService.uploadImage(
+                            validFiles.toArray(new MultipartFile[0]), TargetType.JOB, jobPost.getPostId());
+                } catch (IOException e) {
+                    throw new LoadFileException(ErrorMessage.Image.ERR_UPLOAD);
+                }
+            }
+        }
+        JobResponseDTO jobResponse = jobMapper.toJobResponse(jobPost);
+        jobResponse.setUrlImage(listUrlImage);
+
+        //Thiếu phần gửi thông báo cho tất cả người dùng trong hệ thống qua email ở đây
+
+        return jobResponse;
+    }
+
+    @Override
+    public Page<JobPostResponseDTO> getAllJobPosts(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<JobPost> jobPostPage = jobPostRepository.findByDeletedAtIsNull(pageable);
+        List<JobPostResponseDTO> jobPostResponseDTOS = jobPostPage.getContent().stream()
+                .map(jobPost -> {
+                    JobPostResponseDTO jobPostResponseDTO = jobMapper.toJobPostResponse(jobPost);
+                    jobPostResponseDTO.setCreator(userMapper.toUserPostResponseDTO(jobPost.getCreator()));
+                    jobPostResponseDTO.setUrlImage(imageService.getUrlImage(jobPost.getPostId(), TargetType.JOB));
+                    return jobPostResponseDTO;
+                })
+                .collect(Collectors.toList());
+        return new PageImpl<>(jobPostResponseDTOS, pageable, jobPostPage.getTotalElements());
+    }
+
+    @Override
+    public JobDetailResponseDTO getJobDetail(Long postId) {
+        JobPost jobPost = findById(postId);
+        JobDetailResponseDTO jobDetailResponseDTO = jobMapper.toJonDetailResponse(jobPost);
+        jobDetailResponseDTO.setImages(imageService.getUrlImage(postId, TargetType.JOB));
+        jobDetailResponseDTO.setCommentResponseDTOS(commentService.findCommentByTargetIdAndTargetType(postId, TargetType.JOB));
+        jobDetailResponseDTO.setReactionResponseDTOS(reactionService.findReactionByTargetIdAndTargetType(postId, TargetType.JOB));
+        return jobDetailResponseDTO;
+    }
+
+    @Override
+    public JobResponseDTO updateJob(Long postId, JobUpdateRequestDTO jobPostRequest) {
+        JobPost jobPost = findById(postId);
+        jobPost.setUpdatedAt(LocalDateTime.now());
+        jobPost.setTitle(jobPostRequest.getTitle());
+        jobPost.setDescription(jobPostRequest.getDescription());
+        jobPostRepository.save(jobPost);
+        JobResponseDTO jobResponseDTO = jobMapper.toJobResponse(jobPost);
+        jobResponseDTO.setUrlImage(imageService.getUrlImage(postId, TargetType.JOB));
+        return jobResponseDTO;
+    }
+
+    @Override
+    public JobPost findById(Long id) {
+        return jobPostRepository.findByPostIdAndDeletedAtIsNull(id).orElseThrow(()
+        -> new NotFoundException(ErrorMessage.Job.ERR_NOT_FOUND_JOB_ID));
     }
 }

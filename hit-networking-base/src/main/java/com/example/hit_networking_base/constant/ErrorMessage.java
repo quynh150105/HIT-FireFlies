@@ -4,6 +4,7 @@ public class ErrorMessage {
 
     public static class User{
         public static final String ERR_NOT_FOUND_USER_NAME = "exception.user.not.found.username";
+        public static final String ERR_NOT_FOUND_USER_ID = "exception.user.not.found.userId";
         public static final String ERR_INVALID_PASSWORD = "exception.user.invalid.password";
         public static final String ERR_SAME_PASSWORD = "exception.user.same.password";
         public static final String ERR_NOT_FOUND_EMAIL = "exception.user.not.found.email";
@@ -30,6 +31,14 @@ public class ErrorMessage {
     public static class ImportFileExcel{
         public static final String ERR_WRONG_FORMAT ="exception.import.wrong.format.file";
         public static final String ERR_WRONG_READ ="exception.import.wrong.read.file";
+    }
+
+    public static class Event{
+        public static final String ERR_NOT_FOUND_EVENT = "exception.event.not.found.evnetId";
+    }
+
+    public static class Job{
+        public static final String ERR_NOT_FOUND_JOB_ID ="exception.job.not.found.postId";
     }
 
 }
