@@ -6,7 +6,9 @@ import com.example.hit_networking_base.constant.UrlConstant;
 import com.example.hit_networking_base.domain.dto.request.AuthRequest;
 import com.example.hit_networking_base.domain.dto.request.ResetPasswordRequest;
 import com.example.hit_networking_base.domain.dto.response.AuthResponseDTO;
+import com.example.hit_networking_base.domain.dto.response.HomeResponseDTO;
 import com.example.hit_networking_base.service.AuthService;
+import com.example.hit_networking_base.service.HomeService;
 import com.example.hit_networking_base.service.impl.JobPostServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 
@@ -26,7 +29,7 @@ import javax.validation.Valid;
 public class AuthorizationController {
 
     private final AuthService authService;
-    private final JobPostServiceImpl jobPostService;
+    private final HomeService homeService;
 
     @Operation(summary = "User login")
     @ApiResponses(value = {
@@ -52,17 +55,17 @@ public class AuthorizationController {
         return VsResponseUtil.success(authService.resetPassword(request));
     }
 
-    @Operation(summary = "Get all job posts on the homepage")
+    @Operation(summary = "Get all job and event on the homepage")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Job post list retrieved successfully",
                     content = @Content(
                             mediaType = "application/json",
-                            schema = @Schema(implementation = ApiResponse.class)
+                            schema = @Schema(implementation = HomeResponseDTO.class)
                     )),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(UrlConstant.Authorization.HOME)
-    public ResponseEntity<?> listJobPosts(){
-        return VsResponseUtil.success(jobPostService.getAllJobPosts());
+    public ResponseEntity<?> home(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        return VsResponseUtil.success(homeService.getALLEventAndJobPost(page, size));
     }
 }

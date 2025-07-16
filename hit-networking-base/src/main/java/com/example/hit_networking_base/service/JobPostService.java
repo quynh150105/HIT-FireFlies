@@ -18,4 +18,5 @@ public interface JobPostService {
     JobDetailResponseDTO getJobDetail(Long postId);
     JobResponseDTO updateJob(Long postId, JobUpdateRequestDTO jobPostRequest);
     JobPost findById(Long id);
+    JobPostResponseDTO getJobPost(Long id);
 }

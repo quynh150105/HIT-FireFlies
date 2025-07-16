@@ -8,6 +8,7 @@ import com.example.hit_networking_base.domain.dto.response.*;
 import com.example.hit_networking_base.domain.entity.Event;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.EventMapper;
+import com.example.hit_networking_base.domain.mapstruct.UserMapper;
 import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.exception.UnauthorizedException;
 import com.example.hit_networking_base.repository.EventRepository;
@@ -34,6 +35,7 @@ public class EventServiceImpl implements EventService {
 
     private final EventRepository eventRepository;
     private final UserService userService;
+    private final UserMapper userMapper;
     private final EventMapper eventMapper;
     private final ImageService imageService;
     private final CommentService commentService;
@@ -86,10 +88,11 @@ public class EventServiceImpl implements EventService {
 
         List<EventPostResponseDTO> dtos = eventPage.getContent().stream()
                 .map(event -> {
-                    EventPostResponseDTO dto = eventMapper.toEventPageResponse(event);
+                    EventPostResponseDTO dto = eventMapper.toEventPostResponse(event);
                     List<String> images = imageService.getUrlImage(event.getEventId(), TargetType.EVENT);
                     dto.setUrlImage(images);
                     dto.setEventId(event.getEventId());
+                    dto.setCreator(userMapper.toUserPostResponseDTO(event.getCreator()));
                     return dto;
                 })
                 .collect(Collectors.toList());
@@ -132,5 +135,14 @@ public class EventServiceImpl implements EventService {
     public Event findById(Long id) {
         return eventRepository.findByEventIdAndDeletedAtIsNull(id).orElseThrow(()
                 -> new NotFoundException(ErrorMessage.Event.ERR_NOT_FOUND_EVENT));
+    }
+
+    @Override
+    public EventPostResponseDTO getPostEvent(Long id) {
+        Event event = findById(id);
+        EventPostResponseDTO eventPostResponseDTO = eventMapper.toEventPostResponse(event);
+        eventPostResponseDTO.setUrlImage(imageService.getUrlImage(id, TargetType.EVENT));
+        eventPostResponseDTO.setCreator(userMapper.toUserPostResponseDTO(event.getCreator()));
+        return eventPostResponseDTO;
     }
 }

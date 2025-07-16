@@ -118,4 +118,13 @@ public class JobPostServiceImpl implements JobPostService {
         return jobPostRepository.findByPostIdAndDeletedAtIsNull(id).orElseThrow(()
         -> new NotFoundException(ErrorMessage.Job.ERR_NOT_FOUND_JOB_ID));
     }
+
+    @Override
+    public JobPostResponseDTO getJobPost(Long id) {
+        JobPost jobPost = findById(id);
+        JobPostResponseDTO jobPostResponseDTO = jobMapper.toJobPostResponse(jobPost);
+        jobPostResponseDTO.setUrlImage(imageService.getUrlImage(id, TargetType.JOB));
+        jobPostResponseDTO.setCreator(userMapper.toUserPostResponseDTO(jobPost.getCreator()));
+        return jobPostResponseDTO;
+    }
 }

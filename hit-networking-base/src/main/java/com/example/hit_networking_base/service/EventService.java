@@ -16,4 +16,5 @@ public interface EventService {
     EventResponseDTO updateEvent(long eventId, EventUpdateRequest request);
     EventDetailResponseDTO getEventDetail(long eventId);
     Event findById(Long id);
+    EventPostResponseDTO getPostEvent(Long id);
 }
