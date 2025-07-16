@@ -29,7 +29,7 @@ public class ImportExcelController {
     private final SaveListAccountUser saveListAccountUser;
 
     @PostMapping(value = UrlConstant.Admin.IMPORT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> importExcelFile(@ModelAttribute MultipartFile file){
+    public ResponseEntity<?> importExcelFile(@RequestParam("file") MultipartFile file){
         try {
             saveListAccountUser.saveListAccUsersToDatabase(file);
             return VsResponseUtil.success("import thanh cong");

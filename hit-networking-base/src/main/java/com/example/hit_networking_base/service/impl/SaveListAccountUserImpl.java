@@ -20,7 +20,7 @@ public class SaveListAccountUserImpl implements SaveListAccountUser {
     public void saveListAccUsersToDatabase(MultipartFile file) {
         List<User> users = null;
         try {
-            users = uploadService.getCustomerDataFromExcel(file.getInputStream());
+            users = uploadService.getCustomerDataFromExcel(file.getInputStream()).getUsers();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

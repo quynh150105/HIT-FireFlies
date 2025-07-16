@@ -2,6 +2,8 @@ package com.example.hit_networking_base.service.impl;
 
 import com.example.hit_networking_base.constant.Gender;
 import com.example.hit_networking_base.constant.Role;
+import com.example.hit_networking_base.domain.dto.response.ImportResult;
+import com.example.hit_networking_base.domain.dto.response.UserExportDTO;
 import com.example.hit_networking_base.util.ExcelHelper;
 import com.example.hit_networking_base.util.PasswordGenerator;
 import com.example.hit_networking_base.util.VietNameseUtils;
@@ -31,7 +33,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class ExcelUploadServiceImpl implements ExcelUploadService {
     private  final PasswordEncoder passwordencoder;
-
     private final UserRepository repository;
 
     @Override
@@ -40,8 +41,9 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
     }
 
     @Override
-    public List<User> getCustomerDataFromExcel(InputStream inputStream) {
+    public ImportResult getCustomerDataFromExcel(InputStream inputStream) {
        List<User> users = new ArrayList<>();
+       List<UserExportDTO> exportData = new ArrayList<>();
 
         try {
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
@@ -126,9 +128,21 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 // Các thông tin khác
                 user.setRole(Role.TV);
                 user.setCreatedAt(LocalDate.now());
-                String password = PasswordGenerator.generatePassword();
-                user.setPasswordHash(passwordencoder.encode(password));
+
+               //String password = PasswordGenerator.generatePassword();
+               // Cell passwordCell = row.getCell(4);
+                //String password = ExcelHelper.getCellValueAsString(passwordCell);
+              //  Cell usernameCell = row.getCell(0); // Cột đầu tiên
+               //Cell passwordCell = row.getCell(1); // Cột thứ 2
+                //String rawPassword = ExcelHelper.getCellValueAsString(password).trim();
+
+              //  user.setPasswordHash(passwordencoder.encode(password));
+
+                // save username and password
+                String password = "Abcd!1234";
                 user.setUsername(VietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
+                user.setPasswordHash(passwordencoder.encode(password));
+                exportData.add(new UserExportDTO(user.getUsername(), password));
 
                 if (repository.existsByUsername(user.getUsername())) {
                     throw new UserException("Username đã tồn tại: " + user.getUsername());
@@ -139,11 +153,11 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 System.out.println("password: " + password);
             }
 
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return users;
+        return new ImportResult(users,exportData);
+
     }
-
-
 }
