@@ -1,6 +1,7 @@
 package com.example.hit_networking_base.service.impl;
 
 import com.example.hit_networking_base.constant.ErrorMessage;
+import com.example.hit_networking_base.domain.dto.response.ImportResult;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.exception.BadRequestException;
 import com.example.hit_networking_base.repository.UserRepository;
@@ -21,6 +22,7 @@ public class SaveListAccountUserImpl implements SaveListAccountUser {
 
 
     @Override
+
     public String saveListAccUsersToDatabase(MultipartFile file) {
 
         if(file == null)
@@ -30,6 +32,7 @@ public class SaveListAccountUserImpl implements SaveListAccountUser {
         if (contentType == null || (!contentType.equals("application/vnd.ms-excel")
                 && !contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))) {
             throw new BadRequestException(ErrorMessage.ImportFileExcel.ERR_WRONG_FORMAT);
+
         }
 
         // Kiểm tra phần mở rộng file (phòng trường hợp MIME bị giả mạo)
@@ -39,7 +42,8 @@ public class SaveListAccountUserImpl implements SaveListAccountUser {
         }
 
         try {
-            List<User> users = uploadService.getCustomerDataFromExcel(file.getInputStream());
+           // List<User> users = uploadService.getCustomerDataFromExcel(file.getInputStream());
+            List<User>  users = uploadService.getCustomerDataFromExcel(file.getInputStream());
             repository.saveAll(users);
         } catch (IOException e) {
             throw new BadRequestException(ErrorMessage.ImportFileExcel.ERR_WRONG_READ + e.getMessage());

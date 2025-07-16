@@ -11,6 +11,9 @@ public class UrlConstant {
         public static final String UPDATE = PREFIX + "/update";
         public static final String IMPORT = PREFIX + "/import";
         public static final String GET_ALL = PREFIX + "/select-all";
+        public static final String EXPORT = PREFIX + "/export";
+
+
     }
 
     public static class Authorization{
