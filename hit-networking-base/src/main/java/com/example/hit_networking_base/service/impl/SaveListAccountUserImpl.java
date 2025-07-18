@@ -17,34 +17,30 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class SaveListAccountUserImpl implements SaveListAccountUser {
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final ExcelUploadService uploadService;
 
 
     @Override
-
     public String saveListAccUsersToDatabase(MultipartFile file) {
 
         if(file == null)
             throw new BadRequestException(ErrorMessage.ImportFileExcel.ERR_WRONG_FORMAT);
-        // Kiểm tra định dạng MIME
+
         String contentType = file.getContentType();
         if (contentType == null || (!contentType.equals("application/vnd.ms-excel")
                 && !contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))) {
             throw new BadRequestException(ErrorMessage.ImportFileExcel.ERR_WRONG_FORMAT);
-
         }
 
-        // Kiểm tra phần mở rộng file (phòng trường hợp MIME bị giả mạo)
         String fileName = file.getOriginalFilename();
         if (fileName == null || !(fileName.endsWith(".xls") || fileName.endsWith(".xlsx"))) {
             throw new BadRequestException(ErrorMessage.ImportFileExcel.ERR_WRONG_FORMAT);
         }
 
         try {
-           // List<User> users = uploadService.getCustomerDataFromExcel(file.getInputStream());
             List<User>  users = uploadService.getCustomerDataFromExcel(file.getInputStream());
-            repository.saveAll(users);
+            userRepository.saveAll(users);
         } catch (IOException e) {
             throw new BadRequestException(ErrorMessage.ImportFileExcel.ERR_WRONG_READ + e.getMessage());
         }

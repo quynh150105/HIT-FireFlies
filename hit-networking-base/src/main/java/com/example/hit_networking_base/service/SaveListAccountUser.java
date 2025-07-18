@@ -11,8 +11,4 @@ public interface SaveListAccountUser {
     String saveListAccUsersToDatabase(MultipartFile file);
     List<User> getAllUser();
 
-
-
-
-
 }
