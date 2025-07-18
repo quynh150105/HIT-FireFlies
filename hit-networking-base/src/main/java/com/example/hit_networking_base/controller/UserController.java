@@ -61,12 +61,4 @@ public class UserController {
         return VsResponseUtil.success(userService.updateUser(updateUserRequest));
     }
 
-
-
-    @GetMapping(UrlConstant.Admin.GET_ALL)
-
-    public ResponseEntity<?> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "11") int size){
-        return  VsResponseUtil.success(userService.getAllUser(page, size));
-    }
-
 }

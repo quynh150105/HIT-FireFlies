@@ -1,18 +1,21 @@
 package com.example.hit_networking_base.domain.dto.response;
 
+import com.example.hit_networking_base.constant.TargetType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentResponseDTO{
+public class CommentDetailResponseDTO {
     private long commentId;
-    private UserPostResponseDTO userPostResponseDTO;
     private String content;
+    private TargetType targetType;
+    private long targetId;
     private LocalDateTime createdAt;
+    private LocalDateTime deletedAt;
+    private UserPostResponseDTO userPostResponseDTO;
 }

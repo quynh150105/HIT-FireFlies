@@ -38,7 +38,7 @@ public class EventServiceImpl implements EventService {
     private final UserMapper userMapper;
     private final EventMapper eventMapper;
     private final ImageService imageService;
-    private final CommentService commentService;
+    private final CommentPostService commentPostService;
     private final ReactionService reactionService;
 
     @Override
@@ -51,6 +51,8 @@ public class EventServiceImpl implements EventService {
         Event event = eventMapper.toEvent(eventRequest);
         event.setCreator(user);
         event.setCreatedAt(LocalDateTime.now());
+        event.setCountComment(0L);
+        event.setCountReaction(0L);
         eventRepository.save(event);
 
         List<String> image = Collections.emptyList();
@@ -122,7 +124,7 @@ public class EventServiceImpl implements EventService {
         Event event = findById(eventId);
 
         List<String> urlImage = imageService.getUrlImage(eventId, TargetType.EVENT);
-        List<CommentResponseDTO> comment = commentService.findCommentByTargetIdAndTargetType(eventId, TargetType.EVENT);
+        List<CommentResponseDTO> comment = commentPostService.findCommentByTargetIdAndTargetType(eventId, TargetType.EVENT);
         List<ReactionResponseDTO> reaction = reactionService.findReactionByTargetIdAndTargetType(eventId, TargetType.EVENT);
         EventDetailResponseDTO eventDetailResponseDTO = eventMapper.toEventDetailResponseDTO(event);
         eventDetailResponseDTO.setImages(urlImage);
@@ -144,5 +146,17 @@ public class EventServiceImpl implements EventService {
         eventPostResponseDTO.setUrlImage(imageService.getUrlImage(id, TargetType.EVENT));
         eventPostResponseDTO.setCreator(userMapper.toUserPostResponseDTO(event.getCreator()));
         return eventPostResponseDTO;
+    }
+
+    @Override
+    public void countComment(Long id, TargetType targetType) {
+        Event event = findById(id);
+        if(targetType.equals(TargetType.CREATE)){
+            event.setCountComment(event.getCountComment() + 1);
+        } else {
+            if(event.getCountComment()>0)
+                event.setCountComment(event.getCountComment() - 1);
+        }
+        eventRepository.save(event);
     }
 }

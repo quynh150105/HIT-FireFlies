@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReactionResponseDTO {
+    private long id;
     private UserPostResponseDTO userPostResponseDTO;
     private EmotionType emotionType;
     private LocalDateTime createdAt;

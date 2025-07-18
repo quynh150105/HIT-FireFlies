@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.service;
 
+import com.example.hit_networking_base.constant.TargetType;
 import com.example.hit_networking_base.domain.dto.request.JobPostRequest;
 import com.example.hit_networking_base.domain.dto.request.JobUpdateRequestDTO;
 import com.example.hit_networking_base.domain.dto.response.JobDetailResponseDTO;
@@ -19,4 +20,5 @@ public interface JobPostService {
     JobResponseDTO updateJob(Long postId, JobUpdateRequestDTO jobPostRequest);
     JobPost findById(Long id);
     JobPostResponseDTO getJobPost(Long id);
+    void countComment(Long id, TargetType targetType);
 }

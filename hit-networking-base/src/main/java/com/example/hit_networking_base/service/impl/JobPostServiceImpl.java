@@ -35,7 +35,7 @@ public class JobPostServiceImpl implements JobPostService {
 
     private final JobPostRepository jobPostRepository;
     private final JobPostMapper jobMapper;
-    private final CommentService commentService;
+    private final CommentPostService commentPostService;
     private final ReactionService reactionService;
     private final ImageService imageService;
     private final UserService userService;
@@ -96,7 +96,7 @@ public class JobPostServiceImpl implements JobPostService {
         JobPost jobPost = findById(postId);
         JobDetailResponseDTO jobDetailResponseDTO = jobMapper.toJonDetailResponse(jobPost);
         jobDetailResponseDTO.setImages(imageService.getUrlImage(postId, TargetType.JOB));
-        jobDetailResponseDTO.setCommentResponseDTOS(commentService.findCommentByTargetIdAndTargetType(postId, TargetType.JOB));
+        jobDetailResponseDTO.setCommentResponseDTOS(commentPostService.findCommentByTargetIdAndTargetType(postId, TargetType.JOB));
         jobDetailResponseDTO.setReactionResponseDTOS(reactionService.findReactionByTargetIdAndTargetType(postId, TargetType.JOB));
         return jobDetailResponseDTO;
     }
@@ -126,5 +126,17 @@ public class JobPostServiceImpl implements JobPostService {
         jobPostResponseDTO.setUrlImage(imageService.getUrlImage(id, TargetType.JOB));
         jobPostResponseDTO.setCreator(userMapper.toUserPostResponseDTO(jobPost.getCreator()));
         return jobPostResponseDTO;
+    }
+
+    @Override
+    public void countComment(Long id, TargetType targetType) {
+        JobPost jobPost = findById(id);
+        if(targetType.equals(TargetType.CREATE)){
+            jobPost.setCountComment(jobPost.getCountComment() + 1);
+        } else {
+            if(jobPost.getCountComment()>0)
+                jobPost.setCountComment(jobPost.getCountComment() - 1);
+        }
+        jobPostRepository.save(jobPost);
     }
 }

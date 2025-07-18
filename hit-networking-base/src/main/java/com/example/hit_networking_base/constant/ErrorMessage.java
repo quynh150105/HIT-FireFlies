@@ -25,7 +25,8 @@ public class ErrorMessage {
     }
 
     public static class Comment{
-        public static final String ERR_NOT_FOUND_COMMENT = "exception.comment.not.found";
+        public static final String ERR_NOT_FOUND_COMMENT = "exception.comment.not.found.id";
+        public static final String ERR_NOT_ENOUGH_RIGHTS = "exception.comment.not.enough.right";
     }
 
     public static class ImportFileExcel{

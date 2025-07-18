@@ -7,9 +7,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
+
+    Optional<Comment> findByCommentIdAndDeletedAtIsNull(long commentId);
 
     @Query("SELECT c FROM Comment c WHERE c.targetId = :targetId AND c.targetType = :targetType AND c.deletedAt IS NULL")
     List<Comment> findByTargetIdAndTargetType(long targetId, TargetType targetType);

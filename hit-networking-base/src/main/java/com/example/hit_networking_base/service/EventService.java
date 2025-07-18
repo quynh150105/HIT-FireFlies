@@ -1,6 +1,7 @@
 package com.example.hit_networking_base.service;
 
 
+import com.example.hit_networking_base.constant.TargetType;
 import com.example.hit_networking_base.domain.dto.request.EventRequest;
 import com.example.hit_networking_base.domain.dto.request.EventUpdateRequest;
 import com.example.hit_networking_base.domain.dto.response.EventDetailResponseDTO;
@@ -17,4 +18,5 @@ public interface EventService {
     EventDetailResponseDTO getEventDetail(long eventId);
     Event findById(Long id);
     EventPostResponseDTO getPostEvent(Long id);
+    void countComment(Long id, TargetType targetType);
 }
