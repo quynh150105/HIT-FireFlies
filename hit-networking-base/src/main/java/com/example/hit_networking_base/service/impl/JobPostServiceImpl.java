@@ -8,8 +8,10 @@ import com.example.hit_networking_base.domain.dto.response.JobDetailResponseDTO;
 import com.example.hit_networking_base.domain.dto.response.JobPostResponseDTO;
 import com.example.hit_networking_base.domain.dto.response.JobResponseDTO;
 import com.example.hit_networking_base.domain.entity.JobPost;
+import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.JobPostMapper;
 import com.example.hit_networking_base.domain.mapstruct.UserMapper;
+import com.example.hit_networking_base.exception.BadRequestException;
 import com.example.hit_networking_base.exception.LoadFileException;
 import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.repository.JobPostRepository;
@@ -103,7 +105,10 @@ public class JobPostServiceImpl implements JobPostService {
 
     @Override
     public JobResponseDTO updateJob(Long postId, JobUpdateRequestDTO jobPostRequest) {
+        User user = userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         JobPost jobPost = findById(postId);
+        if(!user.equals(jobPost.getCreator()))
+            throw new BadRequestException(ErrorMessage.Job.ERR_NOT_ENOUGH_RIGHTS);
         jobPost.setUpdatedAt(LocalDateTime.now());
         jobPost.setTitle(jobPostRequest.getTitle());
         jobPost.setDescription(jobPostRequest.getDescription());

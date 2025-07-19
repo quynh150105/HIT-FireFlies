@@ -40,6 +40,8 @@ public class ErrorMessage {
 
     public static class Job{
         public static final String ERR_NOT_FOUND_JOB_ID ="exception.job.not.found.postId";
+        public static final String ERR_NOT_ENOUGH_RIGHTS = "exception.job.not.enough.right";
+
     }
 
 }
