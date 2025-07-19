@@ -5,6 +5,7 @@ import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
 import com.example.hit_networking_base.domain.dto.request.EventRequest;
 import com.example.hit_networking_base.domain.dto.request.EventUpdateRequest;
+import com.example.hit_networking_base.domain.dto.response.EventDetailResponseDTO;
 import com.example.hit_networking_base.domain.dto.response.EventPostResponseDTO;
 import com.example.hit_networking_base.domain.dto.response.EventResponseDTO;
 import com.example.hit_networking_base.service.EventService;
@@ -71,6 +72,16 @@ public class EventController {
         return VsResponseUtil.success(eventService.updateEvent(eventId, request));
     }
 
+    @Operation(summary = "Admin get event detail")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Get successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = EventDetailResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "404", description = "Event not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     @GetMapping(UrlConstant.Event.GET_EVENT)
     public ResponseEntity<?> getEventDetail(@RequestParam long eventId){
         return VsResponseUtil.success(eventService.getEventDetail(eventId));
