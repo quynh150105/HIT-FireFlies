@@ -18,8 +18,7 @@ import org.springframework.stereotype.Component;
 @Mapper(componentModel = "spring")
 
 public interface UserMapper {
-    User toUser(RequestUpdateUserDTO request);
-
+    User toUser(RequestCreateUserDTO request);
    @Mapping(source = "username", target = "username")
     UserResponseDTO toUserResponseDTO(User user);
 

@@ -7,8 +7,11 @@ public class ErrorMessage {
         public static final String ERR_NOT_FOUND_USER_ID = "exception.user.not.found.userId";
         public static final String ERR_INVALID_PASSWORD = "exception.user.invalid.password";
         public static final String ERR_SAME_PASSWORD = "exception.user.same.password";
+        public static final String ERR_ALREADY_EXISTS_USER_NAME = "exception.user.already.exists.username";
+        public static final String ERR_ALREADY_EXISTS_EMAIL = "exception.user.already.exists.email";
         public static final String ERR_NOT_FOUND_EMAIL = "exception.user.not.found.email";
         public static final String ERR_NOT_AUTHENTICATED = "exception.user.not.authenticated";
+        public static final String ERR_NOT_ENOUGH_RIGHTS = "exception.user.not.enough.right";
     }
 
     public static class Auth{

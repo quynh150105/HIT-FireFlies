@@ -1,6 +1,7 @@
 package com.example.hit_networking_base.service.impl;
 
 import com.example.hit_networking_base.constant.*;
+import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
@@ -46,43 +47,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO updateUser(RequestUpdateUserDTO request) {
-
-        // 1. Tìm user theo userName
         User user = findUserByUsername(request.getUsername());
-        if (user == null) {
-            throw new UserException("Không tìm thấy người dùng.");
+        if(!user.getRole().equals(Role.BQT) &&
+                !user.getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+            throw new BadRequestException(ErrorMessage.User.ERR_NOT_ENOUGH_RIGHTS);
         }
-
-        // 2. Cập nhật thông tin (ngoại trừ userName)
         user.setFullName(request.getFullName());
         user.setDob(request.getDob());
         user.setEmail(request.getEmail());
         user.setGender(request.getGender());
 
-        // 3. Mã hóa password trước khi lưu
         String hashedPassword = passwordEncoder.encode(request.getPasswordHash());
         user.setPasswordHash(hashedPassword);
 
-        // 4. Lưu lại vào database
         repository.save(user);
-
-        // 5. Trả về dữ liệu sau khi cập nhật
         return mapper.toUserResponseDTO(user);
-
     }
 
     @Override
-    public UserResponseDTO createUser(RequestUpdateUserDTO request) {
+    public UserResponseDTO createUser(RequestCreateUserDTO request) {
         if(repository.existsByUsernameAndDeletedAtIsNull(request.getUsername())){
-            throw new UserException("User da ton tai");
+            throw new UserException(ErrorMessage.User.ERR_ALREADY_EXISTS_USER_NAME);
         }
         if(repository.existsByEmailAndDeletedAtIsNull(request.getEmail())){
-            throw new UserException("email da ton tai");
+            throw new UserException(ErrorMessage.User.ERR_ALREADY_EXISTS_EMAIL);
         }
         User user = mapper.toUser(request);
         user.setPasswordHash(passwordEncoder.encode(request.getPasswordHash()));
-        User saveUser = repository.save(user);
-        return mapper.toUserResponseDTO(saveUser);
+        repository.save(user);
+        return mapper.toUserResponseDTO(user);
     }
 
 
@@ -142,7 +135,6 @@ public class UserServiceImpl implements UserService {
         if (file != null && !file.isEmpty()) {
             try {
                 avatarUrls = imageService.uploadImage(new MultipartFile[]{file}, TargetType.USER, user.getUserId());
-                System.out.println("======> Nhận được file: " + file.getOriginalFilename());
             } catch (IOException e) {
                 throw new RuntimeException(ErrorMessage.Image.ERR_UPLOAD, e);
             }

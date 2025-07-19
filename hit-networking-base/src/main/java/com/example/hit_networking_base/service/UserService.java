@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.service;
 import com.example.hit_networking_base.domain.dto.request.ChangePasswordRequest;
+import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.UpdateUserRequest;
 import com.example.hit_networking_base.domain.dto.response.ChangePasswordResponseDTO;
 import com.example.hit_networking_base.domain.dto.response.UserInfoResponseDTO;
@@ -19,7 +20,7 @@ public interface UserService {
     UserInfoResponseDTO getUserInfo();
     UserInfoResponseDTO updateUser(UpdateUserRequest updateUserRequest);
     UserResponseDTO updateUser(RequestUpdateUserDTO request);
-    UserResponseDTO createUser(RequestUpdateUserDTO request);
+    UserResponseDTO createUser(RequestCreateUserDTO request);
 
     boolean addAdmin(String adminNane, String password);
 
