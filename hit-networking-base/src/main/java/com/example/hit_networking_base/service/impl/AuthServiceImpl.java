@@ -48,6 +48,7 @@ public class AuthServiceImpl implements AuthService {
         return new AuthResponseDTO(
                 user.getUsername(),
                 user.getRole().name(),
+                user.getAvatarUrl(),
                 token
         );
     }

@@ -3,6 +3,7 @@ package com.example.hit_networking_base.controller;
 import com.example.hit_networking_base.base.RestApiV1;
 import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
+import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.service.SaveListAccountUser;
@@ -36,7 +37,7 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(UrlConstant.Admin.CREATE)
-    public ResponseEntity<?> createUser(@Valid @RequestBody RequestUpdateUserDTO request){
+    public ResponseEntity<?> createUser(@Valid @RequestBody RequestCreateUserDTO request){
         return VsResponseUtil.success(userService.createUser(request));
     }
     @Operation(
@@ -79,8 +80,8 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(UrlConstant.Admin.GET_ALL)
-    public ResponseEntity<?> getAllUsers(){
-        return VsResponseUtil.success(saveListAccountUser.getAllUser());
+    public ResponseEntity<?> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        return VsResponseUtil.success(userService.getAllUser(page, size));
     }
 
     @Operation(summary = "Admin updates user information")
