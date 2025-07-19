@@ -39,7 +39,7 @@ public class AuthorizationController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(UrlConstant.Authorization.LOGIN)
-    public ResponseEntity<?> login(AuthRequest authRequest){
+    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authRequest){
         return VsResponseUtil.success(authService.login(authRequest));
     }
 
