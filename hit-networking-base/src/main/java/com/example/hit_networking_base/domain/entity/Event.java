@@ -42,6 +42,11 @@ public class Event {
     private LocalDateTime deletedAt;
 
     @ManyToOne
-    @JoinColumn(name = "created_by", referencedColumnName = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "created_by", referencedColumnName = "user_id")
     private User creator;
+
+    @Column(nullable = false)
+    private Long countReaction;
+    @Column(nullable = false)
+    private Long countComment;
 }

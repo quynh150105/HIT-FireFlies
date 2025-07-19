@@ -4,6 +4,7 @@ import com.example.hit_networking_base.constant.Gender;
 import com.example.hit_networking_base.constant.Role;
 import com.example.hit_networking_base.domain.entity.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,11 +20,15 @@ public class RequestUpdateUserDTO {
     @Size(max = 100, message = "Tên tối đa 100 ký tự")
     private String username;
 
-    @NotBlank(message="Hay nhap Pass Word")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message="Mat khau it nhat co 1 chu thuong, 1 chu hoa, 1 so, 1 ki tu dac biet, it nhat 8 ki tu")
+    @Schema(description = "Password", example = "Admin1234")
+    @NotBlank(message = "Password must not be blank")
+    @Pattern(
+            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$",
+            message = "Password must be at least 8 characters long, include at least one digit, one lowercase and one uppercase letter"
+    )
     private String passwordHash;
 
-
+    @NotBlank
     private Role role = Role.TV;
 
     private Gender gender = Gender.MALE;
@@ -40,20 +45,5 @@ public class RequestUpdateUserDTO {
     @Email(message="Hay nhap email dung dinh dang")
     @NotBlank(message = "email khong duoc de trong")
     private String email;
-
-    private LocalDate createdAt = LocalDate.now();
-
-    private LocalDate deletedAt;
-
-    private List<CV> cvs;
-
-    private List<Comment> comments;
-
-    private List<Reaction> reactions;
-
-    private List<Event> createdEvents;
-
-    private List<JobPost> createdJobPosts;
-
 
 }

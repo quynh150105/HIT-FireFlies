@@ -1,6 +1,6 @@
 package com.example.hit_networking_base.constant;
 
-import org.springframework.security.access.method.P;
+import org.springframework.security.core.parameters.P;
 
 import java.awt.event.PaintEvent;
 
@@ -11,6 +11,7 @@ public class UrlConstant {
         public static final String UPDATE = PREFIX + "/update";
         public static final String IMPORT = PREFIX + "/import";
         public static final String GET_ALL = PREFIX + "/select-all";
+        public static final String EXPORT = PREFIX + "/export";
     }
 
     public static class Authorization{
@@ -37,5 +38,22 @@ public class UrlConstant {
         public static final String GET_EVENTS = PREFIX + 's';
         public static final String UPDATE_EVENT = PREFIX + "/{eventId}";
 
+    }
+
+    public static class JobPost{
+        public static final String PREFIT = "/user/job";
+        public static final String CREATE_JOB_POST = PREFIT;
+        public static final String GET_JOB_POST_PAGE = PREFIT + "s";
+        public static final String GET_JOB_DETAIL = PREFIT;
+        public static final String UPDATE_JOB = PREFIT;
+    }
+
+    public static class Comment{
+        public static final String PREFIX_USER = "/user/comment";
+        public static final String PREFIX_ADMIN = "/admin/comment";
+        public static final String CREATE = PREFIX_USER;
+        public static final String UPDATE = PREFIX_USER;
+        public static final String DELETE = PREFIX_USER;
+        public static final String GET_DETAIL = PREFIX_ADMIN;
     }
 }

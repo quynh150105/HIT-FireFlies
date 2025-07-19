@@ -1,6 +1,7 @@
 package com.example.hit_networking_base.service.impl;
 
 import com.example.hit_networking_base.constant.*;
+import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.domain.entity.User;
@@ -9,6 +10,10 @@ import com.example.hit_networking_base.exception.UserException;
 import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.UserService;
 import lombok.RequiredArgsConstructor;
+//import org.springdoc.core.converters.models.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.hit_networking_base.domain.dto.request.ChangePasswordRequest;
 import com.example.hit_networking_base.domain.dto.request.UpdateUserRequest;
@@ -24,15 +29,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private  final UserRepository repository;
+    private final UserRepository repository;
     private final UserMapper mapper;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -41,43 +47,35 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO updateUser(RequestUpdateUserDTO request) {
-
-        // 1. Tìm user theo userName
         User user = findUserByUsername(request.getUsername());
-        if (user == null) {
-            throw new UserException("Không tìm thấy người dùng.");
+        if(!user.getRole().equals(Role.BQT) &&
+                !user.getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+            throw new BadRequestException(ErrorMessage.User.ERR_NOT_ENOUGH_RIGHTS);
         }
-
-        // 2. Cập nhật thông tin (ngoại trừ userName)
         user.setFullName(request.getFullName());
         user.setDob(request.getDob());
         user.setEmail(request.getEmail());
         user.setGender(request.getGender());
 
-        // 3. Mã hóa password trước khi lưu
         String hashedPassword = passwordEncoder.encode(request.getPasswordHash());
         user.setPasswordHash(hashedPassword);
 
-        // 4. Lưu lại vào database
         repository.save(user);
-
-        // 5. Trả về dữ liệu sau khi cập nhật
         return mapper.toUserResponseDTO(user);
-
     }
 
     @Override
-    public UserResponseDTO createUser(RequestUpdateUserDTO request) {
-        if(repository.existsByUsername(request.getUsername())){
-            throw new UserException("User da ton tai");
+    public UserResponseDTO createUser(RequestCreateUserDTO request) {
+        if(repository.existsByUsernameAndDeletedAtIsNull(request.getUsername())){
+            throw new UserException(ErrorMessage.User.ERR_ALREADY_EXISTS_USER_NAME);
         }
-        if(repository.existsByEmail(request.getEmail())){
-            throw new UserException("email da ton tai");
+        if(repository.existsByEmailAndDeletedAtIsNull(request.getEmail())){
+            throw new UserException(ErrorMessage.User.ERR_ALREADY_EXISTS_EMAIL);
         }
         User user = mapper.toUser(request);
         user.setPasswordHash(passwordEncoder.encode(request.getPasswordHash()));
-        User saveUser = repository.save(user);
-        return mapper.toUserResponseDTO(saveUser);
+        repository.save(user);
+        return mapper.toUserResponseDTO(user);
     }
 
 
@@ -85,6 +83,12 @@ public class UserServiceImpl implements UserService {
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(()
                 -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_USER_NAME, new long[]{}));
+    }
+
+    @Override
+    public User findUserById(long id) {
+        return userRepository.findById(id).orElseThrow(()
+        -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_USER_ID));
     }
 
     @Override
@@ -131,7 +135,6 @@ public class UserServiceImpl implements UserService {
         if (file != null && !file.isEmpty()) {
             try {
                 avatarUrls = imageService.uploadImage(new MultipartFile[]{file}, TargetType.USER, user.getUserId());
-                System.out.println("======> Nhận được file: " + file.getOriginalFilename());
             } catch (IOException e) {
                 throw new RuntimeException(ErrorMessage.Image.ERR_UPLOAD, e);
             }
@@ -151,10 +154,12 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserInforResponseDTO(user);
     }
 
-    public boolean addAdmin(String adminName, String adminPassword){
+
+
+    @Override
+    public boolean addAdmin(String adminName, String adminPassword) {
         if(userRepository.existsByRole(Role.BQT))
             return false;
-
         User admin = new User();
         admin.setUsername(adminName);
         admin.setPasswordHash(passwordEncoder.encode(adminPassword));
@@ -167,6 +172,21 @@ public class UserServiceImpl implements UserService {
         admin.setCreatedAt(LocalDate.now());
         userRepository.save(admin);
         return true;
+    }
+
+    @Override
+    public Map<String, Object> getAllUser(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> pageResult = userRepository.findAll(pageable);
+        Map<String, Object> response = new HashMap<>();
+        response.put("items", pageResult.getContent());
+        response.put("totalItems", pageResult.getTotalElements());
+        response.put("totalPages", pageResult.getTotalPages());
+        response.put("currentPage", pageResult.getNumber());
+        response.put("pageSize", pageResult.getSize());
+
+        return response;
+
     }
 
 }

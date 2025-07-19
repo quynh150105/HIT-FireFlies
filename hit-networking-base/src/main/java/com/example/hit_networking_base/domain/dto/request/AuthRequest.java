@@ -15,11 +15,11 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 public class AuthRequest {
 
-    @Schema(description = "Username", example = "user1")
+    @Schema(description = "Username", example = "admin")
     @NotBlank(message = "Username must not be blank")
     private String username;
 
-    @Schema(description = "Password", example = "Password123")
+    @Schema(description = "Password", example = "Admin1234")
     @NotBlank(message = "Password must not be blank")
     @Pattern(
             regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$",

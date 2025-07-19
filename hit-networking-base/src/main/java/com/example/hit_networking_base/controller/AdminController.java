@@ -3,11 +3,13 @@ package com.example.hit_networking_base.controller;
 import com.example.hit_networking_base.base.RestApiV1;
 import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
+import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.service.SaveListAccountUser;
 import com.example.hit_networking_base.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -35,23 +37,39 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(UrlConstant.Admin.CREATE)
-    public ResponseEntity<?> createUser(@Valid @RequestBody RequestUpdateUserDTO request){
+    public ResponseEntity<?> createUser(@Valid @RequestBody RequestCreateUserDTO request){
         return VsResponseUtil.success(userService.createUser(request));
     }
-
-    @Operation(summary = "Admin imports user list from Excel file")
+    @Operation(
+            summary = "Admin imports user list from Excel file",
+            description = "Allows the admin to upload an Excel (.xlsx) file containing a list of users to be added to the system.\n\n" +
+                    "**File format requirements:**\n" +
+                    "- Format: `.xlsx` (Excel 2007 or newer)\n" +
+                    "- Columns (in order):\n" +
+                    "  1. Full Name\n" +
+                    "  2. Gender (MALE, FEMALE, OTHER)\n" +
+                    "  3. Date of Birth (`yyyy-MM-dd`)\n" +
+                    "  4. Email\n\n" +
+                    "**Notes:**\n" +
+                    "- If the generated username already exists (and hasn't been soft-deleted) → throw error\n" +
+                    "- Passwords are randomly generated\n" +
+                    "- `.xls` files (older Excel format) are not supported"
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "File imported successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid or incorrect file format"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "403", description = "Access denied"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
+            @ApiResponse(responseCode = "400", description = "Invalid or incorrect file format", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
+            @ApiResponse(responseCode = "403", description = "Access denied", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Internal server error", content = @Content)
     })
     @PostMapping(value = UrlConstant.Admin.IMPORT, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> importExcelFile(@ModelAttribute MultipartFile file){
+    public ResponseEntity<?> importExcelFile(
+            @Parameter(description = "Excel file (.xlsx) List user ", required = true)
+            @ModelAttribute MultipartFile file) {
         return VsResponseUtil.success(saveListAccountUser.saveListAccUsersToDatabase(file));
     }
+
 
     @Operation(summary = "Admin retrieves all user information")
     @ApiResponses(value = {
@@ -62,8 +80,8 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(UrlConstant.Admin.GET_ALL)
-    public ResponseEntity<?> getAllUsers(){
-        return VsResponseUtil.success(saveListAccountUser.getAllUser());
+    public ResponseEntity<?> getAllUsers(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        return VsResponseUtil.success(userService.getAllUser(page, size));
     }
 
     @Operation(summary = "Admin updates user information")

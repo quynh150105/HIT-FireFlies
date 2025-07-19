@@ -16,7 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserResponseDTO {
 
-    private Integer userId;
+    private Long userId;
 
     private String fullName;
 
@@ -27,8 +27,5 @@ public class UserResponseDTO {
     private String email;
 
     private String username;
-
-    private String passwordHash;
-
 
 }
