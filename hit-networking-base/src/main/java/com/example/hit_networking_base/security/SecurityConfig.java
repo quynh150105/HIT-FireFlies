@@ -59,7 +59,9 @@ public class SecurityConfig {
 
         corsConfiguration.setAllowedOrigins(List.of(
                 "http://127.0.0.1:5500",
-                "https://hit-network-system.onrender.com"
+                "https://hit-network-system.onrender.com",
+                "http://localhost:5174",
+                "https://hitnetwork.onrender.com"
         ));
 
         corsConfiguration.setAllowedHeaders(List.of("Origin", "Content-Type", "Accept", "Authorization"));
