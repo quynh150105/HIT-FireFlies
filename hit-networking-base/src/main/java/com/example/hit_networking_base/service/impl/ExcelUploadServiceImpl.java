@@ -2,10 +2,7 @@ package com.example.hit_networking_base.service.impl;
 
 import com.example.hit_networking_base.constant.Gender;
 import com.example.hit_networking_base.constant.Role;
-import com.example.hit_networking_base.domain.dto.response.ImportResult;
 import com.example.hit_networking_base.domain.dto.response.UserExportDTO;
-import com.example.hit_networking_base.util.ExcelHelper;
-import com.example.hit_networking_base.util.VietNameseUtils;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.exception.UserException;
 import com.example.hit_networking_base.repository.UserRepository;
@@ -20,13 +17,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+import com.example.hit_networking_base.util.*;
+import com.example.hit_networking_base.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +69,8 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 Cell emailCell = row.getCell(3);
 
                 // Họ tên
-                String fullName = ExcelHelper.getCellValueAsString(nameCell);
+                //com.example.hit_networking_base.Util.ExcelHelper
+                String fullName = excelHelper.getCellValueAsString(nameCell);
                 if (fullName == null || fullName.isBlank()) {
                     System.out.println("Họ tên bị trống tại dòng " + (rowIndex + 1));
                     continue;
@@ -76,7 +78,7 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 user.setFullName(fullName);
 
                 // Giới tính
-                String genderStr = ExcelHelper.getCellValueAsString(genderCell).trim().toUpperCase();
+                String genderStr = excelHelper.getCellValueAsString(genderCell).trim().toUpperCase();
                 if (genderStr.equals("NAM")) {
                     user.setGender(Gender.MALE);
                 } else if (genderStr.equals("NỮ")) {
@@ -96,7 +98,7 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                         Date date = dobCell.getDateCellValue();
                         dob = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
                     } else {
-                        String dateStr = ExcelHelper.getCellValueAsString(dobCell).trim();
+                        String dateStr = excelHelper.getCellValueAsString(dobCell).trim();
                         List<DateTimeFormatter> formatters = List.of(
                                 DateTimeFormatter.ofPattern("d/M/yyyy"),
                                 DateTimeFormatter.ofPattern("dd/MM/yyyy"),
@@ -118,7 +120,7 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 }
 
                 // Email
-                String email = ExcelHelper.getCellValueAsString(emailCell).trim();
+                String email = excelHelper.getCellValueAsString(emailCell).trim();
                 if (email.isEmpty()) {
                     throw new UserException("Email bị thiếu tại dòng " + (rowIndex + 1));
                 }
@@ -128,20 +130,10 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 user.setRole(Role.TV);
                 user.setCreatedAt(LocalDate.now());
 
-               //String password = PasswordGenerator.generatePassword();
-               // Cell passwordCell = row.getCell(4);
-                //String password = ExcelHelper.getCellValueAsString(passwordCell);
-              //  Cell usernameCell = row.getCell(0); // Cột đầu tiên
-               //Cell passwordCell = row.getCell(1); // Cột thứ 2
-                //String rawPassword = ExcelHelper.getCellValueAsString(password).trim();
-
-              //  user.setPasswordHash(passwordencoder.encode(password));
-
-                // save username and password
                 String password = "Abcd!1234";
-                user.setUsername(VietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
+                user.setUsername(vietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
                 user.setPasswordHash(passwordencoder.encode(password));
-                exportData.add(new UserExportDTO(user.getUsername(), password));
+                exportData.add(UserExportDTO.builder().username(user.getUsername()).password(password).build());
 
                 if (repository.existsByUsernameAndDeletedAtIsNull(user.getUsername())) {
                     throw new UserException("Username đã tồn tại: " + user.getUsername());

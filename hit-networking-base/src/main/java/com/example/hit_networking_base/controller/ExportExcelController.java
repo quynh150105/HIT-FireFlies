@@ -8,6 +8,7 @@ import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.UserMapper;
 import com.example.hit_networking_base.service.ExcelUploadService;
 import com.example.hit_networking_base.service.ExportExcelService;
+import com.example.hit_networking_base.service.SendEmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpHeaders;
@@ -27,13 +28,15 @@ public class ExportExcelController {
 
     private final ExcelUploadService uploadService;
     private final ExportExcelService service;
-
     private final UserMapper mapper;
+
+    private final SendEmailService sendMail;
 
     @PostMapping(value = UrlConstant.Admin.EXPORT)
     public ResponseEntity<Resource> exportExcelFile(@RequestParam("file")MultipartFile file) throws IOException{
         List<User> result = uploadService.getCustomerDataFromExcel(file.getInputStream());
         List<UserExportDTO> exportDTOS = mapper.toUserExportDTO(result);
+        sendMail.sendEmailToUser(exportDTOS);
         ByteArrayOutputStream excelFile = service.exportUsersToExcel(exportDTOS);
         ByteArrayResource resource = new ByteArrayResource(excelFile.toByteArray());
 
