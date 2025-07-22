@@ -56,4 +56,16 @@ public class UrlConstant {
         public static final String DELETE = PREFIX_USER;
         public static final String GET_DETAIL = PREFIX_ADMIN;
     }
+
+    public static class Reaction{
+        public static final String  PREFIX = "/reaction";
+
+        public static final String CREATE_OR_UPDATE = PREFIX + "/react";
+
+        public static final String DELETE = PREFIX + "/delete";
+
+        public static final String GET_ALL = PREFIX + "/get-all";
+
+
+    }
 }
