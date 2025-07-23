@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -143,6 +144,8 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 String lastWord = parts[parts.length - 1];
                 String username = vietNameseUtils.removeAccents(lastWord) + "hit" + counter;
                 user.setUsername(username.toLowerCase());
+                user.setCheckToken(Instant.now());
+                user.setActivate(false);
 
                 String password = GenPassword.generatePassword();
                 user.setPasswordHash(passwordencoder.encode(password));

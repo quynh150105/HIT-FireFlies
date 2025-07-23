@@ -1,8 +1,10 @@
 package com.example.hit_networking_base.service.impl;
 
+import com.example.hit_networking_base.config.JwtProperties;
 import com.example.hit_networking_base.domain.dto.response.UserExportDTO;
-import com.example.hit_networking_base.domain.entity.User;
+import com.example.hit_networking_base.service.SetCheckTokenService;
 import com.example.hit_networking_base.service.TokenService;
+import com.example.hit_networking_base.util.JwtUtils;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,17 +15,19 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
 
-    private final String SECRET_KEY = "QebC#BUd)t11aEhHitNetwork";
-    private final long EXPIRATION_TIME = 86400000;
+    private final JwtProperties jwtProperties;
+    private final SetCheckTokenService setCheckTokenService;
 
     @Override
     public String generateToken(UserExportDTO user) {
+        setCheckTokenService.setCheckToken(user);
+        System.out.println("Time: " + jwtProperties.getAccessExpirationTime());
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("role", user.getRole())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + jwtProperties.getAccessExpirationTime()))
+                .signWith(SignatureAlgorithm.HS256, jwtProperties.getSecret())
                 .compact();
     }
 
@@ -31,7 +35,7 @@ public class TokenServiceImpl implements TokenService {
     public boolean verifyToken(String token) {
         try {
             Jwts.parser()
-                    .setSigningKey(SECRET_KEY)
+                    .setSigningKey(jwtProperties.getSecret())
                     .parseClaimsJws(token);
             return true;
         } catch (JwtException e){
@@ -42,18 +46,11 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String extractUsername(String token) {
-        return getClaims(token).getSubject();
+        return JwtUtils.extractUsername(token, jwtProperties.getSecret());
     }
 
     @Override
     public String extractRole(String token) {
-        return (String) getClaims(token).get("role");
-    }
-
-    private Claims getClaims(String token) {
-        return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
-                .parseClaimsJws(token)
-                .getBody();
+        return JwtUtils.extractRole(token, jwtProperties.getSecret());
     }
 }

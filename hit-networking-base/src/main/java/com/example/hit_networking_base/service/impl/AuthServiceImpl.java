@@ -11,22 +11,13 @@ import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.UserMapper;
 import com.example.hit_networking_base.exception.BadRequestException;
 import com.example.hit_networking_base.exception.NotFoundException;
-import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.AuthService;
 import com.example.hit_networking_base.service.SendEmailService;
 import com.example.hit_networking_base.service.TokenService;
 import com.example.hit_networking_base.service.UserService;
-import com.example.hit_networking_base.util.EmailTemplateLoader;
-import com.example.hit_networking_base.util.GenPassword;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import org.springframework.mail.javamail.JavaMailSender;
-
 
 @Service
 @RequiredArgsConstructor
@@ -42,6 +33,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthResponseDTO login(AuthRequest authRequest) {
         User user = userService.findUserByUsername(authRequest.getUsername());
+        if(!user.isActivate())
+            throw new BadRequestException(ErrorMessage.Auth.ERR_NOT_ACTIVATE);
         if(!passwordEncoder.matches(authRequest.getPassword(), user.getPasswordHash()))
             throw new BadRequestException(ErrorMessage.User.ERR_INVALID_PASSWORD);
         String token = tokenService.generateToken(userMapper.toUserExportDTO(user));

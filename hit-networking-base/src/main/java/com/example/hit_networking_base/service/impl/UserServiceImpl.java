@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.service.impl;
 
+import com.example.hit_networking_base.config.JwtProperties;
 import com.example.hit_networking_base.constant.*;
 import com.example.hit_networking_base.domain.dto.request.*;
 import com.example.hit_networking_base.domain.dto.response.*;
@@ -9,8 +10,10 @@ import com.example.hit_networking_base.exception.UserException;
 import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.SendEmailService;
 import com.example.hit_networking_base.service.UserService;
+import com.example.hit_networking_base.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 //import org.springdoc.core.converters.models.Pageable;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +26,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +48,7 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
     private final ImageService imageService;
     private final SendEmailService sendEmailService;
+    private final JwtProperties jwtProperties;
 
     @Override
     public UserResponseDTO updateUser(RequestUpdateUserDTO request) {
@@ -73,6 +79,7 @@ public class UserServiceImpl implements UserService {
         }
         User user = mapper.toUser(request);
         user.setPasswordHash(passwordEncoder.encode(request.getPasswordHash()));
+        user.setActivate(false);
         repository.save(user);
 
         List<User> users = new ArrayList<>();
@@ -97,12 +104,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public ChangePasswordResponseDTO changePassword(ChangePasswordRequest changePasswordRequest) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || !authentication.isAuthenticated()) {
-            throw new RuntimeException(ErrorMessage.User.ERR_NOT_AUTHENTICATED);
-        }
-        String username = authentication.getName();
-        User user = findUserByUsername(username);
+        User user = checkToken();
 
         if(!passwordEncoder.matches(changePasswordRequest.getOldPassword(), user.getPasswordHash())){
             throw new BadRequestException(ErrorMessage.User.ERR_INVALID_PASSWORD);
@@ -113,25 +115,20 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPasswordHash(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
+        user.setCheckToken(Instant.now());
         userRepository.save(user);
         return new ChangePasswordResponseDTO(SuccessMessage.User.PASSWORD_CHANGE_SUCCESS);
     }
 
     @Override
     public UserInfoResponseDTO getUserInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication == null || !authentication.isAuthenticated()){
-            throw new RuntimeException(ErrorMessage.User.ERR_NOT_AUTHENTICATED);
-        }
-
-        User user = findUserByUsername(authentication.getName());
+        User user = checkToken();
         return userMapper.toUserInforResponseDTO(user);
     }
 
     @Override
     public UserInfoResponseDTO updateUser(UpdateUserRequest updateUserRequest) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = findUserByUsername(authentication.getName());
+        User user = checkToken();
 
         MultipartFile file = updateUserRequest.getAvatar();
         List<String> avatarUrls = new ArrayList<>();
@@ -174,6 +171,8 @@ public class UserServiceImpl implements UserService {
         admin.setEmail("admin@example.com");
         admin.setPhone("0123456789");
         admin.setCreatedAt(LocalDate.now());
+        admin.setActivate(true);
+        admin.setCheckToken(Instant.now());
         userRepository.save(admin);
         return true;
     }
@@ -215,10 +214,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean resetPassword(ResetPasswordRequestDTO resetPasswordRequestDTO) {
-        User user = findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        User user = checkToken();
         if(passwordEncoder.matches(resetPasswordRequestDTO.getNewPassword(), user.getPasswordHash()))
             throw new BadRequestException(ErrorMessage.User.ERR_SAME_PASSWORD);
         user.setPasswordHash(passwordEncoder.encode(resetPasswordRequestDTO.getNewPassword()));
+        user.setActivate(true);
         userRepository.save(user);
         return true;
     }
@@ -226,12 +226,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetailResponseDTO deleteUser(String username) {
        User user = findUserByUsername(username);
-       User userDelete = findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+       User userDelete = checkToken();
        if(userDelete.getRole().equals(Role.TV))
            throw new BadRequestException(ErrorMessage.User.ERR_NOT_ENOUGH_RIGHTS);
        user.setDeletedAt(LocalDate.now());
        userRepository.save(user);
        return userMapper.toUserDetailResponseDTO(user);
+    }
+
+    private User checkToken(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = findUserByUsername(authentication.getName());
+        System.out.println("TOKEN: " + (String)authentication.getCredentials());
+        Instant tokenTime = JwtUtils.getTime((String) authentication.getCredentials(), jwtProperties.getSecret()).truncatedTo(ChronoUnit.SECONDS);
+        Instant checkTime = user.getCheckToken().truncatedTo(ChronoUnit.SECONDS);
+        if(!tokenTime.isBefore(checkTime))
+            return user;
+        System.out.println("Time 1: " + user.getCheckToken());
+        System.out.println("Time 2: " + JwtUtils.getTime((String)authentication.getCredentials(), jwtProperties.getSecret()));
+        throw new BadRequestException(ErrorMessage.User.ERR_INVALID_TOKEN);
     }
 
 }

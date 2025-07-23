@@ -8,7 +8,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
+
 
 
 import java.util.List;
@@ -44,7 +46,7 @@ public class User {
     @Column(name = "full_name", length = 100)
     private String fullName;
 
-    @Column(length = 100)
+    @Column(length = 100, unique = true)
     private String email;
 
     @Column(length = 20)
@@ -58,6 +60,12 @@ public class User {
 
     @Column(name = "deleted_at")
     private LocalDate deletedAt;
+
+    @Column(nullable = false)
+    private Instant checkToken;
+
+    @Column(nullable = false)
+    private boolean activate;
 
     @OneToMany(mappedBy = "user")
     private List<CV> cvs;

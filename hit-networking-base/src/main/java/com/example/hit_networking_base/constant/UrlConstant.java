@@ -28,7 +28,6 @@ public class UrlConstant {
         public static final String USER_INFO = PREFIX + "/me";
         public static final String USER_UPDATE_INFO = PREFIX + "/me";
         public static final String UPDATE = PREFIX;
-
         public static final String RESET_PASSWORD = PREFIX + "/set-password";
     }
 

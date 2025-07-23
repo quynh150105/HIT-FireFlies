@@ -5,45 +5,38 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Map;
 
 public class EmailTemplateLoader {
-    public static String loadSendResetPassTemplate(String fullName, String url){
+
+    private static String loadTemplate(String path, Map<String, String> placeholders, String errorMessage) {
         try {
-            ClassPathResource classPathResource = new ClassPathResource("templates/sendResetPassword.html");
-            byte[] bytes = classPathResource.getInputStream().readAllBytes();
+            byte[] bytes = new ClassPathResource(path).getInputStream().readAllBytes();
             String content = new String(bytes, StandardCharsets.UTF_8);
-            return content
-                    .replace("{{fullName}}", fullName)
-                    .replace("{{link-set-new-pass}}", url);
+            for (Map.Entry<String, String> entry : placeholders.entrySet()) {
+                content = content.replace(entry.getKey(), entry.getValue());
+            }
+            return content;
         } catch (IOException e) {
-            throw new RuntimeException(ErrorMessage.Email.ERR_SEND_RESET_PASS,e);
+            throw new RuntimeException(errorMessage, e);
         }
     }
 
-    public static String loadSendCreateUserTemplate(String fullName, String username, String url){
-        try {
-            ClassPathResource classPathResource = new ClassPathResource("templates/sendNotificationCreateUser.html");
-            byte[] bytes = classPathResource.getInputStream().readAllBytes();
-            String content = new String(bytes, StandardCharsets.UTF_8);
-            return content
-                    .replace("{{fullname}}", fullName)
-                    .replace("{{username}}", username)
-                    .replace("{{link-set-new-pass}}", url);
-        } catch (IOException e) {
-            throw new RuntimeException(ErrorMessage.Email.ERR_SEND_CREATE_USER,e);
-        }
+    public static String loadSendResetPassTemplate(String fullName, String url) {
+        return loadTemplate("templates/sendResetPassword.html",
+                Map.of("{{fullName}}", fullName, "{{link-set-new-pass}}", url),
+                ErrorMessage.Email.ERR_SEND_RESET_PASS);
     }
 
-    public static String loadSendCreatePostTemplate(String fullName){
-        try {
-            ClassPathResource classPathResource = new ClassPathResource("templates/sendNotification.html");
-            byte[] bytes = classPathResource.getInputStream().readAllBytes();
-            String content = new String(bytes, StandardCharsets.UTF_8);
-            return content
-                    .replace("{{fullName}}", fullName)
-                    .replace("{{link-home}}", "https://hitnetwork.onrender.com/home");
-        } catch (IOException e) {
-            throw new RuntimeException(ErrorMessage.Email.ERR_SEND_CREATE_POST,e);
-        }
+    public static String loadSendCreateUserTemplate(String fullName, String username, String url) {
+        return loadTemplate("templates/sendNotificationCreateUser.html",
+                Map.of("{{fullname}}", fullName, "{{username}}", username, "{{link-set-new-pass}}", url),
+                ErrorMessage.Email.ERR_SEND_CREATE_USER);
+    }
+
+    public static String loadSendCreatePostTemplate(String fullName) {
+        return loadTemplate("templates/sendNotification.html",
+                Map.of("{{fullName}}", fullName, "{{link-home}}", "https://hitnetwork.onrender.com/home"),
+                ErrorMessage.Email.ERR_SEND_CREATE_POST);
     }
 }
