@@ -7,10 +7,19 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ReactionRepository extends JpaRepository<Reaction, Long> {
 
     @Query("SELECT r FROM Reaction r WHERE r.targetId = :targetId AND r.targetType = :targetType AND r.deletedAt IS NULL")
     List<Reaction> findByTargetIdAndTargetType(Long targetId, TargetType targetType);
+
+    @Query("SELECT r FROM Reaction r WHERE r.targetId = :targetId AND r.targetType = :targetType AND r.user.id = :userId AND r.deletedAt IS NULL")
+    Optional<Reaction> findByUserIdAndTarget(Long userId, Long targetId, TargetType targetType);
+
+    @Query("SELECT r.emotionType, COUNT(r) FROM Reaction r WHERE r.targetId = :targetId AND r.targetType = :targetType AND r.deletedAt IS NULL GROUP BY r.emotionType")
+    List<Object[]> countReactionsByType(Long targetId, TargetType targetType);
+
+
 }
