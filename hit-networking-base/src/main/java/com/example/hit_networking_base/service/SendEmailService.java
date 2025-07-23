@@ -5,5 +5,7 @@ import com.example.hit_networking_base.domain.dto.response.UserExportDTO;
 import java.util.List;
 
 public interface SendEmailService {
-    void sendEmailToUser(List<UserExportDTO> users);
+    void sendEmailToCreateUser(List<UserExportDTO> users);
+    void seddEmailToUserResetPassword(UserExportDTO user);
+    void sendEmailWhenCreatePost(List<UserExportDTO> users);
 }

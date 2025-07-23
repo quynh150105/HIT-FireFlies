@@ -11,7 +11,7 @@
       font-family: 'Roboto', sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f5f7fa;
+      background: linear-gradient(to right, #ffffff 10%, #ffe0cc 60%, #ff6b00 100%);
     }
 
     .container {
@@ -20,11 +20,11 @@
       background-color: #ffffff;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     }
 
     .header {
-      background: linear-gradient(135deg, #1f4fff, #0099ff);
+      background: linear-gradient(135deg, #ff6b00, #ff9900);
       color: white;
       padding: 30px;
       text-align: center;
@@ -38,6 +38,7 @@
     .content {
       padding: 30px;
       color: #333333;
+      background-color: #ffffff;
     }
 
     .content h2 {
@@ -46,34 +47,39 @@
     }
 
     .password-box {
-      background-color: #f0f4f8;
-      border-left: 5px solid #1f4fff;
+      background-color: #fff2e6;
+      border-left: 5px solid #ff6b00;
       padding: 15px 20px;
       font-size: 18px;
       font-weight: bold;
       margin: 20px 0;
       border-radius: 8px;
-      color: #2c3e50;
-      word-break: break-all;
+      color: #663300;
+      word-break: break-word;
     }
 
     .footer {
-      background-color: #f0f0f0;
+      background-color: #ffffff;
       padding: 20px;
       text-align: center;
       font-size: 13px;
       color: #999999;
+      border-top: 1px solid #eee;
     }
 
     a.button {
       display: inline-block;
-      background-color: #1f4fff;
+      background-color: #ff6b00;
       color: white;
       padding: 12px 24px;
       border-radius: 6px;
       text-decoration: none;
       font-weight: bold;
       margin-top: 20px;
+    }
+
+    a.button:hover {
+      background-color: #ff8126;
     }
 
     @media only screen and (max-width: 600px) {
@@ -89,11 +95,14 @@
     <h1>Thông báo từ Hệ thống CLB-HIT</h1>
   </div>
   <div class="content">
-    <h2>Xin chào <strong>{{username}}</strong></h2>
-    <p>Chúng tôi đã xử lý yêu cầu cấp lại mật khẩu của bạn. Dưới đây là mật khẩu mới:</p>
-    <div class="password-box">{{password}}</div>
-    <p>Vui lòng đăng nhập và đổi mật khẩu ngay để bảo vệ tài khoản của bạn.</p>
-    <a href="{{login_url}}" class="button">Đăng nhập ngay</a>
+	<h2>Xin chào <strong>{{fullname}}</strong>,</h2>
+	<p>Chào mừng bạn đến với <strong>HIT Network</strong>!</p>
+	<p>Bạn đã được tạo một tài khoản với tên đăng nhập là <strong>{{username}}</strong>. Hãy thiết lập mật khẩu để bắt đầu sử dụng tài khoản nhé.</p>
+	<p style="text-align: left;">
+		<a href="{{link-set-new-pass}}" class="button">Đặt mật khẩu</a>
+	</p>
+	<p>Chúng tôi tin rằng bạn sẽ tìm thấy nhiều cơ hội và giá trị trong hành trình cùng HIT Network.</p>
+	<p>Trân trọng,<br><strong>Đội ngũ HIT Network</strong></p>
   </div>
   <div class="footer">
     Email này được gửi tự động từ hệ thống. Vui lòng không phản hồi lại email này.<br>

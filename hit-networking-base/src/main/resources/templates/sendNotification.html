@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Email Notification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #ffffff 10%, #ffe0cc 60%, #ff6b00 100%);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 100px auto;
+      background-color: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
+
+    .header {
+      background: linear-gradient(135deg, #ff6b00, #ff9900);
+      color: white;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 50px;
+    }
+
+    .content {
+      padding: 30px;
+      color: #333333;
+      background-color: #ffffff;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .content h2 {
+      font-size: 40px;
+      margin-top: 0;
+    }
+
+    .password-box {
+      background-color: #fff2e6;
+      border-left: 5px solid #ff6b00;
+      padding: 15px 20px;
+      font-size: 40px;
+      font-weight: bold;
+      margin: 20px 0;
+      border-radius: 8px;
+      color: #663300;
+      word-break: break-word;
+    }
+
+    .footer {
+      background-color: #ffffff;
+      padding: 20px;
+      text-align: center;
+      font-size: 20px;
+      color: #999999;
+      border-top: 1px solid #eee;
+    }
+
+    a.button {
+      display: inline-block;
+      background-color: #ff6b00;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 30px;
+      margin-top: 20px;
+    }
+
+    a.button:hover {
+      background-color: #ff8126;
+    }
+
+    @media only screen and (max-width: 600px) {
+      .container {
+        margin: 100px;
+      }
+    }
+
+	p {
+    font-size: 40px;
+  	}
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>Thông báo từ Hệ thống CLB-HIT</h1>
+  </div>
+  <div class="content">
+    <h2>Xin chào <strong>{{fullName}}</strong>,</h2>
+    <p>Chúng tôi rất vui khi được gửi đến bạn những thông tin mới nhất từ <strong>HIT Network</strong>.</p>
+    <p>Một cơ hội nghề nghiệp hoặc sự kiện hấp dẫn sắp diễn ra – rất có thể phù hợp với bạn! Đừng bỏ lỡ nhé.</p>
+    <p style="text-align: left;">
+      <a href="{{link-home}}" class="button">Xem chi tiết</a>
+    </p>
+    <p>Chúng tôi hy vọng bạn sẽ tìm thấy điều giá trị cho hành trình phát triển của mình.</p>
+    <p>Trân trọng,<br><strong>Đội ngũ HIT Network</strong></p>
+  </div>
+  <div class="footer">
+    Email này được gửi tự động từ hệ thống. Vui lòng không phản hồi lại email này.<br>
+    &copy; 2025 Hệ thống Quản lý CLB-HIT.
+  </div>
+</div>
+</body>
+</html>
