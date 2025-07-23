@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.service.impl;
 
+import com.example.hit_networking_base.domain.dto.response.UserExportDTO;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.service.TokenService;
 import io.jsonwebtoken.*;
@@ -16,7 +17,7 @@ public class TokenServiceImpl implements TokenService {
     private final long EXPIRATION_TIME = 86400000;
 
     @Override
-    public String generateToken(User user) {
+    public String generateToken(UserExportDTO user) {
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("role", user.getRole())

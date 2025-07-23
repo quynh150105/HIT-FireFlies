@@ -42,6 +42,7 @@ public class JobPostServiceImpl implements JobPostService {
     private final ImageService imageService;
     private final UserService userService;
     private final UserMapper userMapper;
+    private final SendEmailService sendEmailService;
 
 
     @Override
@@ -73,7 +74,7 @@ public class JobPostServiceImpl implements JobPostService {
         JobResponseDTO jobResponse = jobMapper.toJobResponse(jobPost);
         jobResponse.setUrlImage(listUrlImage);
 
-        //Thiếu phần gửi thông báo cho tất cả người dùng trong hệ thống qua email ở đây
+        sendEmailService.sendEmailWhenCreatePost(userService.getAllUserToSendEmail());
 
         return jobResponse;
     }

@@ -2,7 +2,6 @@ package com.example.hit_networking_base.service.impl;
 
 import com.example.hit_networking_base.constant.Gender;
 import com.example.hit_networking_base.constant.Role;
-import com.example.hit_networking_base.domain.dto.response.UserExportDTO;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.exception.UserException;
 import com.example.hit_networking_base.repository.UserRepository;
@@ -25,8 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import com.example.hit_networking_base.util.*;
+
 import com.example.hit_networking_base.util.*;
 
 @Service
@@ -35,21 +33,37 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
     private  final PasswordEncoder passwordencoder;
     private final UserRepository repository;
 
+
     @Override
     public boolean isValidExcelFile(MultipartFile file) {
-        return Objects.equals(file.getContentType(),"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        if (file == null) return false;
+
+        String contentType = file.getContentType();
+        boolean isExcelMimeType = contentType != null && (
+                contentType.equals("application/vnd.ms-excel") ||
+                        contentType.equals("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+        );
+
+        String fileName = file.getOriginalFilename();
+        boolean isExcelExtension = fileName != null && (
+                fileName.endsWith(".xls") || fileName.endsWith(".xlsx")
+        );
+
+        return isExcelMimeType && isExcelExtension;
     }
+
 
     @Override
     public List<User> getCustomerDataFromExcel(InputStream inputStream) {
-       List<User> users = new ArrayList<>();
-       List<UserExportDTO> exportData = new ArrayList<>();
 
-        try {
+       List<User> users = new ArrayList<>();
+
+       try {
             XSSFWorkbook workbook = new XSSFWorkbook(inputStream);
             XSSFSheet sheet = workbook.getSheetAt(0);
 
             int numberOfRows = sheet.getPhysicalNumberOfRows();
+            long counter = repository.findMaxUserId();
 
             for (int rowIndex = 1; rowIndex < numberOfRows; rowIndex++) { // Bắt đầu từ 1 để bỏ tiêu đề
                 Row row = sheet.getRow(rowIndex);
@@ -77,7 +91,6 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 }
                 user.setFullName(fullName);
 
-                // Giới tính
                 String genderStr = excelHelper.getCellValueAsString(genderCell).trim().toUpperCase();
                 if (genderStr.equals("NAM")) {
                     user.setGender(Gender.MALE);
@@ -87,7 +100,6 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                     throw new UserException("Giới tính không hợp lệ tại dòng " + (rowIndex + 1) + ": " + genderStr);
                 }
 
-                // Ngày sinh
                 if (dobCell == null || dobCell.getCellType() == CellType.BLANK) {
                     throw new UserException("Ngày sinh bị trống tại dòng " + (rowIndex + 1));
                 }
@@ -119,36 +131,35 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                     throw new UserException("Lỗi xử lý ngày sinh tại dòng " + (rowIndex + 1) + ": " + ex.getMessage());
                 }
 
-                // Email
                 String email = excelHelper.getCellValueAsString(emailCell).trim();
                 if (email.isEmpty()) {
                     throw new UserException("Email bị thiếu tại dòng " + (rowIndex + 1));
                 }
                 user.setEmail(email);
-
-                // Các thông tin khác
                 user.setRole(Role.TV);
                 user.setCreatedAt(LocalDate.now());
 
-                String password = "Abcd!1234";
-                user.setUsername(vietNameseUtils.removeAccents(user.getFullName().replaceAll("\\s+", "")) + "123");
+                String[] parts = user.getFullName().trim().split("\\s+");
+                String lastWord = parts[parts.length - 1];
+                String username = vietNameseUtils.removeAccents(lastWord) + "hit" + counter;
+                user.setUsername(username.toLowerCase());
+
+                String password = GenPassword.generatePassword();
                 user.setPasswordHash(passwordencoder.encode(password));
-                exportData.add(UserExportDTO.builder().username(user.getUsername()).password(password).build());
 
                 if (repository.existsByUsernameAndDeletedAtIsNull(user.getUsername())) {
                     throw new UserException("Username đã tồn tại: " + user.getUsername());
                 }
-
                 System.out.println("Thêm user: " + user.getFullName() + ", dob = " + user.getDob() + ", email = " + user.getEmail());
-                users.add(user);
-                System.out.println("password: " + password);
-            }
 
+                users.add(user);
+                counter++;
+            }
 
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return users;
 
+        return users;
     }
 }

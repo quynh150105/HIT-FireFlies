@@ -40,6 +40,7 @@ public class EventServiceImpl implements EventService {
     private final ImageService imageService;
     private final CommentPostService commentPostService;
     private final ReactionService reactionService;
+    private final SendEmailService sendEmailService;
 
     @Override
     public EventResponseDTO createEvent(EventRequest eventRequest, MultipartFile[] files) {
@@ -78,8 +79,7 @@ public class EventServiceImpl implements EventService {
         EventResponseDTO eventResponseDTO = eventMapper.toEventResponseDTO(event);
         eventResponseDTO.setImage(image);
 
-        // Thiếu phần gửi thông báo ở đây khi có bài viết mới cho mọi người qua email
-
+        sendEmailService.sendEmailWhenCreatePost(userService.getAllUserToSendEmail());
         return eventResponseDTO;
     }
 

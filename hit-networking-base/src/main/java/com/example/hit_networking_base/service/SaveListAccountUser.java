@@ -6,9 +6,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface SaveListAccountUser {
-
-
     String saveListAccUsersToDatabase(MultipartFile file);
-    List<User> getAllUser();
 
 }

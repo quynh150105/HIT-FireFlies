@@ -5,6 +5,8 @@ import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
 import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
+import com.example.hit_networking_base.domain.dto.response.UserDetailResponseDTO;
+import com.example.hit_networking_base.domain.dto.response.UserExportDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
 import com.example.hit_networking_base.service.SaveListAccountUser;
 import com.example.hit_networking_base.service.UserService;
@@ -57,7 +59,7 @@ public class AdminController {
     )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "File imported successfully",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserExportDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid or incorrect file format", content = @Content),
             @ApiResponse(responseCode = "401", description = "Unauthorized", content = @Content),
             @ApiResponse(responseCode = "403", description = "Access denied", content = @Content),
@@ -74,7 +76,7 @@ public class AdminController {
     @Operation(summary = "Admin retrieves all user information")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Retrieved successfully",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailResponseDTO.class))),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
@@ -87,7 +89,7 @@ public class AdminController {
     @Operation(summary = "Admin updates user information")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User updated successfully",
-                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = ApiResponse.class))),
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserResponseDTO.class))),
             @ApiResponse(responseCode = "400", description = "Invalid input data"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "403", description = "Access denied"),
@@ -96,5 +98,19 @@ public class AdminController {
     @PutMapping(UrlConstant.Admin.UPDATE)
     public ResponseEntity<?> updateUser(@Valid @RequestBody RequestUpdateUserDTO request){
         return VsResponseUtil.success(userService.updateUser(request));
+    }
+
+    @Operation(summary = "Admin delete user account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Delete successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @DeleteMapping(UrlConstant.Admin.DELETE)
+    public ResponseEntity<?> deleteUser(@RequestParam String username){
+        return VsResponseUtil.success(userService.deleteUser(username));
     }
 }

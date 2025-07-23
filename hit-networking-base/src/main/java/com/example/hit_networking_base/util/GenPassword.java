@@ -9,7 +9,7 @@ public class GenPassword {
     private static final String UPPERCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String LOWERCASE = "abcdefghijklmnopqrstuvwxyz";
     private static final String NUMBER = "0123456789";
-    private static final int PASSWORD_LENGTH = 8;
+    private static final int PASSWORD_LENGTH = 10;
 
     public static String generatePassword() {
         SecureRandom random = new SecureRandom();

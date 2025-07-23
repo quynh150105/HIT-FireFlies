@@ -44,7 +44,12 @@ public class ErrorMessage {
     public static class Job{
         public static final String ERR_NOT_FOUND_JOB_ID ="exception.job.not.found.postId";
         public static final String ERR_NOT_ENOUGH_RIGHTS = "exception.job.not.enough.right";
+    }
 
+    public static final class Email{
+        public static final String ERR_SEND_RESET_PASS = "exception.email.can't.send.email.reset.password";
+        public static final String ERR_SEND_CREATE_USER = "exception.email.can't.send.email.create.user";
+        public static final String ERR_SEND_CREATE_POST = "exception.email.can't.send.email.create.post";
     }
 
 }

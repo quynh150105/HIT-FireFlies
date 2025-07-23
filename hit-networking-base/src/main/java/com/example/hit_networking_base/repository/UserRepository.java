@@ -1,12 +1,15 @@
 package com.example.hit_networking_base.repository;
 
 import com.example.hit_networking_base.constant.Role;
+import com.example.hit_networking_base.domain.dto.response.UserExportDTO;
 import com.example.hit_networking_base.domain.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -26,5 +29,12 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     boolean existsByRole(Role role);
 
+    @Query("SELECT MAX(u.userId) FROM User u")
+    Long findMaxUserId();
+
+    @Query("SELECT new com.example.hit_networking_base.domain.dto.response.UserExportDTO(u.fullName, u.username, u.role, u.email) " +
+            "FROM User u " +
+            "WHERE u.deletedAt IS NULL")
+    List<UserExportDTO> findAllForExport();
 
 }
