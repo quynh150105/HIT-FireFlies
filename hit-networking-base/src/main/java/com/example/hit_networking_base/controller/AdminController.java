@@ -96,8 +96,8 @@ public class AdminController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PutMapping(UrlConstant.Admin.UPDATE)
-    public ResponseEntity<?> updateUser(@Valid @RequestBody RequestUpdateUserDTO request){
-        return VsResponseUtil.success(userService.updateUser(request));
+    public ResponseEntity<?> updateUser(@RequestParam Long id, @Valid @RequestBody RequestUpdateUserDTO request){
+        return VsResponseUtil.success(userService.updateUser(id, request));
     }
 
     @Operation(summary = "Admin delete user account")

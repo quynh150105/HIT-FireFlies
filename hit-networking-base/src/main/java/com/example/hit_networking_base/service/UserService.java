@@ -14,7 +14,7 @@ public interface UserService {
     ChangePasswordResponseDTO changePassword(ChangePasswordRequest changePasswordRequest);
     UserInfoResponseDTO getUserInfo();
     UserInfoResponseDTO updateUser(UpdateUserRequest updateUserRequest);
-    UserResponseDTO updateUser(RequestUpdateUserDTO request);
+    UserResponseDTO updateUser(Long id, RequestUpdateUserDTO request);
     UserResponseDTO createUser(RequestCreateUserDTO request);
     boolean addAdmin(String adminNane, String password);
     Map<String, Object> getAllUser(int page, int size);

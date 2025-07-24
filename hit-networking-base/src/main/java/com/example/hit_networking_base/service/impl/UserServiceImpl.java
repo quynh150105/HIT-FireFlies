@@ -51,21 +51,21 @@ public class UserServiceImpl implements UserService {
     private final JwtProperties jwtProperties;
 
     @Override
-    public UserResponseDTO updateUser(RequestUpdateUserDTO request) {
-        User user = findUserByUsername(request.getUsername());
+    public UserResponseDTO updateUser(Long id, RequestUpdateUserDTO request) {
+        User user = findUserById(id);
         if(!user.getRole().equals(Role.BQT) &&
                 !user.getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
             throw new BadRequestException(ErrorMessage.User.ERR_NOT_ENOUGH_RIGHTS);
         }
         user.setFullName(request.getFullName());
         user.setDob(request.getDob());
+        user.setRole(request.getRole());
         user.setEmail(request.getEmail());
         user.setGender(request.getGender());
-
-        String hashedPassword = passwordEncoder.encode(request.getPasswordHash());
-        user.setPasswordHash(hashedPassword);
-
         repository.save(user);
+        List<UserExportDTO> userExportDTOS = new ArrayList<>();
+        userExportDTOS.add(userMapper.toUserExportDTO(user));
+        sendEmailService.sendEmailToCreateUser(userExportDTOS);
         return mapper.toUserResponseDTO(user);
     }
 
@@ -84,6 +84,7 @@ public class UserServiceImpl implements UserService {
         user.setActivate(false);
         user.setCheckToken(Instant.now());
         user.setCreatedAt(LocalDate.now());
+        user.setActivate(false);
         repository.save(user);
 
         List<User> users = new ArrayList<>();
@@ -219,6 +220,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean resetPassword(ResetPasswordRequestDTO resetPasswordRequestDTO) {
         User user = checkToken();
+        if(user.isActivate())
+            throw new BadRequestException(ErrorMessage.User.ERR_ACTIVATED);
         if(passwordEncoder.matches(resetPasswordRequestDTO.getNewPassword(), user.getPasswordHash()))
             throw new BadRequestException(ErrorMessage.User.ERR_SAME_PASSWORD);
         user.setPasswordHash(passwordEncoder.encode(resetPasswordRequestDTO.getNewPassword()));
