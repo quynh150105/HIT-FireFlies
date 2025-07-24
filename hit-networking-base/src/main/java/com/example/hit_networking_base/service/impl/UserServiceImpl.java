@@ -10,10 +10,11 @@ import com.example.hit_networking_base.exception.UserException;
 import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.SendEmailService;
 import com.example.hit_networking_base.service.UserService;
+import com.example.hit_networking_base.util.GenPassword;
 import com.example.hit_networking_base.util.JwtUtils;
+import com.example.hit_networking_base.util.VietnameseUtils;
 import lombok.RequiredArgsConstructor;
 //import org.springdoc.core.converters.models.Pageable;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,7 +29,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -71,15 +71,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO createUser(RequestCreateUserDTO request) {
-        if(repository.existsByUsernameAndDeletedAtIsNull(request.getUsername())){
-            throw new UserException(ErrorMessage.User.ERR_ALREADY_EXISTS_USER_NAME);
-        }
         if(repository.existsByEmailAndDeletedAtIsNull(request.getEmail())){
             throw new UserException(ErrorMessage.User.ERR_ALREADY_EXISTS_EMAIL);
         }
         User user = mapper.toUser(request);
-        user.setPasswordHash(passwordEncoder.encode(request.getPasswordHash()));
+        long counter = userRepository.findMaxUserId();
+        String[] parts = user.getFullName().trim().split("\\s+");
+        String lastWord = parts[parts.length - 1];
+        String username = VietnameseUtils.removeAccents(lastWord) + "hit" + counter;
+        user.setUsername(username.toLowerCase());
+        user.setPasswordHash(passwordEncoder.encode(GenPassword.generatePassword()));
         user.setActivate(false);
+        user.setCheckToken(Instant.now());
+        user.setCreatedAt(LocalDate.now());
         repository.save(user);
 
         List<User> users = new ArrayList<>();

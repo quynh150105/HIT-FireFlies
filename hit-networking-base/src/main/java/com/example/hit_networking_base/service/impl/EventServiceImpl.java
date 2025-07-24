@@ -91,9 +91,7 @@ public class EventServiceImpl implements EventService {
         List<EventPostResponseDTO> dtos = eventPage.getContent().stream()
                 .map(event -> {
                     EventPostResponseDTO dto = eventMapper.toEventPostResponse(event);
-                    List<String> images = imageService.getUrlImage(event.getEventId(), TargetType.EVENT);
-                    dto.setUrlImage(images);
-                    dto.setEventId(event.getEventId());
+                    dto.setUrlImage(imageService.getUrlImage(event.getEventId(), TargetType.EVENT));
                     dto.setCreator(userMapper.toUserPostResponseDTO(event.getCreator()));
                     return dto;
                 })

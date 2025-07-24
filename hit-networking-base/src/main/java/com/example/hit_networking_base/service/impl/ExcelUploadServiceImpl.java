@@ -98,7 +98,7 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 } else if (genderStr.equals("NỮ")) {
                     user.setGender(Gender.FEMALE);
                 } else {
-                    throw new UserException("Giới tính không hợp lệ tại dòng " + (rowIndex + 1) + ": " + genderStr);
+                    user.setGender(Gender.OTHER);
                 }
 
                 if (dobCell == null || dobCell.getCellType() == CellType.BLANK) {
@@ -142,7 +142,7 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
 
                 String[] parts = user.getFullName().trim().split("\\s+");
                 String lastWord = parts[parts.length - 1];
-                String username = vietNameseUtils.removeAccents(lastWord) + "hit" + counter;
+                String username = VietnameseUtils.removeAccents(lastWord) + "hit" + counter;
                 user.setUsername(username.toLowerCase());
                 user.setCheckToken(Instant.now());
                 user.setActivate(false);

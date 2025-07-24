@@ -19,18 +19,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestCreateUserDTO {
-    @NotBlank(message="username")
+    @NotBlank(message="Hay nhap ho va ten")
     @Size(max = 100, message = "Tên tối đa 100 ký tự")
-    @Schema(description = "username", example = "user1")
-    private String username;
-
-    @Schema(description = "Password", example = "Password1")
-    @NotBlank(message = "Password must not be blank")
-    @Pattern(
-            regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$",
-            message = "Password must be at least 8 characters long, include at least one digit, one lowercase and one uppercase letter"
-    )
-    private String passwordHash;
+    @Schema(description = "full name", example = "Nguyễn Văn An")
+    private String fullName;
 
     @NotNull
     @Schema(description = "role", example = "TV")
@@ -43,11 +35,6 @@ public class RequestCreateUserDTO {
     @JsonFormat( pattern = "yyyy-MM-dd")
     @Schema(description = "dob", example = "2000-01-20")
     private LocalDate dob;
-
-    @NotBlank(message="Hay nhap ho va ten")
-    @Size(max = 100, message = "Tên tối đa 100 ký tự")
-    @Schema(description = "full name", example = "Nguyễn Văn An")
-    private String fullName;
 
     @Email(message="Hay nhap email dung dinh dang")
     @NotBlank(message = "email khong duoc de trong")

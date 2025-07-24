@@ -15,6 +15,9 @@ public class EventPostResponseDTO {
     private long eventId;
     private String title;
     private String description;
+    private LocalDateTime eventDate;
+    private String organizer;
+    private String location;
     private UserPostResponseDTO creator;
     private List<String> urlImage;
     private long countReaction;

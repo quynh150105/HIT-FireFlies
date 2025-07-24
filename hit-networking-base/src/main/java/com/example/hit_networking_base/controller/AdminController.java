@@ -49,7 +49,7 @@ public class AdminController {
                     "- Format: `.xlsx` (Excel 2007 or newer)\n" +
                     "- Columns (in order):\n" +
                     "  1. Full Name\n" +
-                    "  2. Gender (MALE, FEMALE, OTHER)\n" +
+                    "  2. Gender (NAM, NỮ)\n" +
                     "  3. Date of Birth (`yyyy-MM-dd`)\n" +
                     "  4. Email\n\n" +
                     "**Notes:**\n" +

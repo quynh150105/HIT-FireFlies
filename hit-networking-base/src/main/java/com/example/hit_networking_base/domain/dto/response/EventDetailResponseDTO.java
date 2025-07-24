@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventDetailResponseDTO {
+    private long eventId;
     private String title;
     private String description;
     private LocalDateTime eventDate;
