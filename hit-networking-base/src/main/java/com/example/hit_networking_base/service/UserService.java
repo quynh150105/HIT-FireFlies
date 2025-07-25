@@ -21,4 +21,6 @@ public interface UserService {
     List<UserExportDTO> getAllUserToSendEmail();
     boolean resetPassword(ResetPasswordRequestDTO resetPasswordRequestDTO);
     UserDetailResponseDTO deleteUser(String username);
+
+    UserDetailResponseDTO getUserDetailByAdmin(Long userId);
 }

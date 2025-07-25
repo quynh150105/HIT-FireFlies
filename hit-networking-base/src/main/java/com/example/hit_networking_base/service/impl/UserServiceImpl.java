@@ -241,6 +241,12 @@ public class UserServiceImpl implements UserService {
        return userMapper.toUserDetailResponseDTO(user);
     }
 
+    @Override
+    public UserDetailResponseDTO getUserDetailByAdmin(Long userId) {
+        User user = findUserById(userId);
+        return userMapper.toUserDetailResponseDTO(user);
+    }
+
     private User checkToken(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = findUserByUsername(authentication.getName());

@@ -113,4 +113,19 @@ public class AdminController {
     public ResponseEntity<?> deleteUser(@RequestParam String username){
         return VsResponseUtil.success(userService.deleteUser(username));
     }
+
+    @Operation(summary = "Admin get user detail account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "get user detail successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserDetailResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping(UrlConstant.Admin.GET_DETAIL)
+    public ResponseEntity<?> getUserDetail(@RequestParam Long userId){
+        return VsResponseUtil.success(userService.getUserDetailByAdmin(userId));
+    }
+
 }

@@ -13,6 +13,8 @@ public class UrlConstant {
         public static final String GET_ALL = PREFIX + "/select-all";
         public static final String EXPORT = PREFIX + "/export";
         public static final String DELETE = PREFIX + "/delete";
+
+        public static final String GET_DETAIL = PREFIX + "/get-detail";
     }
 
     public static class Authorization{
