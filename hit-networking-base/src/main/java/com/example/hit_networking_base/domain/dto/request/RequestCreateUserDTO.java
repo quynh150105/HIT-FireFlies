@@ -5,6 +5,8 @@ import com.example.hit_networking_base.constant.Role;
 import com.example.hit_networking_base.domain.entity.*;
 import com.example.hit_networking_base.domain.entity.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jdk.jfr.Description;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,48 +19,25 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestCreateUserDTO {
-    @NotBlank(message="Hay nhap userName")
+    @NotBlank(message="Hay nhap ho va ten")
     @Size(max = 100, message = "Tên tối đa 100 ký tự")
-    private String username;
+    @Schema(description = "full name", example = "Nguyễn Văn An")
+    private String fullName;
 
-    @NotBlank(message="Hay nhap Pass Word")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", message="Mat khau it nhat co 1 chu thuong, 1 chu hoa, 1 so, 1 ki tu dac biet, it nhat 8 ki tu")
-    private String passwordHash;
-
-
-    private Role role = Role.TV;
+    @NotNull
+    @Schema(description = "role", example = "TV")
+    private Role role;
 
     private Gender gender = Gender.MALE;
 
     @NotNull(message = "Ngày sinh không được để trống")
     @Past(message = "Ngày sinh phải trước ngày hôm nay")
     @JsonFormat( pattern = "yyyy-MM-dd")
+    @Schema(description = "dob", example = "2000-01-20")
     private LocalDate dob;
-
-    @NotBlank(message="Hay nhap ho va ten")
-    @Size(max = 100, message = "Tên tối đa 100 ký tự")
-    private String fullName;
 
     @Email(message="Hay nhap email dung dinh dang")
     @NotBlank(message = "email khong duoc de trong")
+    @Schema(description = "email", example = "an@gmail.com")
     private String email;
-
-    private LocalDate createdAt = LocalDate.now();
-
-    private LocalDate deletedAt;
-
-    private List<CV> cvs;
-
-    private List<Comment> comments;
-
-
-    private List<Reaction> reactions;
-
-
-    private List<Event> createdEvents;
-
-
-    private List<JobPost> createdJobPosts;
-
-
 }

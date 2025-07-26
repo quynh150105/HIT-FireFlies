@@ -4,6 +4,7 @@ import com.example.hit_networking_base.base.RestApiV1;
 import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
+import com.example.hit_networking_base.domain.dto.request.ResetPasswordRequestDTO;
 import com.example.hit_networking_base.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -61,4 +62,9 @@ public class UserController {
         return VsResponseUtil.success(userService.updateUser(updateUserRequest));
     }
 
+
+    @PutMapping(UrlConstant.User.RESET_PASSWORD)
+    public ResponseEntity<?> setPassword(@RequestBody @Valid ResetPasswordRequestDTO resetPasswordRequestDTO){
+        return VsResponseUtil.success(userService.resetPassword(resetPasswordRequestDTO));
+    }
 }

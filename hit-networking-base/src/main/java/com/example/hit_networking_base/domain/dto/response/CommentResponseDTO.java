@@ -11,7 +11,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentResponseDTO{
-    private long userId;
+    private long commentId;
+    private UserPostResponseDTO userPostResponseDTO;
     private String content;
     private LocalDateTime createdAt;
 }

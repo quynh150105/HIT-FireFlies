@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "jobpost")
+@Table(name = "job_post")
 public class JobPost {
 
     @Id
@@ -27,6 +27,10 @@ public class JobPost {
     @JoinColumn(name = "created_by", referencedColumnName = "user_id")
     private User creator;
 
+    @Column()
+    private Long countReaction;
+    @Column()
+    private Long countComment;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

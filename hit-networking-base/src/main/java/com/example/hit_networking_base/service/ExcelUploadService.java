@@ -7,8 +7,6 @@ import java.io.InputStream;
 import java.util.List;
 
 public interface ExcelUploadService {
-     public boolean isValidExcelFile(MultipartFile file);
-
+    public boolean isValidExcelFile(MultipartFile file);
     List<User> getCustomerDataFromExcel(InputStream inputStream);
-
 }

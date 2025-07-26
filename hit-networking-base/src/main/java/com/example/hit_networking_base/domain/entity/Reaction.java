@@ -33,8 +33,8 @@ public class Reaction {
     @Column(name = "target_id")
     private long targetId;
 
-    @Column(name = "reacted_at")
-    private LocalDateTime reactedAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
