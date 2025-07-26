@@ -150,6 +150,7 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 String username = VietnameseUtils.removeAccents(lastWord) + "hit" + counter;
                 user.setUsername(username.toLowerCase());
                 user.setActivate(false);
+                user.setCheckToken("a");
 
                 String password = GenPassword.generatePassword();
                 user.setPasswordHash(passwordencoder.encode(password));

@@ -38,7 +38,7 @@ public class SaveListAccountUserImpl implements SaveListAccountUser {
         } catch (IOException e) {
             throw new BadRequestException(ErrorMessage.ImportFileExcel.ERR_WRONG_READ + e.getMessage());
         }
-        return "SUCCESS";
+        return "Import OK";
     }
 
 }
