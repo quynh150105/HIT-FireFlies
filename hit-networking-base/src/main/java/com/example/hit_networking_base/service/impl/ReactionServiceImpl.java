@@ -27,8 +27,20 @@ public class ReactionServiceImpl implements ReactionService {
 
     private final ReactionRepository repository;
     private final UserMapper userMapper;
-
      private final UserRepository userRepository;
+
+//    @Override
+//    public List<ReactionResponseDTO> findReactionByTargetIdAndTargetType(Long targetId , TargetType targetType) {
+//        return repository.findByTargetIdAndTargetType(targetType).stream()
+//                .map(reaction -> {
+//                    ReactionResponseDTO reactionResponseDTO = new ReactionResponseDTO();
+//                    reactionResponseDTO.setEmotionType(reaction.getEmotionType());
+//                    reactionResponseDTO.setCreatedAt(reaction.getCreatedAt());
+//                    reactionResponseDTO.setUserPostResponseDTO(userMapper.toUserPostResponseDTO(reaction.getUser()));
+//                    return reactionResponseDTO;
+//                })
+//                .collect(Collectors.toList());
+//    }
 
     @Override
     public List<ReactionResponseDTO> findReactionByTargetIdAndTargetType(long targetId, TargetType targetType) {
@@ -46,7 +58,7 @@ public class ReactionServiceImpl implements ReactionService {
     // create
     @Override
     public String reactToTarget(ReactionRequestDTO request) {
-        Reaction reaction = repository.findByUserIdAndTarget(request.getUserId(), request.getTargetId(), request.getTargetType()).orElse(null);
+        Reaction reaction = repository.findByUserIdAndTarget(request.getUserId(), request.getTargetId(),request.getTargetType()).orElse(null);
 
         // neu da co reaction thi thay doi
         if(reaction !=null){
@@ -59,7 +71,7 @@ public class ReactionServiceImpl implements ReactionService {
 
             Reaction react = new Reaction();
             react.setEmotionType(request.getEmotionType());
-            react.setTargetId(request.getTargetId());
+           // react.setTargetId(request.getTargetId());
             react.setTargetType(request.getTargetType());
             react.setCreatedAt(LocalDateTime.now());
             react.setUser(user);
@@ -68,8 +80,8 @@ public class ReactionServiceImpl implements ReactionService {
     }
 
     @Override
-    public String removeReaction(Long userId, Long targetId, TargetType targetType) {
-        Reaction reaction = repository.findByUserIdAndTarget(userId,targetId,targetType)
+    public String removeReaction(Long userId,Long targetId, TargetType targetType) {
+        Reaction reaction = repository.findByUserIdAndTarget(userId, targetId, targetType)
                 .orElseThrow(()-> new NotFoundException("Reaction not found"));
         repository.delete(reaction);
         return "SUCCESS";
@@ -77,7 +89,7 @@ public class ReactionServiceImpl implements ReactionService {
 
     @Override
     public ReactionListResponseDTO getReaction(Long targetId, TargetType targetType) {
-        List<Object[]> result = repository.countReactionsByType(targetId,targetType);
+        List<Object[]> result = repository.countReactionsByType(targetId, targetType);
 
         Map<EmotionType, Long> reactionMap = new EnumMap<EmotionType, Long>(EmotionType.class);
         long total = 0;
