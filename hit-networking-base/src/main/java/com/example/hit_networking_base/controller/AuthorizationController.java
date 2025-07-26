@@ -35,7 +35,8 @@ public class AuthorizationController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Login successful",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = AuthResponseDTO.class))),
-            @ApiResponse(responseCode = "400", description = "Invalid user credentials"),
+            @ApiResponse(responseCode = "400", description = "Invalid Password"),
+            @ApiResponse(responseCode = "404", description = "Invalid Username"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(UrlConstant.Authorization.LOGIN)
@@ -48,6 +49,7 @@ public class AuthorizationController {
             @ApiResponse(responseCode = "200", description = "Password reset link sent successfully",
                     content = @Content(mediaType = "application/json", schema = @Schema(implementation = String.class))),
             @ApiResponse(responseCode = "400", description = "Invalid data"),
+            @ApiResponse(responseCode = "404", description = "Invalid Username"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(UrlConstant.Authorization.REST_PASSWORD)

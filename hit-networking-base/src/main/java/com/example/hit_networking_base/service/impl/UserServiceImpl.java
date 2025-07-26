@@ -180,9 +180,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, Object> getAllUser(int page, int size) {
+        User userIn = checkToken();
         Pageable pageable = PageRequest.of(page, size);
         Page<User> pageResult = userRepository.findAll(pageable);
         List<UserDetailResponseDTO> userDTOs = pageResult.getContent().stream()
+                .filter(user -> !userIn.getUsername().equals(user.getUsername()))
                 .map(user -> new UserDetailResponseDTO(
                         user.getUserId(),
                         user.getUsername(),
