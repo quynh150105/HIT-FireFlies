@@ -28,7 +28,7 @@ public class SendEmailServiceImpl implements SendEmailService {
     @Override
     public void sendEmailToCreateUser(List<UserExportDTO> users) {
         for(UserExportDTO user : users){
-            String url = linkResetPassword + tokenService.generateToken(user);
+            String url = linkResetPassword + tokenService.generateTokenEmail(user);
             String html = EmailTemplateLoader
                     .loadSendCreateUserTemplate(user.getFullName(),user.getUsername(), url);
             sendMail(user, html, "Account creation notice");
@@ -37,7 +37,7 @@ public class SendEmailServiceImpl implements SendEmailService {
 
     @Override
     public void seddEmailToUserResetPassword(UserExportDTO user) {
-        String url = linkResetPassword + tokenService.generateToken(user);
+        String url = linkResetPassword + tokenService.generateTokenEmail(user);
         String html = EmailTemplateLoader
                 .loadSendResetPassTemplate(user.getFullName(), url);
         sendMail(user, html, "Reset new password");

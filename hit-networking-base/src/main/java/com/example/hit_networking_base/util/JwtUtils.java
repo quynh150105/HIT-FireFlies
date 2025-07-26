@@ -22,7 +22,7 @@ public class JwtUtils {
         return (String) getClaims(token, secretKey).get("role");
     }
 
-    public static Instant getTime(String token, String secretKey) {
-        return getClaims(token, secretKey).getIssuedAt().toInstant();
+    public static String getTokenPass(String token, String secretKey) {
+        return getClaims(token, secretKey).get("sessionId", String.class);
     }
 }

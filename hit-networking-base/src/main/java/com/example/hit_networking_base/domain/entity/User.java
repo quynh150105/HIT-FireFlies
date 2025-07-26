@@ -62,7 +62,7 @@ public class User {
     private LocalDate deletedAt;
 
     @Column(nullable = false)
-    private Instant checkToken;
+    private String checkToken;
 
     @Column(nullable = false)
     private boolean activate;

@@ -1,8 +1,10 @@
 package com.example.hit_networking_base.service.impl;
 
+import com.example.hit_networking_base.constant.ErrorMessage;
 import com.example.hit_networking_base.constant.Gender;
 import com.example.hit_networking_base.constant.Role;
 import com.example.hit_networking_base.domain.entity.User;
+import com.example.hit_networking_base.exception.BadRequestException;
 import com.example.hit_networking_base.exception.UserException;
 import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.ExcelUploadService;
@@ -136,6 +138,9 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 if (email.isEmpty()) {
                     throw new UserException("Email bị thiếu tại dòng " + (rowIndex + 1));
                 }
+                if(repository.existsByEmail(email)){
+                    throw new BadRequestException(ErrorMessage.User.ERR_ALREADY_EXISTS_EMAIL + "." + email);
+                }
                 user.setEmail(email);
                 user.setRole(Role.TV);
                 user.setCreatedAt(LocalDate.now());
@@ -144,14 +149,13 @@ public class ExcelUploadServiceImpl implements ExcelUploadService {
                 String lastWord = parts[parts.length - 1];
                 String username = VietnameseUtils.removeAccents(lastWord) + "hit" + counter;
                 user.setUsername(username.toLowerCase());
-                user.setCheckToken(Instant.now());
                 user.setActivate(false);
 
                 String password = GenPassword.generatePassword();
                 user.setPasswordHash(passwordencoder.encode(password));
 
                 if (repository.existsByUsernameAndDeletedAtIsNull(user.getUsername())) {
-                    throw new UserException("Username đã tồn tại: " + user.getUsername());
+                    throw new BadRequestException(ErrorMessage.User.ERR_ALREADY_EXISTS_USERNAME + "." + user.getUsername());
                 }
                 System.out.println("Thêm user: " + user.getFullName() + ", dob = " + user.getDob() + ", email = " + user.getEmail());
 

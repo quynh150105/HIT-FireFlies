@@ -9,6 +9,7 @@ public class ErrorMessage {
         public static final String ERR_SAME_PASSWORD = "exception.user.same.password";
         public static final String ERR_ACTIVATED= "exception.user.activated";
         public static final String ERR_ALREADY_EXISTS_EMAIL = "exception.user.already.exists.email";
+        public static final String ERR_ALREADY_EXISTS_USERNAME = "exception.user.already.exists.username";
         public static final String ERR_NOT_FOUND_EMAIL = "exception.user.not.found.email";
         public static final String ERR_NOT_ENOUGH_RIGHTS = "exception.user.not.enough.right";
         public static final String ERR_INVALID_TOKEN = "exception.user.invalid.token";
@@ -17,6 +18,7 @@ public class ErrorMessage {
     public static class Auth{
         public static final String ERR_SEND_EMAIL = "exception.auth.send.failed.email";
         public static final String ERR_NOT_ACTIVATE = "exception.user.not.activate";
+        public static final String ERR_INVALID_TOKEN_REFRESH = "exception.user.invalid.token.refresh";
     }
 
     public static class Image{

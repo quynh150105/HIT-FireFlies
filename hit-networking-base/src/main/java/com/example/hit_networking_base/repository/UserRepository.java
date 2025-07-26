@@ -25,7 +25,7 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     boolean existsByUsernameAndDeletedAtIsNull(String username);
 
-    boolean existsByEmailAndDeletedAtIsNull(String email);
+    boolean existsByEmail(String email);
 
     boolean existsByRole(Role role);
 
@@ -36,5 +36,11 @@ public interface UserRepository extends JpaRepository<User,Long> {
             "FROM User u " +
             "WHERE u.deletedAt IS NULL")
     List<UserExportDTO> findAllForExport();
+
+    Optional<User> findByEmail(String email);
+
+    @Query("SELECT u.checkToken FROM User u WHERE u.username = :username AND u.deletedAt IS NULL")
+    String findCheckTokenByUsername(String username);
+
 
 }

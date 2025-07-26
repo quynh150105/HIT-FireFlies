@@ -6,7 +6,7 @@ import com.example.hit_networking_base.domain.dto.request.*;
 import com.example.hit_networking_base.domain.dto.response.*;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.UserMapper;
-import com.example.hit_networking_base.exception.UserException;
+import com.example.hit_networking_base.exception.*;
 import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.SendEmailService;
 import com.example.hit_networking_base.service.UserService;
@@ -19,17 +19,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.example.hit_networking_base.exception.BadRequestException;
-import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.service.ImageService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +56,9 @@ public class UserServiceImpl implements UserService {
         user.setFullName(request.getFullName());
         user.setDob(request.getDob());
         user.setRole(request.getRole());
-        user.setEmail(request.getEmail());
+        if(!user.getEmail().equals(request.getEmail())){
+            user.setEmail(request.getEmail());
+        }
         user.setGender(request.getGender());
         repository.save(user);
         List<UserExportDTO> userExportDTOS = new ArrayList<>();
@@ -71,8 +69,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO createUser(RequestCreateUserDTO request) {
-        if(repository.existsByEmailAndDeletedAtIsNull(request.getEmail())){
-            throw new UserException(ErrorMessage.User.ERR_ALREADY_EXISTS_EMAIL);
+        if(repository.existsByEmail(request.getEmail())){
+            throw new UserException(ErrorMessage.User.ERR_ALREADY_EXISTS_EMAIL+ "." + request.getEmail());
         }
         User user = mapper.toUser(request);
         long counter = userRepository.findMaxUserId();
@@ -82,15 +80,13 @@ public class UserServiceImpl implements UserService {
         user.setUsername(username.toLowerCase());
         user.setPasswordHash(passwordEncoder.encode(GenPassword.generatePassword()));
         user.setActivate(false);
-        user.setCheckToken(Instant.now());
+        user.setCheckToken("a");
         user.setCreatedAt(LocalDate.now());
         user.setActivate(false);
         repository.save(user);
-
         List<User> users = new ArrayList<>();
         users.add(user);
         sendEmailService.sendEmailToCreateUser(userMapper.toListUserExportDTO(users));
-
         return mapper.toUserResponseDTO(user);
     }
 
@@ -98,7 +94,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findByUsername(username).orElseThrow(()
-                -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_USER_NAME, new long[]{}));
+                -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_USER_NAME));
     }
 
     @Override
@@ -120,7 +116,7 @@ public class UserServiceImpl implements UserService {
         }
 
         user.setPasswordHash(passwordEncoder.encode(changePasswordRequest.getNewPassword()));
-        user.setCheckToken(Instant.now());
+        user.setCheckToken("a");
         userRepository.save(user);
         return new ChangePasswordResponseDTO(SuccessMessage.User.PASSWORD_CHANGE_SUCCESS);
     }
@@ -177,7 +173,7 @@ public class UserServiceImpl implements UserService {
         admin.setPhone("0123456789");
         admin.setCreatedAt(LocalDate.now());
         admin.setActivate(true);
-        admin.setCheckToken(Instant.now());
+        admin.setCheckToken("a");
         userRepository.save(admin);
         return true;
     }
@@ -219,7 +215,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean resetPassword(ResetPasswordRequestDTO resetPasswordRequestDTO) {
-        User user = checkToken();
+        User user = findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         if(user.isActivate())
             throw new BadRequestException(ErrorMessage.User.ERR_ACTIVATED);
         if(passwordEncoder.matches(resetPasswordRequestDTO.getNewPassword(), user.getPasswordHash()))
@@ -234,9 +230,11 @@ public class UserServiceImpl implements UserService {
     public UserDetailResponseDTO deleteUser(String username) {
        User user = findUserByUsername(username);
        User userDelete = checkToken();
-       if(userDelete.getRole().equals(Role.TV))
+       if(userDelete.getRole().equals(Role.TV) || username.equals(userDelete.getUsername()))
            throw new BadRequestException(ErrorMessage.User.ERR_NOT_ENOUGH_RIGHTS);
        user.setDeletedAt(LocalDate.now());
+       user.setActivate(false);
+       user.setCheckToken("a");
        userRepository.save(user);
        return userMapper.toUserDetailResponseDTO(user);
     }
@@ -247,17 +245,35 @@ public class UserServiceImpl implements UserService {
         return userMapper.toUserDetailResponseDTO(user);
     }
 
+    @Override
+    public UserResponseDTO restoreUser(RestoreUserRequestDTO restoreUserRequestDTO) {
+        User user = userRepository.findByEmail(restoreUserRequestDTO.getEmail()).orElseThrow(()
+        -> new NotFoundException(ErrorMessage.User.ERR_NOT_FOUND_EMAIL));
+        user.setDeletedAt(null);
+        user.setActivate(false);
+        user.setCheckToken("a");
+        userRepository.save(user);
+        List<UserExportDTO> userExportDTOS = new ArrayList<>();
+        userExportDTOS.add(userMapper.toUserExportDTO(user));
+        sendEmailService.sendEmailToCreateUser(userExportDTOS);
+        return userMapper.toUserResponseDTO(user);
+    }
+
+    @Override
+    public void setActivated(User user) {
+        user.setActivate(false);
+        userRepository.save(user);
+    }
+
     private User checkToken(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = findUserByUsername(authentication.getName());
-        System.out.println("TOKEN: " + (String)authentication.getCredentials());
-        Instant tokenTime = JwtUtils.getTime((String) authentication.getCredentials(), jwtProperties.getSecret()).truncatedTo(ChronoUnit.SECONDS);
-        Instant checkTime = user.getCheckToken().truncatedTo(ChronoUnit.SECONDS);
-        if(!tokenTime.isBefore(checkTime))
-            return user;
-        System.out.println("Time 1: " + user.getCheckToken());
-        System.out.println("Time 2: " + JwtUtils.getTime((String)authentication.getCredentials(), jwtProperties.getSecret()));
-        throw new BadRequestException(ErrorMessage.User.ERR_INVALID_TOKEN);
+        if(!passwordEncoder.matches(
+                JwtUtils.getTokenPass((String) authentication.getCredentials(), jwtProperties.getSecret())
+                ,user.getCheckToken())){
+            throw new ForbiddenException(ErrorMessage.User.ERR_INVALID_TOKEN);
+        }
+        return user;
     }
 
 }

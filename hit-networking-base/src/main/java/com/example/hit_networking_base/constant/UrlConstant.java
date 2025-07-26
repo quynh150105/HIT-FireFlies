@@ -11,9 +11,8 @@ public class UrlConstant {
         public static final String UPDATE = PREFIX + "/update";
         public static final String IMPORT = PREFIX + "/import";
         public static final String GET_ALL = PREFIX + "/select-all";
-        public static final String EXPORT = PREFIX + "/export";
+        public static final String RESTORE = PREFIX + "/restore";
         public static final String DELETE = PREFIX + "/delete";
-
         public static final String GET_DETAIL = PREFIX + "/get-detail";
     }
 
@@ -22,6 +21,7 @@ public class UrlConstant {
         public static final String LOGIN = PREFIX + "/login";
         public static final String REST_PASSWORD = PREFIX + "/forgot-password";
         public static final String HOME = PREFIX + "/home";
+        public static final String REFRESH = PREFIX + "/refresh";
     }
 
     public static class User{

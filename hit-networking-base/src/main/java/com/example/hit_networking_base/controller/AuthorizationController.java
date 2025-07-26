@@ -20,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestApiV1
@@ -37,8 +39,8 @@ public class AuthorizationController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @PostMapping(UrlConstant.Authorization.LOGIN)
-    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authRequest){
-        return VsResponseUtil.success(authService.login(authRequest));
+    public ResponseEntity<?> login(@RequestBody @Valid AuthRequest authRequest, HttpServletResponse response){
+        return VsResponseUtil.success(authService.login(authRequest, response));
     }
 
     @Operation(summary = "Reset password (Forgot password)")
@@ -67,8 +69,17 @@ public class AuthorizationController {
         return VsResponseUtil.success(homeService.getALLEventAndJobPost(page, size));
     }
 
-    @GetMapping("/auth/load")
-    public ResponseEntity<?> load(){
-        return VsResponseUtil.success(HttpStatus.OK);
+    @Operation(summary = "Generate token when token is invalid")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Generate token successfully",
+                    content = @Content(
+                            mediaType = "application/json",
+                            schema = @Schema(implementation = String.class)
+                    )),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping(UrlConstant.Authorization.REFRESH)
+    public ResponseEntity<?> refresh(HttpServletRequest request){
+        return VsResponseUtil.success(authService.refreshToken(request));
     }
 }

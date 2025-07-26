@@ -10,7 +10,7 @@ import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.EventMapper;
 import com.example.hit_networking_base.domain.mapstruct.UserMapper;
 import com.example.hit_networking_base.exception.NotFoundException;
-import com.example.hit_networking_base.exception.UnauthorizedException;
+import com.example.hit_networking_base.exception.UnAuthorizedException;
 import com.example.hit_networking_base.repository.EventRepository;
 import com.example.hit_networking_base.service.*;
 import lombok.RequiredArgsConstructor;
@@ -108,7 +108,7 @@ public class EventServiceImpl implements EventService {
         String username = authentication.getName();
 
         if (!event.getCreator().getUsername().equals(username)) {
-            throw new UnauthorizedException("You are not authorized to update this event");
+            throw new UnAuthorizedException("You are not authorized to update this event");
         }
 
         eventMapper.updateEventFromRequest(request, event);
