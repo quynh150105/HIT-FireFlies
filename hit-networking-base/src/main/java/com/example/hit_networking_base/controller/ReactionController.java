@@ -32,7 +32,7 @@ public class ReactionController {
     })
     @DeleteMapping(UrlConstant.Reaction.DELETE)
     public ResponseEntity<?> removeReaction(@RequestParam Long userId, @RequestParam Long targetId, @RequestParam TargetType targetType){
-        return VsResponseUtil.success(service.removeReaction(userId,targetId,targetType));
+        return VsResponseUtil.success(service.removeReaction(userId, targetId,targetType));
     }
 
     @Operation(summary = "User change Reaction")
@@ -56,9 +56,9 @@ public class ReactionController {
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping(UrlConstant.Reaction.GET_ALL)
+    @GetMapping(UrlConstant.Reaction.GET_ALL)//,
     public ResponseEntity<?> getReaction(@RequestParam Long targetId, @RequestParam TargetType targetType){
-        return VsResponseUtil.success(service.getReaction(targetId,targetType));
+        return VsResponseUtil.success(service.getReaction(targetId, targetType));
     }
 
 }
