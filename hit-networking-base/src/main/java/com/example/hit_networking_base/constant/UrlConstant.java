@@ -72,4 +72,14 @@ public class UrlConstant {
 
 
     }
+
+    public static class Cv{
+        public static final String PREFIX ="/cv";
+
+        public static final String UP_CV = PREFIX + "/up";
+
+        public static final String GET_BY_USERID = PREFIX + "/get-by-user";
+
+        public static final String GET_BY_POST = PREFIX + "/get-by-post";
+    }
 }
