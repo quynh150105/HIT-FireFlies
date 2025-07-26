@@ -39,6 +39,7 @@ public class UrlConstant {
         public static final String GET_EVENT = PREFIX;
         public static final String GET_EVENTS = PREFIX + 's';
         public static final String UPDATE_EVENT = PREFIX + "/{eventId}";
+        public static final String DELETE = PREFIX;
 
     }
 
@@ -48,6 +49,7 @@ public class UrlConstant {
         public static final String GET_JOB_POST_PAGE = PREFIT + "s";
         public static final String GET_JOB_DETAIL = PREFIT;
         public static final String UPDATE_JOB = PREFIT;
+        public static final String DELETE = PREFIT;
     }
 
     public static class Comment{

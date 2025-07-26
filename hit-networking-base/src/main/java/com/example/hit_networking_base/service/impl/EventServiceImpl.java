@@ -157,4 +157,12 @@ public class EventServiceImpl implements EventService {
         }
         eventRepository.save(event);
     }
+
+    @Override
+    public EventDetailResponseDTO deleteEvent(Long eventId) {
+        Event event = findById(eventId);
+        event.setDeletedAt(LocalDateTime.now());
+        eventRepository.save(event);
+        return eventMapper.toEventDetailResponseDTO(event);
+    }
 }

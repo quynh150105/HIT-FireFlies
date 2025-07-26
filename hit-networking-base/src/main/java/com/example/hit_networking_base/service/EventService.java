@@ -19,4 +19,5 @@ public interface EventService {
     Event findById(Long id);
     EventPostResponseDTO getPostEvent(Long id);
     void countComment(Long id, TargetType targetType);
+    EventDetailResponseDTO deleteEvent(Long eventId);
 }

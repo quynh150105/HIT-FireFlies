@@ -86,4 +86,19 @@ public class EventController {
     public ResponseEntity<?> getEventDetail(@RequestParam long eventId){
         return VsResponseUtil.success(eventService.getEventDetail(eventId));
     }
+
+    @Operation(summary = "Admin delete event detail")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Delete successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = EventDetailResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "403", description = "Invalid token"),
+            @ApiResponse(responseCode = "404", description = "Event not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @DeleteMapping(UrlConstant.Event.DELETE)
+    public ResponseEntity<?> deleteEvent(@RequestParam Long id){
+        return VsResponseUtil.success(eventService.deleteEvent(id));
+    }
 }
