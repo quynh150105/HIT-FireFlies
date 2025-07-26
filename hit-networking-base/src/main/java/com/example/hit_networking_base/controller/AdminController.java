@@ -5,6 +5,7 @@ import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
 import com.example.hit_networking_base.domain.dto.request.RequestCreateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
+import com.example.hit_networking_base.domain.dto.request.RestoreUserRequestDTO;
 import com.example.hit_networking_base.domain.dto.response.UserDetailResponseDTO;
 import com.example.hit_networking_base.domain.dto.response.UserExportDTO;
 import com.example.hit_networking_base.domain.dto.response.UserResponseDTO;
@@ -17,12 +18,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 
 @RestApiV1
 @RequiredArgsConstructor
@@ -128,4 +131,17 @@ public class AdminController {
         return VsResponseUtil.success(userService.getUserDetailByAdmin(userId));
     }
 
+    @Operation(summary = "Admin restore user account")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "restore successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = UserExportDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @PostMapping(UrlConstant.Admin.RESTORE)
+    public ResponseEntity<?> restoreUser(@RequestBody @Valid RestoreUserRequestDTO restoreUserRequestDTO){
+        return VsResponseUtil.success(userService.restoreUser(restoreUserRequestDTO));
+    }
 }
