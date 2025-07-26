@@ -1,6 +1,7 @@
 package com.example.hit_networking_base.service.impl;
 
 import com.example.hit_networking_base.constant.ErrorMessage;
+import com.example.hit_networking_base.constant.Role;
 import com.example.hit_networking_base.constant.TargetType;
 import com.example.hit_networking_base.domain.dto.request.JobPostRequest;
 import com.example.hit_networking_base.domain.dto.request.JobUpdateRequestDTO;
@@ -144,5 +145,18 @@ public class JobPostServiceImpl implements JobPostService {
                 jobPost.setCountComment(jobPost.getCountComment() - 1);
         }
         jobPostRepository.save(jobPost);
+    }
+
+    @Override
+    public JobDetailResponseDTO deleteJob(Long id) {
+        JobPost jobPost = findById(id);
+        User user = userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        if(user.getRole().equals(Role.TV) && !user.equals(jobPost.getCreator())) {
+            throw new BadRequestException(ErrorMessage.User.ERR_NOT_ENOUGH_RIGHTS);
+        }
+
+        jobPost.setDeletedAt(LocalDateTime.now());
+        jobPostRepository.save(jobPost);
+        return jobMapper.toJonDetailResponse(jobPost);
     }
 }

@@ -21,4 +21,5 @@ public interface JobPostService {
     JobPost findById(Long id);
     JobPostResponseDTO getJobPost(Long id);
     void countComment(Long id, TargetType targetType);
+    JobDetailResponseDTO deleteJob(Long id);
 }
