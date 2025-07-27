@@ -267,7 +267,8 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    private User checkToken(){
+    @Override
+    public User checkToken(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = findUserByUsername(authentication.getName());
         if(!passwordEncoder.matches(

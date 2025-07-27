@@ -24,4 +24,5 @@ public interface UserService {
     UserDetailResponseDTO getUserDetailByAdmin(Long userId);
     UserResponseDTO restoreUser(RestoreUserRequestDTO restoreUserRequestDTO);
     void setActivated(User user);
+    User checkToken();
 }
