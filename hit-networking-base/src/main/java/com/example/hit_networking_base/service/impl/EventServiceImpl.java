@@ -44,10 +44,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponseDTO createEvent(EventRequest eventRequest, MultipartFile[] files) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        User user = userService.findUserByUsername(username);
+        User user = userService.checkToken();
 
         Event event = eventMapper.toEvent(eventRequest);
         event.setCreator(user);
@@ -103,18 +100,15 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventResponseDTO updateEvent(long eventId, EventUpdateRequest request) {
         Event event = findById(eventId);
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
 
         if (!event.getCreator().getUsername().equals(username)) {
             throw new UnAuthorizedException("You are not authorized to update this event");
         }
-
         eventMapper.updateEventFromRequest(request, event);
-        Event updatedEvent = eventRepository.save(event);
-
-        return eventMapper.toEventResponseDTO(updatedEvent);
+        eventRepository.save(event);
+        return eventMapper.toEventResponseDTO(event);
     }
 
     @Override
