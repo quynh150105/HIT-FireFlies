@@ -32,4 +32,9 @@ public class CV {
     @ManyToOne
     @JoinColumn(name = "post_id", insertable = false, updatable = false)
     private JobPost jobPost;
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "post_id")
+    private Long postId;
 }

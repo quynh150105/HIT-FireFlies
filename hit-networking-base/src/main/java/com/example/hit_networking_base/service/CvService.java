@@ -10,4 +10,6 @@ public interface CvService {
 
     List<CvResponseDTO> getCVsByPostId(Long postId);
     List<CvResponseDTO> getCVsByUserId(Long userId);
+    void applyToJob(Long userId, Long postId, String linkCV);
+    boolean hasUserApplied(Long userId, Long postId);
 }

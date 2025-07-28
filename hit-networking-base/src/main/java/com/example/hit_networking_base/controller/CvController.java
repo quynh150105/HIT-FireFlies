@@ -3,6 +3,7 @@ package com.example.hit_networking_base.controller;
 import com.example.hit_networking_base.base.RestApiV1;
 import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
+import com.example.hit_networking_base.domain.dto.request.ApplyRequest;
 import com.example.hit_networking_base.domain.dto.request.RequestCvDTO;
 import com.example.hit_networking_base.domain.dto.response.CommentResponseDTO;
 import com.example.hit_networking_base.domain.dto.response.CvResponseDTO;
@@ -14,11 +15,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestApiV1
@@ -70,4 +74,25 @@ public class CvController {
         List<CvResponseDTO> cvs = service.getCVsByUserId(userId);
         return VsResponseUtil.success(cvs);
     }
+
+    @PostMapping(UrlConstant.Cv.APPLY)
+    public ResponseEntity<?> applyJob(@RequestBody ApplyRequest request, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+        }
+        service.applyToJob(userId, request.getPostId(), request.getLinkCV());
+        return ResponseEntity.ok("Bạn đã apply thành công");
+    }
+
+    @GetMapping(UrlConstant.Cv.CHECK_APPLIED)
+    public ResponseEntity<?> checkApplied(@RequestParam Long postId, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
+        if (userId == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not logged in");
+        }
+        boolean applied = service.hasUserApplied(userId, postId);
+        return ResponseEntity.ok(applied);
+    }
+
 }

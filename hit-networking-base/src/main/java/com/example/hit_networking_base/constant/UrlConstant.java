@@ -81,5 +81,7 @@ public class UrlConstant {
         public static final String GET_BY_USERID = PREFIX + "/get-by-user";
 
         public static final String GET_BY_POST = PREFIX + "/get-by-post";
+        public static final String APPLY = PREFIX + "/apply";
+        public static final String CHECK_APPLIED = PREFIX + "/applied";
     }
 }

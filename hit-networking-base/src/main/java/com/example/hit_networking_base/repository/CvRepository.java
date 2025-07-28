@@ -15,4 +15,5 @@ public interface CvRepository extends JpaRepository<CV,Long> {
 
     @Query("SELECT c FROM CV c WHERE c.user.userId = :userId AND c.deletedAt IS NULL")
     List<CV> findByUserIdAndDeletedAtIsNull(Long userId);
+    boolean existsByUserIdAndPostId(Long userId, Long postId);
 }

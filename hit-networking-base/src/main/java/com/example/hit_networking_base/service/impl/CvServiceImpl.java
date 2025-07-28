@@ -72,4 +72,23 @@ public class CvServiceImpl implements CvService {
                 .postId(cv.getJobPost() != null ? cv.getJobPost().getPostId(): null)
                 .build();
     }
+    @Override
+    public void applyToJob(Long userId, Long postId, String linkCV) {
+        if (cvRepository.existsByUserIdAndPostId(userId, postId)) {
+            throw new IllegalStateException("Bạn đã apply bài viết này rồi.");
+        }
+
+        CV cv = new CV();
+        cv.setUserId(userId);
+        cv.setPostId(postId);
+        cv.setLinkCV(linkCV);
+        cv.setApplyDate(LocalDateTime.now());
+
+        cvRepository.save(cv);
+    }
+
+    @Override
+    public boolean hasUserApplied(Long userId, Long postId) {
+        return cvRepository.existsByUserIdAndPostId(userId, postId);
+    }
 }
