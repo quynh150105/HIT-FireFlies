@@ -71,11 +71,13 @@ public class ReactionServiceImpl implements ReactionService {
 
             Reaction react = new Reaction();
             react.setEmotionType(request.getEmotionType());
-           // react.setTargetId(request.getTargetId());
+            react.setTargetId(request.getTargetId());
             react.setTargetType(request.getTargetType());
             react.setCreatedAt(LocalDateTime.now());
             react.setUser(user);
+            repository.save(react);
         }
+
         return "SUCCESS";
     }
 
