@@ -3,10 +3,9 @@ package com.example.hit_networking_base.controller;
 import com.example.hit_networking_base.base.RestApiV1;
 import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
-import com.example.hit_networking_base.domain.dto.request.RequestCvDTO;
-import com.example.hit_networking_base.domain.dto.response.CommentResponseDTO;
+import com.example.hit_networking_base.domain.dto.request.CVCreateRequestDTO;
+import com.example.hit_networking_base.domain.dto.request.CVUpdateRequestDTO;
 import com.example.hit_networking_base.domain.dto.response.CvResponseDTO;
-import com.example.hit_networking_base.repository.CvRepository;
 import com.example.hit_networking_base.service.CvService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -14,17 +13,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 @RestApiV1
 @RequiredArgsConstructor
 public class CvController {
-    private final CvService service;
+    private final CvService cVService;
 
     @Operation(summary = "User upload cv")
     @ApiResponses(value = {
@@ -35,10 +34,9 @@ public class CvController {
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @PostMapping(UrlConstant.Cv.UP_CV)
-    public Object createCv(@RequestBody RequestCvDTO dto) {
-        CvResponseDTO response = service.createCv(dto);
-        return VsResponseUtil.success(response);
+    @PostMapping(value = UrlConstant.Cv.UP_CV, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> createCv(@ModelAttribute @Valid CVCreateRequestDTO cvCreateRequestDTO) {
+        return VsResponseUtil.success(cVService.createCv(cvCreateRequestDTO));
     }
 
     @Operation(summary = "User get all by post  cv")
@@ -51,9 +49,11 @@ public class CvController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(UrlConstant.Cv.GET_BY_POST)
-    public Object getCvsByPostId(@RequestParam Long postId) {
-        List<CvResponseDTO> cvs = service.getCVsByPostId(postId);
-        return VsResponseUtil.success(cvs);
+    public ResponseEntity<?> getCvsByPostId(
+            @RequestParam Long postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return VsResponseUtil.success(cVService.getCVsByPostId(postId, page, size));
     }
 
     @Operation(summary = "User get all by user id  cv")
@@ -66,8 +66,29 @@ public class CvController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping(UrlConstant.Cv.GET_BY_USERID)
-    public Object getCvsByUserId(@RequestParam Long userId) {
-        List<CvResponseDTO> cvs = service.getCVsByUserId(userId);
-        return VsResponseUtil.success(cvs);
+    public ResponseEntity<?> getCvsByUserId(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return VsResponseUtil.success(cVService.getMyCVS(page, size));
+    }
+
+    @Operation(summary = "Delete cv by cvId")
+    @DeleteMapping(UrlConstant.Cv.DELETE)
+    public ResponseEntity<?> deleteCV(@RequestParam Long cvId){
+        return VsResponseUtil.success(cVService.deleteCV(cvId));
+    }
+
+    @Operation(summary = "Update cv by cvId")
+    @PutMapping(value = UrlConstant.Cv.UPDATE , consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> updateCV(
+            @RequestParam Long cvId,
+            @ModelAttribute @Valid CVUpdateRequestDTO cvUpdateRequestDTO){
+        return VsResponseUtil.success(cVService.updateCV(cvId, cvUpdateRequestDTO));
+    }
+
+    @Operation(summary = "Download list cv in my post")
+    @GetMapping(UrlConstant.Cv.DOWNLOAD)
+    public void downloadCV(@RequestParam Long postId, HttpServletResponse httpServletResponse){
+        cVService.downloadCV(postId, httpServletResponse);
     }
 }

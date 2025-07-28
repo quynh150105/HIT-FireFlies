@@ -140,7 +140,7 @@ public class AdminController {
             @ApiResponse(responseCode = "403", description = "Access denied"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @PostMapping(UrlConstant.Admin.RESTORE)
+    @PutMapping(UrlConstant.Admin.RESTORE)
     public ResponseEntity<?> restoreUser(@RequestBody @Valid RestoreUserRequestDTO restoreUserRequestDTO){
         return VsResponseUtil.success(userService.restoreUser(restoreUserRequestDTO));
     }

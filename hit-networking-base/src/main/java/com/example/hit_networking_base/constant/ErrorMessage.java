@@ -55,4 +55,14 @@ public class ErrorMessage {
         public static final String ERR_SEND_CREATE_POST = "exception.email.can't.send.email.create.post";
     }
 
+    public static final class CV{
+        public static final String ERR_FORMAT = "exception.cv.wrong.format.pdf";
+        public static final String ERR_WRONG_LOAD = "exception.cv.wrong.load.pdf";
+        public static final String ERR_NOT_ENOUGH_RIGHTS = "exception.cv.not.enough.right";
+        public static final String ERR_NOT_FOUND_CV_ID = "exception.cv.not.found.id";
+        public static final String ERR_NOT_FOUND_CVS = "exception.cv.not.found.list";
+        public static final String ERR_NOT_FOUND_CV_PDF = "exception.cv.not.found.file.pdf";
+        public static final String ERR_WRONG_DOWNLOAD = "exception.cv.wrong.download.list";
+    }
+
 }

@@ -15,6 +15,6 @@ public class CvResponseDTO {
     private Long id;
     private String linkCV;
     private LocalDateTime applyDate;
-    private Long userId;
+    private UserPostResponseDTO userPostResponseDTO;
     private Long postId;
 }
