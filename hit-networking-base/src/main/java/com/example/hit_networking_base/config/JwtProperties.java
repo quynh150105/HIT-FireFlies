@@ -13,7 +13,6 @@ public class JwtProperties {
     public long getAccessExpirationTime() {
         return this.accessExpirationTime * 60 * 1000;
     }
-
     public long getRefreshExpirationTime() {
         return this.refreshExpirationTime * 60 * 1000;
     }

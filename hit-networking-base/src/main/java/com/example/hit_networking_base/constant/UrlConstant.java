@@ -63,23 +63,20 @@ public class UrlConstant {
 
     public static class Reaction{
         public static final String  PREFIX = "/reaction";
-
         public static final String CREATE_OR_UPDATE = PREFIX + "/react";
-
         public static final String DELETE = PREFIX + "/delete";
-
         public static final String GET_ALL = PREFIX + "/get-all";
 
 
     }
 
     public static class Cv{
-        public static final String PREFIX ="/cv";
-
-        public static final String UP_CV = PREFIX + "/up";
-
-        public static final String GET_BY_USERID = PREFIX + "/get-by-user";
-
-        public static final String GET_BY_POST = PREFIX + "/get-by-post";
+        public static final String PREFIX ="user/cv";
+        public static final String UP_CV = PREFIX;
+        public static final String GET_BY_USERID = PREFIX + "/my-cv";
+        public static final String GET_BY_POST = PREFIX + "/post-cv";
+        public static final String DELETE = PREFIX;
+        public static final String UPDATE= PREFIX;
+        public static final String DOWNLOAD= PREFIX + "/download";
     }
 }

@@ -3,7 +3,6 @@ package com.example.hit_networking_base.controller;
 import com.example.hit_networking_base.base.RestApiV1;
 import com.example.hit_networking_base.base.VsResponseUtil;
 import com.example.hit_networking_base.constant.UrlConstant;
-import com.example.hit_networking_base.domain.dto.request.RequestUpdateUserDTO;
 import com.example.hit_networking_base.domain.dto.request.ResetPasswordRequestDTO;
 import com.example.hit_networking_base.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
