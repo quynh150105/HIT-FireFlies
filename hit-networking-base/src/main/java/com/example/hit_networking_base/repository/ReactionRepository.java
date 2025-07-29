@@ -16,7 +16,7 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
     List<Reaction> findByTargetIdAndTargetType(Long targetId, TargetType targetType);
 
     @Query("SELECT r FROM Reaction r WHERE r.targetId = :targetId AND r.targetType = :targetType AND r.user.id = :userId AND r.deletedAt IS NULL")
-    Optional<Reaction> findByUserIdAndTarget(Long userId, Long targetId,TargetType targetType);
+    Optional<Reaction> findByUserIdAndTarget( Long targetId,TargetType targetType, Long userId);
 
     @Query("SELECT r.emotionType, COUNT(r) FROM Reaction r WHERE r.targetId = :targetId AND r.targetType = :targetType AND r.deletedAt IS NULL GROUP BY r.emotionType")
     List<Object[]> countReactionsByType(Long targetId, TargetType targetType);

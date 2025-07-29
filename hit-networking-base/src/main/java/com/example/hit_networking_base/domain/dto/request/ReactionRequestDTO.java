@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ReactionRequestDTO {
-    private Long userId;
     private Long targetId;
     private TargetType targetType;
     private EmotionType emotionType;

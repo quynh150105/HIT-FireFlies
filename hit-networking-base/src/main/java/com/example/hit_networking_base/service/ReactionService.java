@@ -10,9 +10,11 @@ import java.util.List;
 public interface ReactionService {
     List<ReactionResponseDTO> findReactionByTargetIdAndTargetType(long targetId, TargetType targetType);
 
-    String reactToTarget(ReactionRequestDTO requestDTO);
+    String createReaction(ReactionRequestDTO requestDTO);
 
-    String removeReaction(Long userId, Long targetId, TargetType targetType);
+    String updateReaction(ReactionRequestDTO requestDTO);
+
+    String removeReaction(Long targetId, TargetType targetType);
 
     ReactionListResponseDTO getReaction(Long targetId, TargetType targetType);
 

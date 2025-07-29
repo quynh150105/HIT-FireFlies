@@ -5,14 +5,18 @@ import com.example.hit_networking_base.constant.TargetType;
 import com.example.hit_networking_base.domain.dto.request.ReactionRequestDTO;
 import com.example.hit_networking_base.domain.dto.response.ReactionListResponseDTO;
 import com.example.hit_networking_base.domain.dto.response.ReactionResponseDTO;
+import com.example.hit_networking_base.domain.entity.Event;
+import com.example.hit_networking_base.domain.entity.JobPost;
 import com.example.hit_networking_base.domain.entity.Reaction;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.UserMapper;
 import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.exception.UserException;
+import com.example.hit_networking_base.repository.EventRepository;
+import com.example.hit_networking_base.repository.JobPostRepository;
 import com.example.hit_networking_base.repository.ReactionRepository;
-import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.ReactionService;
+import com.example.hit_networking_base.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
@@ -25,26 +29,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ReactionServiceImpl implements ReactionService {
 
-    private final ReactionRepository repository;
+    private final ReactionRepository reactionRepository;
     private final UserMapper userMapper;
-     private final UserRepository userRepository;
+    private final EventRepository eventRepository;
+    private final UserService userService;
 
-//    @Override
-//    public List<ReactionResponseDTO> findReactionByTargetIdAndTargetType(Long targetId , TargetType targetType) {
-//        return repository.findByTargetIdAndTargetType(targetType).stream()
-//                .map(reaction -> {
-//                    ReactionResponseDTO reactionResponseDTO = new ReactionResponseDTO();
-//                    reactionResponseDTO.setEmotionType(reaction.getEmotionType());
-//                    reactionResponseDTO.setCreatedAt(reaction.getCreatedAt());
-//                    reactionResponseDTO.setUserPostResponseDTO(userMapper.toUserPostResponseDTO(reaction.getUser()));
-//                    return reactionResponseDTO;
-//                })
-//                .collect(Collectors.toList());
-//    }
+    private final JobPostRepository jobPostRepository;
 
     @Override
     public List<ReactionResponseDTO> findReactionByTargetIdAndTargetType(long targetId, TargetType targetType) {
-        return repository.findByTargetIdAndTargetType(targetId, targetType).stream()
+        return reactionRepository.findByTargetIdAndTargetType(targetId, targetType).stream()
                 .map(reaction -> {
                     ReactionResponseDTO reactionResponseDTO = new ReactionResponseDTO();
                     reactionResponseDTO.setEmotionType(reaction.getEmotionType());
@@ -57,41 +51,42 @@ public class ReactionServiceImpl implements ReactionService {
 
     // create
     @Override
-    public String reactToTarget(ReactionRequestDTO request) {
-        Reaction reaction = repository.findByUserIdAndTarget(request.getUserId(), request.getTargetId(),request.getTargetType()).orElse(null);
-
-        // neu da co reaction thi thay doi
-        if(reaction !=null){
+    public String createReaction(ReactionRequestDTO request) {
+            User user = userService.checkToken();
+            boolean exists = reactionRepository
+                    .findByUserIdAndTarget(request.getTargetId(), request.getTargetType(), user.getUserId())
+                    .isPresent();
+            if (exists) {
+                throw new UserException("User has already reacted to this target");
+            }
+            Reaction reaction = new Reaction();
+            reaction.setUser(user);
+            reaction.setTargetId(request.getTargetId());
+            reaction.setTargetType(request.getTargetType());
             reaction.setEmotionType(request.getEmotionType());
-        }
-        else{ // khong thi them moi
-
-            User user = userRepository.findById(request.getUserId())
-                    .orElseThrow(()-> new UserException("User not found"));
-
-            Reaction react = new Reaction();
-            react.setEmotionType(request.getEmotionType());
-            react.setTargetId(request.getTargetId());
-            react.setTargetType(request.getTargetType());
-            react.setCreatedAt(LocalDateTime.now());
-            react.setUser(user);
-            repository.save(react);
-        }
-
-        return "SUCCESS";
+            reaction.setCreatedAt(LocalDateTime.now());
+            increaseReactionCount(request.getTargetType(), request.getTargetId());
+            reactionRepository.save(reaction);
+            return "SUCCESS";
     }
 
     @Override
-    public String removeReaction(Long userId,Long targetId, TargetType targetType) {
-        Reaction reaction = repository.findByUserIdAndTarget(userId, targetId, targetType)
-                .orElseThrow(()-> new NotFoundException("Reaction not found"));
-        repository.delete(reaction);
+    public String removeReaction(Long targetId, TargetType targetType) {
+        User user = userService.checkToken();
+
+        Reaction reaction = reactionRepository
+                .findByUserIdAndTarget(targetId, targetType, user.getUserId())
+                .orElseThrow(() -> new NotFoundException("Reaction not found"));
+
+        reactionRepository.delete(reaction);
+        decreaseReactionCount(targetType, targetId);
+
         return "SUCCESS";
     }
 
     @Override
     public ReactionListResponseDTO getReaction(Long targetId, TargetType targetType) {
-        List<Object[]> result = repository.countReactionsByType(targetId, targetType);
+        List<Object[]> result = reactionRepository.countReactionsByType(targetId, targetType);
 
         Map<EmotionType, Long> reactionMap = new EnumMap<EmotionType, Long>(EmotionType.class);
         long total = 0;
@@ -106,9 +101,62 @@ public class ReactionServiceImpl implements ReactionService {
             reactionMap.put(emotion,count);
             total +=count;
         }
-
-
         return new ReactionListResponseDTO(total,reactionMap);
     }
+    @Override
+    public String updateReaction(ReactionRequestDTO requestDTO) {
+        User user = userService.checkToken();
+
+        Reaction reaction = reactionRepository
+                .findByUserIdAndTarget(requestDTO.getTargetId(), requestDTO.getTargetType(), user.getUserId())
+                .orElseThrow(() -> new NotFoundException("Reaction not found"));
+
+        EmotionType oldEmotion = reaction.getEmotionType();
+        EmotionType newEmotion = requestDTO.getEmotionType();
+
+        if (oldEmotion != newEmotion) {
+            reaction.setEmotionType(newEmotion);
+            reaction.setCreatedAt(LocalDateTime.now());
+            reactionRepository.save(reaction);
+        }
+
+        return "SUCCESS";
+    }
+
+    private void increaseReactionCount(TargetType targetType, Long targetId) {
+        switch (targetType) {
+            case EVENT:
+                Event event = eventRepository.findByEventIdAndDeletedAtIsNull(targetId)
+                        .orElseThrow(() -> new NotFoundException("Event not found"));
+                event.setCountReaction(event.getCountReaction() + 1);
+                break;
+            case JOB:
+                JobPost job = jobPostRepository.findByPostIdAndDeletedAtIsNull(targetId)
+                        .orElseThrow(() -> new NotFoundException("JobPost not found"));
+                job.setCountReaction(job.getCountReaction() + 1);
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unsupported TargetType: " + targetType);
+        }
+    }
+
+    private void decreaseReactionCount(TargetType targetType, Long targetId) {
+        switch (targetType) {
+            case EVENT:
+                Event event = eventRepository.findByEventIdAndDeletedAtIsNull(targetId)
+                        .orElseThrow(() -> new NotFoundException("Event not found"));
+                event.setCountReaction(event.getCountReaction() - 1);
+                break;
+            case JOB:
+                JobPost job = jobPostRepository.findByPostIdAndDeletedAtIsNull(targetId)
+                        .orElseThrow(() -> new NotFoundException("JobPost not found"));
+                job.setCountReaction(job.getCountReaction() - 1);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unsupported TargetType: " + targetType);
+        }
+    }
+
 
 }
