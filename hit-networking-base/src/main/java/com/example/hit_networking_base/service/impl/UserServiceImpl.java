@@ -48,9 +48,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO updateUser(Long id, RequestUpdateUserDTO request) {
+        User userUpdate = checkToken();
         User user = findUserById(id);
-        if(!user.getRole().equals(Role.BQT) &&
-                !user.getUsername().equals(SecurityContextHolder.getContext().getAuthentication().getName())){
+        System.out.println("tên người sửa: " + userUpdate.getFullName());
+        if(!userUpdate.getRole().equals(Role.BQT)){
             throw new BadRequestException(ErrorMessage.User.ERR_NOT_ENOUGH_RIGHTS);
         }
         user.setFullName(request.getFullName());
