@@ -75,13 +75,14 @@ public class CommentServiceImpl implements CommentService {
             throw new BadRequestException(ErrorMessage.Comment.ERR_NOT_ENOUGH_RIGHTS);
         comment.setContent(commentUpdateRequestDTO.getContent());
         commentRepository.save(comment);
-        return commentMapper.toCommentResponseDTO(comment);
+        CommentResponseDTO commentResponseDTO = commentMapper.toCommentResponseDTO(comment);
+        commentResponseDTO.setUserPostResponseDTO(userMapper.toUserPostResponseDTO(comment.getUser()));
+        return commentResponseDTO;
     }
 
     @Override
     public CommentResponseDTO createComment(CommentCreateRequestDTO commentCreateRequestDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userService.findUserByUsername(authentication.getName());
+        User user = userService.checkToken();
         Comment comment = commentMapper.toComment(commentCreateRequestDTO);
         comment.setCreatedAt(LocalDateTime.now());
         comment.setUser(user);
@@ -89,7 +90,9 @@ public class CommentServiceImpl implements CommentService {
             jobPostService.countComment(comment.getTargetId(), TargetType.CREATE);
         } else eventService.countComment(comment.getTargetId(), TargetType.CREATE);
         commentRepository.save(comment);
-        return commentMapper.toCommentResponseDTO(comment);
+        CommentResponseDTO commentResponseDTO = commentMapper.toCommentResponseDTO(comment);
+        commentResponseDTO.setUserPostResponseDTO(userMapper.toUserPostResponseDTO(comment.getUser()));
+        return commentResponseDTO;
     }
 
 }
