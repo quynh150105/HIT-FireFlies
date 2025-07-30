@@ -10,9 +10,9 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class JobUpdateRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Not blank title")
     private String title;
 
-    @NotBlank
+    @NotBlank(message = "Not blank description")
     private String description;
 }

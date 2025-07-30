@@ -9,11 +9,13 @@ import com.example.hit_networking_base.domain.entity.Event;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.EventMapper;
 import com.example.hit_networking_base.domain.mapstruct.UserMapper;
+import com.example.hit_networking_base.exception.BadRequestException;
 import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.exception.UnAuthorizedException;
 import com.example.hit_networking_base.repository.EventRepository;
 import com.example.hit_networking_base.service.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.data.domain.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,11 +44,15 @@ public class EventServiceImpl implements EventService {
     private final CommentPostService commentPostService;
     private final ReactionService reactionService;
     private final SendEmailService sendEmailService;
+    private final CheckListService checkListService;
 
     @Override
     public EventResponseDTO createEvent(EventRequest eventRequest, MultipartFile[] files) {
         User user = userService.checkToken();
-
+        testInput(eventRequest.getTitle(),
+                eventRequest.getDescription(),
+                eventRequest.getLocation(),
+                eventRequest.getOrganizer());
         Event event = eventMapper.toEvent(eventRequest);
         event.setCreator(user);
         event.setCreatedAt(LocalDateTime.now());
@@ -99,6 +106,10 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public EventResponseDTO updateEvent(long eventId, EventUpdateRequest request) {
+        testInput(request.getTitle(),
+                request.getDescription(),
+                request.getLocation(),
+                request.getOrganizer());
         Event event = findById(eventId);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -158,5 +169,15 @@ public class EventServiceImpl implements EventService {
         event.setDeletedAt(LocalDateTime.now());
         eventRepository.save(event);
         return eventMapper.toEventDetailResponseDTO(event);
+    }
+
+    private void testInput(String title, String description, String location, String organizer){
+        Map<String, String> fields = Map.of(
+                "description", description,
+                "title", title,
+                "location", location,
+                "organizer", organizer
+        );
+        checkListService.checkListText(fields);
     }
 }

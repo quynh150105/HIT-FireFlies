@@ -21,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +33,7 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
     private final JobPostService jobPostService;
     private final EventService eventService;
+    private final CheckListService checkListService;
 
     @Override
     public CommentDetailResponseDTO getCommentDetail(long commentId) {
@@ -69,6 +71,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentResponseDTO updateComment(Long commentId, CommentUpdateRequestDTO commentUpdateRequestDTO) {
+        testInput(commentUpdateRequestDTO.getContent());
         User user = userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         Comment comment = findCommentById(commentId);
         if(!user.equals(comment.getUser()))
@@ -82,6 +85,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentResponseDTO createComment(CommentCreateRequestDTO commentCreateRequestDTO) {
+        testInput(commentCreateRequestDTO.getContent());
         User user = userService.checkToken();
         Comment comment = commentMapper.toComment(commentCreateRequestDTO);
         comment.setCreatedAt(LocalDateTime.now());
@@ -93,6 +97,12 @@ public class CommentServiceImpl implements CommentService {
         CommentResponseDTO commentResponseDTO = commentMapper.toCommentResponseDTO(comment);
         commentResponseDTO.setUserPostResponseDTO(userMapper.toUserPostResponseDTO(comment.getUser()));
         return commentResponseDTO;
+    }
+    private void testInput(String content){
+        Map<String, String> fields = Map.of(
+                "content", content
+        );
+        checkListService.checkListText(fields);
     }
 
 }

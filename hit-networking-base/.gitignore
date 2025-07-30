@@ -35,3 +35,6 @@ build/
 
 # Ignore environment variables
 .env
+
+# Google Cloud Vision key
+src/main/resources/secrets/vision-key.json

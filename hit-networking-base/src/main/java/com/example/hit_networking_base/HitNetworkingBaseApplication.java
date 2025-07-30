@@ -2,12 +2,16 @@ package com.example.hit_networking_base;
 
 
 import com.example.hit_networking_base.config.DotenvApplicationContextInitializer;
+import com.example.hit_networking_base.config.GenVisonKey;
 import com.example.hit_networking_base.config.JwtProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
+
+import java.io.IOException;
+
 @Slf4j
 @SpringBootApplication
 @EnableConfigurationProperties(JwtProperties.class)

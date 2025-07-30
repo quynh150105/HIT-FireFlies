@@ -24,6 +24,9 @@ public class ErrorMessage {
     public static class Image{
         public static final String ERR_UPLOAD = "exception.image.upload.failed";
         public static final String ERR_NOT_FOUND_IMAGE = "exception.image.not.found";
+        public static final String ERR_OVER_SIZE_IMAGE = "exception.image.over.size";
+        public static final String ERR_SENSITIVE_CONTENT = "exception.image.sensitive.content";
+
     }
 
     public static class Reaction{
@@ -33,6 +36,7 @@ public class ErrorMessage {
     public static class Comment{
         public static final String ERR_NOT_FOUND_COMMENT = "exception.comment.not.found.id";
         public static final String ERR_NOT_ENOUGH_RIGHTS = "exception.comment.not.enough.right";
+        public static final String ERR_SENSITIVE_CONTENT = "exception.comment.sensitive.content";
     }
 
     public static class ImportFileExcel{
@@ -42,11 +46,13 @@ public class ErrorMessage {
 
     public static class Event{
         public static final String ERR_NOT_FOUND_EVENT = "exception.event.not.found.evnetId";
+        public static final String ERR_SENSITIVE_CONTENT = "exception.event.sensitive.content";
     }
 
     public static class Job{
         public static final String ERR_NOT_FOUND_JOB_ID ="exception.job.not.found.postId";
         public static final String ERR_NOT_ENOUGH_RIGHTS = "exception.job.not.enough.right";
+        public static final String ERR_SENSITIVE_CONTENT = "exception.job.sensitive.content";
     }
 
     public static final class Email{

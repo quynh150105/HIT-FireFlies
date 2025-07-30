@@ -30,6 +30,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,10 +45,12 @@ public class JobPostServiceImpl implements JobPostService {
     private final UserService userService;
     private final UserMapper userMapper;
     private final SendEmailService sendEmailService;
+    private final CheckListService checkListService;
 
 
     @Override
     public JobResponseDTO createJob(JobPostRequest jobPostRequest) {
+        testInput(jobPostRequest.getTitle(), jobPostRequest.getDescription());
         JobPost jobPost = new JobPost();
         jobPost.setTitle(jobPostRequest.getTitle());
         jobPost.setDescription(jobPostRequest.getDescription());
@@ -107,6 +110,7 @@ public class JobPostServiceImpl implements JobPostService {
 
     @Override
     public JobResponseDTO updateJob(Long postId, JobUpdateRequestDTO jobPostRequest) {
+        testInput(jobPostRequest.getTitle(), jobPostRequest.getDescription());
         User user = userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         JobPost jobPost = findById(postId);
         if(!user.equals(jobPost.getCreator()))
@@ -158,5 +162,13 @@ public class JobPostServiceImpl implements JobPostService {
         jobPost.setDeletedAt(LocalDateTime.now());
         jobPostRepository.save(jobPost);
         return jobMapper.toJonDetailResponse(jobPost);
+    }
+
+    private void testInput(String title, String description){
+        Map<String, String> fields = Map.of(
+                "description", description,
+                "title", title
+        );
+        checkListService.checkListText(fields);
     }
 }

@@ -11,6 +11,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CommentUpdateRequestDTO {
-    @NotBlank
+    @NotBlank(message = "Not blank content")
     private String content;
 }
