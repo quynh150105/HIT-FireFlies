@@ -41,6 +41,7 @@ public class ReactionServiceImpl implements ReactionService {
         return reactionRepository.findByTargetIdAndTargetType(targetId, targetType).stream()
                 .map(reaction -> {
                     ReactionResponseDTO reactionResponseDTO = new ReactionResponseDTO();
+                    reactionResponseDTO.setId(reaction.getId());
                     reactionResponseDTO.setEmotionType(reaction.getEmotionType());
                     reactionResponseDTO.setCreatedAt(reaction.getCreatedAt());
                     reactionResponseDTO.setUserPostResponseDTO(userMapper.toUserPostResponseDTO(reaction.getUser()));
