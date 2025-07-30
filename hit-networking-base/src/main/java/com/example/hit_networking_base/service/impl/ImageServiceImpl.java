@@ -4,6 +4,7 @@ import com.cloudinary.Cloudinary;
 import com.example.hit_networking_base.constant.ErrorMessage;
 import com.example.hit_networking_base.constant.TargetType;
 import com.example.hit_networking_base.domain.entity.Image;
+import com.example.hit_networking_base.exception.BadRequestException;
 import com.example.hit_networking_base.exception.NotFoundException;
 import com.example.hit_networking_base.repository.ImageRepository;
 import com.example.hit_networking_base.service.ImageService;
@@ -23,6 +24,7 @@ public class ImageServiceImpl implements ImageService {
 
     private final Cloudinary cloudinary;
     private final ImageRepository imageRepository;
+    private final CheckListServiceImpl checkListService;
 
     @Override
     public List<String> uploadImage(MultipartFile[] files, TargetType targetType, long targetId)
@@ -30,6 +32,16 @@ public class ImageServiceImpl implements ImageService {
         List<String> urls = new ArrayList<>();
 
         for (MultipartFile file : files) {
+            if (file.getSize() > 5 * 1024 * 1024) {
+                throw new BadRequestException(ErrorMessage.Image.ERR_OVER_SIZE_IMAGE + " over 5Mb");
+            }
+
+
+//            Đã tạo được nhưng mất phí => không chạy
+//            if(!checkListService.checkImage(file)){
+//                throw new BadRequestException(ErrorMessage.Image.ERR_SENSITIVE_CONTENT);
+//            }
+
             Map<?, ?> uploadResult = cloudinary.uploader().upload(file.getBytes(), Map.of());
             String url = (String) uploadResult.get("secure_url");
             urls.add(url);

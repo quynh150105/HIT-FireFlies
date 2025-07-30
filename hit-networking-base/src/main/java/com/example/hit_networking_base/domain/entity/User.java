@@ -8,12 +8,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.time.LocalDate;
+
 
 
 import java.util.List;
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -24,7 +26,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userId;
 
-    @Column(length = 50, nullable = false, name= "username")
+    @Column(length = 50, nullable = false, name= "username", unique = true)
     private String username;
 
     @Column(name = "password_hash", length = 255, nullable = false)
@@ -44,7 +46,7 @@ public class User {
     @Column(name = "full_name", length = 100)
     private String fullName;
 
-    @Column(length = 100)
+    @Column(length = 100, unique = true)
     private String email;
 
     @Column(length = 20)
@@ -58,6 +60,12 @@ public class User {
 
     @Column(name = "deleted_at")
     private LocalDate deletedAt;
+
+    @Column(nullable = false)
+    private String checkToken;
+
+    @Column(nullable = false)
+    private boolean activate;
 
     @OneToMany(mappedBy = "user")
     private List<CV> cvs;

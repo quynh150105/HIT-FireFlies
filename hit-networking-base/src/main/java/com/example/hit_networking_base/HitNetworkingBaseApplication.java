@@ -2,12 +2,19 @@ package com.example.hit_networking_base;
 
 
 import com.example.hit_networking_base.config.DotenvApplicationContextInitializer;
+import com.example.hit_networking_base.config.GenVisonKey;
+import com.example.hit_networking_base.config.JwtProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
+
+import java.io.IOException;
+
 @Slf4j
 @SpringBootApplication
+@EnableConfigurationProperties(JwtProperties.class)
 public class HitNetworkingBaseApplication {
 
 	public static void main(String[] args) {
@@ -28,15 +35,4 @@ public class HitNetworkingBaseApplication {
 		log.info("-------------------------START SUCCESS " + appName
 				+ " Application------------------------------");
 	}
-
 }
-
-/*
-
-	{
-		"username": "admin",
-		"password": "prPt9Tn3"
-	}
-
-eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbiIsInJvbGUiOiJCUVQiLCJpYXQiOjE3NTEyNjI2MDAsImV4cCI6MTc1MTM0OTAwMH0.kMX_3AH1J-C3sphTAlyRA_PelsNjACLx6rDwwTOyFrk
-*/

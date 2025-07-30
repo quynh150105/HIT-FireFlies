@@ -7,7 +7,7 @@ import org.apache.poi.ss.usermodel.DateUtil;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class ExcelHelper {
+public class excelHelper {
 
     public static String getCellValueAsString(Cell cell) {
         if (cell == null) return "";

@@ -13,7 +13,8 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 @Data
 @Entity
-@Table(name = "reaction")
+@Table(name = "reaction",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "target_id", "target_type"}))
 @AllArgsConstructor
 @NoArgsConstructor
 public class Reaction {
@@ -33,13 +34,13 @@ public class Reaction {
     @Column(name = "target_id")
     private long targetId;
 
-    @Column(name = "reacted_at")
-    private LocalDateTime reactedAt;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 }

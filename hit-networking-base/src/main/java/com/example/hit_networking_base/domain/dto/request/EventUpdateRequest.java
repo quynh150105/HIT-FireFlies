@@ -1,15 +1,20 @@
 package com.example.hit_networking_base.domain.dto.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
-@EqualsAndHashCode(callSuper = false)
+@AllArgsConstructor
+@NoArgsConstructor
 public class EventUpdateRequest {
     @NotBlank(message = "Title is required")
     private String title;
@@ -18,5 +23,13 @@ public class EventUpdateRequest {
 
     @NotNull(message = "Event date is required")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate eventDate;
+    private LocalDateTime eventDate;
+
+    @Schema(description = "Organizer", example = "Nguyễn Văn Nam")
+    @NotBlank
+    private String organizer;
+
+    @Schema(description = "Location", example = "Trước toàn A1 Đại học Công nghiệp")
+    @NotBlank
+    private String location;
 }
