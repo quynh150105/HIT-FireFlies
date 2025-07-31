@@ -67,7 +67,7 @@ public class UserController {
         return VsResponseUtil.success(userService.resetPassword(resetPasswordRequestDTO));
     }
 
-    @Operation(summary = "User count information")
+    @Operation(summary = "User count information total post, recruitment, apply")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Success"),
             @ApiResponse(responseCode = "401", description = "Unauthorized"),
