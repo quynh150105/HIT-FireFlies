@@ -25,4 +25,5 @@ public interface UserService {
     UserResponseDTO restoreUser(RestoreUserRequestDTO restoreUserRequestDTO);
     void setActivated(User user);
     User checkToken();
+    UserStatisticResponseDTO  countPostReactApply();
 }

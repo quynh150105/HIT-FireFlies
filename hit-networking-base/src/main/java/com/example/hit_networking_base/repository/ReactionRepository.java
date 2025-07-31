@@ -21,5 +21,4 @@ public interface ReactionRepository extends JpaRepository<Reaction, Long> {
     @Query("SELECT r.emotionType, COUNT(r) FROM Reaction r WHERE r.targetId = :targetId AND r.targetType = :targetType AND r.deletedAt IS NULL GROUP BY r.emotionType")
     List<Object[]> countReactionsByType(Long targetId, TargetType targetType);
 
-
 }
