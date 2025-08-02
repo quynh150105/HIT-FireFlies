@@ -159,5 +159,14 @@ public class ReactionServiceImpl implements ReactionService {
         }
     }
 
+    @Override
+    public boolean hasUserReacted(Long targetId, TargetType targetType) {
+        User user = userService.checkToken();
+        return reactionRepository
+                .findByUserIdAndTarget(targetId, targetType, user.getUserId())
+                .isPresent();
+    }
+
+
 
 }

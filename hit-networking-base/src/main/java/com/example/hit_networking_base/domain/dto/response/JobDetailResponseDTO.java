@@ -20,4 +20,6 @@ public class JobDetailResponseDTO {
     private long countComment;
     private List<ReactionResponseDTO> reactionResponseDTOS;
     private List<CommentResponseDTO> commentResponseDTOS;
+
+    private boolean checkReaction;
 }

@@ -18,4 +18,6 @@ public interface ReactionService {
 
     ReactionListResponseDTO getReaction(Long targetId, TargetType targetType);
 
+    boolean hasUserReacted(Long targetID, TargetType targetType);
+
 }

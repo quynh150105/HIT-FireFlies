@@ -133,6 +133,7 @@ public class EventServiceImpl implements EventService {
         eventDetailResponseDTO.setImages(urlImage);
         eventDetailResponseDTO.setCommentResponseDTOS(comment);
         eventDetailResponseDTO.setReactionResponseDTOS(reaction);
+        eventDetailResponseDTO.setCheckReaction(reactionService.hasUserReacted(eventId, TargetType.EVENT));
         return eventDetailResponseDTO;
     }
 

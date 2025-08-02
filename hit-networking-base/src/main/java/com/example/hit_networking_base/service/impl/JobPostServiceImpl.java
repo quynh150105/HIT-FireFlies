@@ -105,6 +105,7 @@ public class JobPostServiceImpl implements JobPostService {
         jobDetailResponseDTO.setImages(imageService.getUrlImage(postId, TargetType.JOB));
         jobDetailResponseDTO.setCommentResponseDTOS(commentPostService.findCommentByTargetIdAndTargetType(postId, TargetType.JOB));
         jobDetailResponseDTO.setReactionResponseDTOS(reactionService.findReactionByTargetIdAndTargetType(postId, TargetType.JOB));
+        jobDetailResponseDTO.setCheckReaction(reactionService.hasUserReacted(postId, TargetType.JOB));
         return jobDetailResponseDTO;
     }
 
