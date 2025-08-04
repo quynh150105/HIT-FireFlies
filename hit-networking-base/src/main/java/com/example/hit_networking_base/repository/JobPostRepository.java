@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface JobPostRepository extends JpaRepository<JobPost, Integer> {
+public interface JobPostRepository extends JpaRepository<JobPost, Long> {
    Page<JobPost> findByDeletedAtIsNull(Pageable pageable);
    Optional<JobPost> findByPostIdAndDeletedAtIsNull(Long postId);
 }

@@ -35,9 +35,10 @@ public class UrlConstant {
 
     public static class Event{
         public static final String PREFIX = "/admin/event";
+        public static final String PREFIX_USER = "/user/event";
         public static final String CREATE_EVENT = PREFIX;
-        public static final String GET_EVENT = PREFIX;
-        public static final String GET_EVENTS = PREFIX + 's';
+        public static final String GET_EVENT = PREFIX_USER;
+        public static final String GET_EVENTS = PREFIX_USER + 's';
         public static final String UPDATE_EVENT = PREFIX + "/{eventId}";
         public static final String DELETE = PREFIX;
 

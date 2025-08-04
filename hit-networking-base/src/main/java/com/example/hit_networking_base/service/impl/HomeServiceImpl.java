@@ -31,7 +31,7 @@ public class HomeServiceImpl implements HomeService {
     @Override
     public Page<HomeResponseDTO> getALLEventAndJobPost(int page, int size) {
         List<Object[]> homeDTOS = homeRepository.getMergedPosts(size, page*size);
-
+        long totalElements = homeRepository.countMergedPosts();
         List<HomeProjection> homeProjectionDTOS = homeDTOS.stream()
                 .map(HomeProjection::new).collect(Collectors.toList());
 
@@ -43,7 +43,7 @@ public class HomeServiceImpl implements HomeService {
                 listHomeResponseDTOS.add((mergeJobToHome(jobPostService.getJobPost(homeProjection.getPostId()))));
         }
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdAt"));
-        return new PageImpl<>(listHomeResponseDTOS, pageable, listHomeResponseDTOS.size());
+        return new PageImpl<>(listHomeResponseDTOS, pageable, totalElements);
     }
 
     private HomeResponseDTO mergeEventToHome(EventPostResponseDTO eventPostResponseDTO){
