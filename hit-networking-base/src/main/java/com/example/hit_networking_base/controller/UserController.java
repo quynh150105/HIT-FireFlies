@@ -66,4 +66,16 @@ public class UserController {
     public ResponseEntity<?> setPassword(@RequestBody @Valid ResetPasswordRequestDTO resetPasswordRequestDTO){
         return VsResponseUtil.success(userService.resetPassword(resetPasswordRequestDTO));
     }
+
+    @Operation(summary = "User count information total post, recruitment, apply")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Success"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping(UrlConstant.User.PREFIX)
+    public ResponseEntity<?> totalReactJob(){
+        return VsResponseUtil.success(userService.countPostReactApply());
+    }
 }

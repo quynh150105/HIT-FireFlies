@@ -7,6 +7,9 @@ import com.example.hit_networking_base.domain.dto.response.*;
 import com.example.hit_networking_base.domain.entity.User;
 import com.example.hit_networking_base.domain.mapstruct.UserMapper;
 import com.example.hit_networking_base.exception.*;
+import com.example.hit_networking_base.repository.CvRepository;
+import com.example.hit_networking_base.repository.JobPostRepository;
+import com.example.hit_networking_base.repository.ReactionRepository;
 import com.example.hit_networking_base.repository.UserRepository;
 import com.example.hit_networking_base.service.SendEmailService;
 import com.example.hit_networking_base.service.UserService;
@@ -45,6 +48,10 @@ public class UserServiceImpl implements UserService {
     private final ImageService imageService;
     private final SendEmailService sendEmailService;
     private final JwtProperties jwtProperties;
+
+    private final JobPostRepository jobPostRepository;
+
+    private final CvRepository cvRepository;
 
     @Override
     public UserResponseDTO updateUser(Long id, RequestUpdateUserDTO request) {
@@ -278,6 +285,21 @@ public class UserServiceImpl implements UserService {
             throw new ForbiddenException(ErrorMessage.User.ERR_INVALID_TOKEN);
         }
         return user;
+    }
+
+    @Override // tong bài post
+    public UserStatisticResponseDTO countPostReactApply() {
+        User user = checkToken();
+        Long countJobPost = jobPostRepository.countActivePostsByUserId(user.getUserId());
+        Long recruitment = cvRepository.countJobPostAppliedByUser(user.getUserId());
+        UserStatisticResponseDTO result = UserStatisticResponseDTO.builder()
+                .countPost(countJobPost)
+                .countRecruitment(recruitment)
+                .build();
+//        Map<String,UserStatisticResponseDTO > results = new HashMap<>();
+//        result.put("totalJobPost", UserStatisticResponseDTO.builder().countPost(countJobPost).build());
+//        result.put("totalReaction",countReaction);
+        return result;
     }
 
 }

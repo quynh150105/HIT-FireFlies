@@ -24,5 +24,8 @@ public interface CvRepository extends JpaRepository<CV,Long> {
 
     List<CV> findByJobPost_PostIdAndDeletedAtIsNull(Long postId);
 
+    @Query("SELECT COUNT(DISTINCT c.jobPost.postId) FROM CV c WHERE c.user.userId = :userId AND c.deletedAt IS NULL")
+    Long countJobPostAppliedByUser(Long userId);
+
 
 }
