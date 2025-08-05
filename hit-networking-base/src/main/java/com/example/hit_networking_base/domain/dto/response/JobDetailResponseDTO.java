@@ -18,8 +18,11 @@ public class JobDetailResponseDTO {
     private List<String> images;
     private long countReaction;
     private long countComment;
+    private long countCv;
     private List<ReactionResponseDTO> reactionResponseDTOS;
     private List<CommentResponseDTO> commentResponseDTOS;
-
+    private List<CvApplyInforDTO> totalCvResponseDTOS;
     private boolean checkReaction;
+    private boolean checkApply;
+
 }

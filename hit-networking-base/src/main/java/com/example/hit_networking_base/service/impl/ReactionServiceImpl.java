@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -53,22 +54,22 @@ public class ReactionServiceImpl implements ReactionService {
     // create
     @Override
     public String createReaction(ReactionRequestDTO request) {
-            User user = userService.checkToken();
-            boolean exists = reactionRepository
-                    .findByUserIdAndTarget(request.getTargetId(), request.getTargetType(), user.getUserId())
-                    .isPresent();
-            if (exists) {
-                throw new UserException("User has already reacted to this target");
-            }
-            Reaction reaction = new Reaction();
-            reaction.setUser(user);
-            reaction.setTargetId(request.getTargetId());
-            reaction.setTargetType(request.getTargetType());
-            reaction.setEmotionType(request.getEmotionType());
-            reaction.setCreatedAt(LocalDateTime.now());
-            increaseReactionCount(request.getTargetType(), request.getTargetId());
-            reactionRepository.save(reaction);
-            return "SUCCESS";
+        User user = userService.checkToken();
+        boolean exists = reactionRepository
+                .findByUserIdAndTarget(request.getTargetId(), request.getTargetType(), user.getUserId())
+                .isPresent();
+        if (exists) {
+            throw new UserException("User has already reacted to this target");
+        }
+        Reaction reaction = new Reaction();
+        reaction.setUser(user);
+        reaction.setTargetId(request.getTargetId());
+        reaction.setTargetType(request.getTargetType());
+        reaction.setEmotionType(request.getEmotionType());
+        reaction.setCreatedAt(LocalDateTime.now());
+        increaseReactionCount(request.getTargetType(), request.getTargetId());
+        reactionRepository.save(reaction);
+        return "SUCCESS";
     }
 
     @Override
@@ -168,7 +169,4 @@ public class ReactionServiceImpl implements ReactionService {
                 .findByUserIdAndTarget(targetId, targetType, user.getUserId())
                 .isPresent();
     }
-
-
-
 }

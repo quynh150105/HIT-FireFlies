@@ -15,6 +15,7 @@ import com.example.hit_networking_base.domain.mapstruct.UserMapper;
 import com.example.hit_networking_base.exception.BadRequestException;
 import com.example.hit_networking_base.exception.LoadFileException;
 import com.example.hit_networking_base.exception.NotFoundException;
+import com.example.hit_networking_base.repository.CvRepository;
 import com.example.hit_networking_base.repository.JobPostRepository;
 import com.example.hit_networking_base.service.*;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,7 @@ public class JobPostServiceImpl implements JobPostService {
     private final UserMapper userMapper;
     private final SendEmailService sendEmailService;
     private final CheckListService checkListService;
+    private final CvRepository cvRepository;
 
 
     @Override
@@ -100,12 +102,16 @@ public class JobPostServiceImpl implements JobPostService {
 
     @Override
     public JobDetailResponseDTO getJobDetail(Long postId) {
+        User user = userService.checkToken();
         JobPost jobPost = findById(postId);
         JobDetailResponseDTO jobDetailResponseDTO = jobMapper.toJonDetailResponse(jobPost);
         jobDetailResponseDTO.setImages(imageService.getUrlImage(postId, TargetType.JOB));
         jobDetailResponseDTO.setCommentResponseDTOS(commentPostService.findCommentByTargetIdAndTargetType(postId, TargetType.JOB));
         jobDetailResponseDTO.setReactionResponseDTOS(reactionService.findReactionByTargetIdAndTargetType(postId, TargetType.JOB));
         jobDetailResponseDTO.setCheckReaction(reactionService.hasUserReacted(postId, TargetType.JOB));
+        jobDetailResponseDTO.setCountCv(cvRepository.countByJobPostIdAndDeletedAtIsNull(postId));
+        jobDetailResponseDTO.setTotalCvResponseDTOS(cvRepository.findCvApplyInfoByPostId(postId));
+        jobDetailResponseDTO.setCheckApply(cvRepository.hasUserAppliedToPost(user.getUserId(),postId));
         return jobDetailResponseDTO;
     }
 

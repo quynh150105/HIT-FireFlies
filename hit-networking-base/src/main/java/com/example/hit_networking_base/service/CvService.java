@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.service;
 
+import com.example.hit_networking_base.constant.TargetType;
 import com.example.hit_networking_base.domain.dto.request.CVCreateRequestDTO;
 import com.example.hit_networking_base.domain.dto.request.CVUpdateRequestDTO;
 import com.example.hit_networking_base.domain.dto.response.CvResponseDTO;
@@ -17,5 +18,6 @@ public interface CvService {
     String deleteCV(Long postId);
     MyCVResponseDTO updateCV(Long id, CVUpdateRequestDTO cvUpdateRequestDTO);
     void downloadCV(Long postId, HttpServletResponse response);
+    boolean hasUserApplied(Long postId);
 
 }

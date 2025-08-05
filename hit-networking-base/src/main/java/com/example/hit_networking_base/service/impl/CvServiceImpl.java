@@ -170,6 +170,12 @@ public class CvServiceImpl implements CvService {
         }
     }
 
+    @Override
+    public boolean hasUserApplied(Long postId) {
+        User user = userService.checkToken();
+        return cvRepository.hasUserAppliedToPost(user.getUserId(),postId);
+    }
+
 
     private CvResponseDTO convertToDTO(CV cv) {
         return CvResponseDTO.builder()

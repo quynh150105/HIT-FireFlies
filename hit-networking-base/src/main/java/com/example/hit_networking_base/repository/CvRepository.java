@@ -1,5 +1,7 @@
 package com.example.hit_networking_base.repository;
 
+import com.example.hit_networking_base.constant.TargetType;
+import com.example.hit_networking_base.domain.dto.response.CvApplyInforDTO;
 import com.example.hit_networking_base.domain.entity.CV;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,18 @@ public interface CvRepository extends JpaRepository<CV,Long> {
 
     @Query("SELECT COUNT(DISTINCT c.jobPost.postId) FROM CV c WHERE c.user.userId = :userId AND c.deletedAt IS NULL")
     Long countJobPostAppliedByUser(Long userId);
+
+    @Query("SELECT new com.example.hit_networking_base.domain.dto.response.CvApplyInforDTO(c.user.fullName, c.linkCV) " +
+            "FROM CV c WHERE c.jobPost.postId = :postId AND c.deletedAt IS NULL")
+    List<CvApplyInforDTO> findCvApplyInfoByPostId(Long postId);
+
+    @Query("SELECT COUNT(c) FROM CV c WHERE c.jobPost.postId = :postId AND c.deletedAt IS NULL")
+    Long countByJobPostIdAndDeletedAtIsNull(Long postId);
+
+    @Query("SELECT COUNT(c) > 0 FROM CV c WHERE c.user.userId = :userId AND c.jobPost.postId = :postId AND c.deletedAt IS NULL")
+    boolean hasUserAppliedToPost(Long userId, Long postId);
+
+
 
 
 }
