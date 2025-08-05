@@ -148,11 +148,13 @@ public class ReactionServiceImpl implements ReactionService {
                 Event event = eventRepository.findByEventIdAndDeletedAtIsNull(targetId)
                         .orElseThrow(() -> new NotFoundException("Event not found"));
                 event.setCountReaction(event.getCountReaction() - 1);
+                eventRepository.save(event);
                 break;
             case JOB:
                 JobPost job = jobPostRepository.findByPostIdAndDeletedAtIsNull(targetId)
                         .orElseThrow(() -> new NotFoundException("JobPost not found"));
                 job.setCountReaction(job.getCountReaction() - 1);
+                jobPostRepository.save(job);
                 break;
             default:
                 throw new UnsupportedOperationException("Unsupported TargetType: " + targetType);
