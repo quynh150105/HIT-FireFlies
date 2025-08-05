@@ -18,4 +18,6 @@ public interface JobPostRepository extends JpaRepository<JobPost, Long> {
    @Query("SELECT COUNT(j) FROM JobPost j WHERE j.creator.userId = :userId AND j.deletedAt IS NULL")
    Long countActivePostsByUserId(Long userId);
 
+   Page<JobPost> findByCreator_UserIdAndDeletedAtIsNull(Long userId, Pageable pageable);
+
 }

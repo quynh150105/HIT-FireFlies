@@ -98,4 +98,18 @@ public class JobPostController {
     public ResponseEntity<?> deleteJob(@RequestParam Long id){
         return VsResponseUtil.success(jobPostService.deleteJob(id));
     }
+
+    @Operation(summary = "User get all  user's  job post")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User get all  user's job post successfully",
+                    content = @Content(mediaType = "application/json", schema = @Schema(implementation = JobDetailResponseDTO.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid input data"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Access denied"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    @GetMapping(UrlConstant.JobPost.GET_MY_JOB_DETAIL)
+    public ResponseEntity<?> getAllMyJobPost(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size){
+        return VsResponseUtil.success(jobPostService.getAllMyJobPosts(page,size));
+    }
 }

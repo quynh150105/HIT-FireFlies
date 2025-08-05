@@ -172,6 +172,22 @@ public class JobPostServiceImpl implements JobPostService {
         return jobMapper.toJonDetailResponse(jobPost);
     }
 
+    @Override
+    public Page<JobPostResponseDTO> getAllMyJobPosts(int page, int size) {
+        User user = userService.checkToken();
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<JobPost> jobPostPage = jobPostRepository.findByCreator_UserIdAndDeletedAtIsNull(user.getUserId(), pageable);
+        List<JobPostResponseDTO> jobPostResponseDTOS = jobPostPage.getContent().stream()
+                .map(jobPost -> {
+                    JobPostResponseDTO jobPostResponseDTO = jobMapper.toJobPostResponse(jobPost);
+                    jobPostResponseDTO.setCreator(userMapper.toUserPostResponseDTO(jobPost.getCreator()));
+                    jobPostResponseDTO.setUrlImage(imageService.getUrlImage(jobPost.getPostId(), TargetType.JOB));
+                    return jobPostResponseDTO;
+                })
+                .collect(Collectors.toList());
+        return new PageImpl<>(jobPostResponseDTOS, pageable, jobPostPage.getTotalElements());
+    }
+
     private void testInput(String title, String description){
         Map<String, String> fields = Map.of(
                 "description", description,

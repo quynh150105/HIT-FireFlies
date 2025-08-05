@@ -15,11 +15,12 @@ import java.util.List;
 
 public interface JobPostService {
     JobResponseDTO createJob(JobPostRequest jobPostRequest);
-    Page<JobPostResponseDTO> getAllJobPosts(int page, int sice);
+    Page<JobPostResponseDTO> getAllJobPosts(int page, int size);
     JobDetailResponseDTO getJobDetail(Long postId);
     JobResponseDTO updateJob(Long postId, JobUpdateRequestDTO jobPostRequest);
     JobPost findById(Long id);
     JobPostResponseDTO getJobPost(Long id);
     void countComment(Long id, TargetType targetType);
     JobDetailResponseDTO deleteJob(Long id);
+    Page<JobPostResponseDTO> getAllMyJobPosts(int page, int size);
 }

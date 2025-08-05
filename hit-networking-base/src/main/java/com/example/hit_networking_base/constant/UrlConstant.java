@@ -8,6 +8,7 @@ public class UrlConstant {
         public static final String IMPORT = PREFIX + "/import";
         public static final String GET_ALL = PREFIX + "/select-all";
         public static final String RESTORE = PREFIX + "/restore";
+
         public static final String DELETE = PREFIX + "/delete";
         public static final String GET_DETAIL = PREFIX + "/get-detail";
     }
@@ -36,6 +37,7 @@ public class UrlConstant {
         public static final String GET_EVENT = PREFIX_USER;
         public static final String GET_EVENTS = PREFIX_USER + 's';
         public static final String UPDATE_EVENT = PREFIX + "/{eventId}";
+
         public static final String DELETE = PREFIX;
 
     }
@@ -45,7 +47,9 @@ public class UrlConstant {
         public static final String CREATE_JOB_POST = PREFIT;
         public static final String GET_JOB_POST_PAGE = PREFIT + "s";
         public static final String GET_JOB_DETAIL = PREFIT;
+        public static final String GET_MY_JOB_DETAIL = PREFIT + "/my-jobs";
         public static final String UPDATE_JOB = PREFIT;
+
         public static final String DELETE = PREFIT;
     }
 
@@ -54,6 +58,7 @@ public class UrlConstant {
         public static final String PREFIX_ADMIN = "/admin/comment";
         public static final String CREATE = PREFIX_USER;
         public static final String UPDATE = PREFIX_USER;
+
         public static final String DELETE = PREFIX_USER;
         public static final String GET_DETAIL = PREFIX_ADMIN;
     }
@@ -61,7 +66,6 @@ public class UrlConstant {
     public static class Reaction{
         public static final String  PREFIX = "/reaction";
         public static final String CREATE = PREFIX + "/react";
-
         public static final String UPDATE = PREFIX + "/update-react";
 
         public static final String DELETE = PREFIX + "/delete";
@@ -75,6 +79,7 @@ public class UrlConstant {
         public static final String UP_CV = PREFIX;
         public static final String GET_BY_USERID = PREFIX + "/my-cv";
         public static final String GET_BY_POST = PREFIX + "/post-cv";
+
         public static final String DELETE = PREFIX;
         public static final String UPDATE= PREFIX;
         public static final String DOWNLOAD= PREFIX + "/download";
