@@ -57,6 +57,7 @@ public class HomeServiceImpl implements HomeService {
         homeResponseDTO.setUrlImage(eventPostResponseDTO.getUrlImage());
         homeResponseDTO.setCreatedAt(eventPostResponseDTO.getCreatedAt());
         homeResponseDTO.setTargetType(TargetType.EVENT);
+        homeResponseDTO.setCheckReaction(eventPostResponseDTO.isCheckReaction());
         return homeResponseDTO;
     }
     private HomeResponseDTO mergeJobToHome(JobPostResponseDTO jobPostResponseDTO){
@@ -70,6 +71,7 @@ public class HomeServiceImpl implements HomeService {
         homeResponseDTO.setUrlImage(jobPostResponseDTO.getUrlImage());
         homeResponseDTO.setCreatedAt(jobPostResponseDTO.getCreatedAt());
         homeResponseDTO.setTargetType(TargetType.JOB);
+        homeResponseDTO.setCheckReaction(jobPostResponseDTO.isCheckReaction());
         return homeResponseDTO;
     }
 }

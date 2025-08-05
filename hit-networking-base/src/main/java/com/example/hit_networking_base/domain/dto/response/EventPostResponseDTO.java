@@ -23,4 +23,5 @@ public class EventPostResponseDTO {
     private long countReaction;
     private long countComment;
     private LocalDateTime createdAt;
+    private boolean checkReaction;
 }

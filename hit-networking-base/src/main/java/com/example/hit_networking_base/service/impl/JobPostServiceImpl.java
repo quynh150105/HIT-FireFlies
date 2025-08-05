@@ -137,6 +137,7 @@ public class JobPostServiceImpl implements JobPostService {
         JobPostResponseDTO jobPostResponseDTO = jobMapper.toJobPostResponse(jobPost);
         jobPostResponseDTO.setUrlImage(imageService.getUrlImage(id, TargetType.JOB));
         jobPostResponseDTO.setCreator(userMapper.toUserPostResponseDTO(jobPost.getCreator()));
+        jobPostResponseDTO.setCheckReaction(reactionService.hasUserReacted(jobPost.getPostId(), TargetType.JOB));
         return jobPostResponseDTO;
     }
 

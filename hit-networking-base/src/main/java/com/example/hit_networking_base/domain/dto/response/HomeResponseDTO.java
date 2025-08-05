@@ -21,4 +21,5 @@ public class HomeResponseDTO {
     private long countComment;
     private LocalDateTime createdAt;
     private TargetType targetType;
+    private boolean checkReaction;
 }

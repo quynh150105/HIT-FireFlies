@@ -1,9 +1,5 @@
 package com.example.hit_networking_base.constant;
 
-import org.springframework.security.core.parameters.P;
-
-import java.awt.event.PaintEvent;
-
 public class UrlConstant {
     public static class Admin{
         public static final String PREFIX = "admin";
@@ -20,7 +16,7 @@ public class UrlConstant {
         public static final String PREFIX = "/auth";
         public static final String LOGIN = PREFIX + "/login";
         public static final String REST_PASSWORD = PREFIX + "/forgot-password";
-        public static final String HOME = PREFIX + "/home";
+        public static final String HOME = User.PREFIX + "/home";
         public static final String REFRESH = PREFIX + "/refresh";
     }
 

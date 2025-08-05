@@ -1,5 +1,6 @@
 package com.example.hit_networking_base.security;
 
+import org.springframework.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +44,7 @@ public class SecurityConfig {
                                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeRequests()
+                .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                 .antMatchers(SWAGGER_WHITELIST).permitAll()
                 .antMatchers(ADMIN).hasAnyRole("ADMIN", "BQT")
                 .antMatchers(USER).hasAnyRole("USER", "ADMIN", "BQT", "TV")
