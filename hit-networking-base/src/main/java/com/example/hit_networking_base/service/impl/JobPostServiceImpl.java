@@ -94,6 +94,7 @@ public class JobPostServiceImpl implements JobPostService {
                     JobPostResponseDTO jobPostResponseDTO = jobMapper.toJobPostResponse(jobPost);
                     jobPostResponseDTO.setCreator(userMapper.toUserPostResponseDTO(jobPost.getCreator()));
                     jobPostResponseDTO.setUrlImage(imageService.getUrlImage(jobPost.getPostId(), TargetType.JOB));
+                    jobPostResponseDTO.setCheckReaction(reactionService.hasUserReacted(jobPost.getPostId(), TargetType.JOB));
                     return jobPostResponseDTO;
                 })
                 .collect(Collectors.toList());
@@ -182,6 +183,7 @@ public class JobPostServiceImpl implements JobPostService {
                     JobPostResponseDTO jobPostResponseDTO = jobMapper.toJobPostResponse(jobPost);
                     jobPostResponseDTO.setCreator(userMapper.toUserPostResponseDTO(jobPost.getCreator()));
                     jobPostResponseDTO.setUrlImage(imageService.getUrlImage(jobPost.getPostId(), TargetType.JOB));
+                    jobPostResponseDTO.setCheckReaction(reactionService.hasUserReacted(jobPost.getPostId(), TargetType.JOB));
                     return jobPostResponseDTO;
                 })
                 .collect(Collectors.toList());

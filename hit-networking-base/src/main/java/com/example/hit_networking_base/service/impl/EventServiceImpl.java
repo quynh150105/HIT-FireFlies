@@ -97,6 +97,7 @@ public class EventServiceImpl implements EventService {
                     EventPostResponseDTO dto = eventMapper.toEventPostResponse(event);
                     dto.setUrlImage(imageService.getUrlImage(event.getEventId(), TargetType.EVENT));
                     dto.setCreator(userMapper.toUserPostResponseDTO(event.getCreator()));
+                    dto.setCheckReaction(reactionService.hasUserReacted(event.getEventId(), TargetType.EVENT));
                     return dto;
                 })
                 .collect(Collectors.toList());
