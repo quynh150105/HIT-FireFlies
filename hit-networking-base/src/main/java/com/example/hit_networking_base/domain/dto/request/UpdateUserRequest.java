@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.time.LocalDate;
 
 @Data
@@ -35,5 +36,6 @@ public class UpdateUserRequest {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NotNull
+    @Past(message = "Ngay sinh phai trong qua khu")
     private LocalDate dob;
 }
