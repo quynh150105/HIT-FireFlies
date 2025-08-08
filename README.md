@@ -218,7 +218,7 @@ Nhấn nút run trên thanh công cụ
 
 # 📑 API Documentation
 
-### Swagger UI: http://localhost:8081/swagger-ui/index.html
+### Swagger UI: [http://localhost:8081/swagger-ui/index.html](https://hit-network-system.onrender.com/swagger-ui/index.html)
 
 - giao diện chính của Swagger
 
