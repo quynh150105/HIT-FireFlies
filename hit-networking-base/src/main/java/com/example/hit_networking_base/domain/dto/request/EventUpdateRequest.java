@@ -7,6 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -23,6 +24,7 @@ public class EventUpdateRequest {
 
     @NotNull(message = "Event date is required")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Future(message="ngay su kien phai trong tuong lai")
     private LocalDateTime eventDate;
 
     @Schema(description = "Organizer", example = "Nguyễn Văn Nam")
