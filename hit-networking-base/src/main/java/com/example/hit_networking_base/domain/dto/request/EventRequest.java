@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ public class EventRequest {
     @Schema(description = "Time date start", type = "string", example = "2025-06-30T10:00:00")
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    @Future(message="ngay su kien phai trong tuong lai")
     private LocalDateTime eventDate;
 
     @Schema(description = "Organizer", example = "Nguyễn Văn Nam")
